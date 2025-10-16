@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -8,12 +8,15 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
+    <link href="/src/main/resources/static/css/sign-in.css" rel="stylesheet" />
+
     <link href="/css/sign-in.css" rel="stylesheet" />
   </head>
 
   <body>
     <main
-      class="form-signin w-50 min-vh-100 d-flex flex-column justify-content-center align-items-center mx-auto"
+      class="form-signin min-vh-100 d-flex flex-column justify-content-center align-items-center mx-auto"
+      style="margin-left: 20px"
     >
       <form>
         <img
@@ -40,7 +43,14 @@
             id="floatingPassword"
             placeholder="Password"
           />
-          <label for="floatingPassword">Password</label>
+          <label for="floatingPassword"
+            >Password
+            <style>
+              label[for="floatingPassword"] {
+                background: transparent !important;
+              }
+            </style></label
+          >
         </div>
         <div class="form-check text-start my-3">
           <input
@@ -61,3 +71,67 @@
     </main>
   </body>
 </html>
+
+<!--
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login con Efecto Cristal</title>
+    <link
+      rel="stylesheet"
+      href="/src/main/resources/templates/login/login.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="login-container">
+      <div class="avatar">
+        <svg
+          width="60"
+          height="60"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <circle cx="12" cy="7" r="4" stroke="white" stroke-width="1.5" />
+          <path
+            d="M4 21C4 17.134 7.58172 14 12 14C16.4183 14 20 17.134 20 21"
+            stroke="white"
+            stroke-width="1.5"
+            stroke-linecap="round"
+          />
+        </svg>
+      </div>
+
+      <form>
+        <div class="input-group">
+          <input type="email" id="email" required />
+          <label for="email">Email ID</label>
+        </div>
+
+        <div class="input-group">
+          <input type="password" id="password" required />
+          <label for="password">Password</label>
+        </div>
+
+        <div class="options">
+          <label class="remember">
+            <input type="checkbox" />
+            Remember me
+          </label>
+          <a href="#">Forgot Password?</a>
+        </div>
+
+        <button type="submit" class="login-button">LOGIN</button>
+      </form>
+    </div>
+  </body>
+</html>
+-->
