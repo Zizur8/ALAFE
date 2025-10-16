@@ -13,36 +13,23 @@
 
 <body>
 
-  <header>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <div class="container-fluid">
-        <!-- <a class="navbar-brand" href="#">Azulito</a> -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample01"
-          aria-controls="navbarsExample01" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
+    <header>
+        <nav class="">
+            <div id="nav-container">
+                <div id="dropdown-menu" class="">
+                    <button class="" type="button" onclick="toggleDropdown()">
 
-        <div class="collapse navbar-collapse" id="navbarsExample01">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <!-- Dropdown con ícono a la izquierda -->
-            <li class="nav-item dropdown">
-              <a class="nav-link d-flex align-items-center" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="bi bi-caret-down-fill me-2"></i> Dropdown
-              </a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Action</a></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
-                <li><a class="dropdown-item" href="#">Something else here</a></li>
-              </ul>
-            </li>
-          </ul>
-          <form class="d-flex" role="search">
-            <input class="form-control" type="search" placeholder="Buscar" aria-label="Buscar">
-          </form>
-        </div>
-      </div>
-    </nav>
-  </header>
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                </div>
+                <div id="last-update">
+                    <h3>15 Febrero</h3>
+                    <p id="info-ultimo-registro">Ultimo registro: Victor H.</p>
+                </div>
+
+            </div>
+        </nav>
+    </header>
     <style>
 
     </style>
@@ -104,7 +91,70 @@
             </div>
         </aside> -->
 
+    <aside id="aside-app">
+        <div>
+            <ul id="modulos-list">
+                <li><a href="#">Clientes</a></li>
+                <li><a href="#">Movimientos</a></li>
+                <li><a href="#">Reportes</a></li>
+                <li><a href="#">Usuarios</a></li>
+
+            </ul>
+        </div>
+        <div id="buttons-container-aside">
+            <button class="button-icons-aside">
+                <i class="fa-solid fa-user"></i>
+            </button>
+            <button class="button-icons-aside">
+                <i class="fa-solid fa-gear"></i>
+        </div>
+    </aside>
     <main>
+
+        <div class="calendar-container">
+            <div class="calendar-header">
+                <button class="nav-button" onclick="previousMonth()">‹</button>
+                <div class="month-year" id="monthYear"></div>
+                <button class="nav-button" onclick="nextMonth()">›</button>
+            </div>
+
+            <div class="calendar-grid">
+                <div class="weekdays">
+                    <div class="weekday">Dom</div>
+                    <div class="weekday">Lun</div>
+                    <div class="weekday">Mar</div>
+                    <div class="weekday">Mié</div>
+                    <div class="weekday">Jue</div>
+                    <div class="weekday">Vie</div>
+                    <div class="weekday">Sáb</div>
+                </div>
+                <div class="days-grid" id="daysGrid"></div>
+            </div>
+
+        </div>
+
+        <div class="calendar-container">
+            <div class="calendar-header">
+                <button class="nav-button" onclick="previousMonth()">‹</button>
+                <div class="month-year" id="monthYear"></div>
+                <button class="nav-button" onclick="nextMonth()">›</button>
+            </div>
+
+            <div class="calendar-grid">
+                <div class="weekdays">
+                    <div class="weekday">Dom</div>
+                    <div class="weekday">Lun</div>
+                    <div class="weekday">Mar</div>
+                    <div class="weekday">Mié</div>
+                    <div class="weekday">Jue</div>
+                    <div class="weekday">Vie</div>
+                    <div class="weekday">Sáb</div>
+                </div>
+                <div class="days-grid" id="daysGrid"></div>
+            </div>
+
+        </div>
+
         <div class="calendar-container">
             <div class="calendar-header">
                 <button class="nav-button" onclick="previousMonth()">‹</button>
@@ -128,8 +178,141 @@
         </div>
 
 
+                <div class="calendar-container">
+            <div class="calendar-header">
+                <button class="nav-button" onclick="previousMonth()">‹</button>
+                <div class="month-year" id="monthYear"></div>
+                <button class="nav-button" onclick="nextMonth()">›</button>
+            </div>
+
+            <div class="calendar-grid">
+                <div class="weekdays">
+                    <div class="weekday">Dom</div>
+                    <div class="weekday">Lun</div>
+                    <div class="weekday">Mar</div>
+                    <div class="weekday">Mié</div>
+                    <div class="weekday">Jue</div>
+                    <div class="weekday">Vie</div>
+                    <div class="weekday">Sáb</div>
+                </div>
+                <div class="days-grid" id="daysGrid"></div>
+            </div>
+
+        </div>
+
+
+                <div class="calendar-container">
+            <div class="calendar-header">
+                <button class="nav-button" onclick="previousMonth()">‹</button>
+                <div class="month-year" id="monthYear"></div>
+                <button class="nav-button" onclick="nextMonth()">›</button>
+            </div>
+
+            <div class="calendar-grid">
+                <div class="weekdays">
+                    <div class="weekday">Dom</div>
+                    <div class="weekday">Lun</div>
+                    <div class="weekday">Mar</div>
+                    <div class="weekday">Mié</div>
+                    <div class="weekday">Jue</div>
+                    <div class="weekday">Vie</div>
+                    <div class="weekday">Sáb</div>
+                </div>
+                <div class="days-grid" id="daysGrid"></div>
+            </div>
+
+        </div>
+
+
+                <div class="calendar-container">
+            <div class="calendar-header">
+                <button class="nav-button" onclick="previousMonth()">‹</button>
+                <div class="month-year" id="monthYear"></div>
+                <button class="nav-button" onclick="nextMonth()">›</button>
+            </div>
+
+            <div class="calendar-grid">
+                <div class="weekdays">
+                    <div class="weekday">Dom</div>
+                    <div class="weekday">Lun</div>
+                    <div class="weekday">Mar</div>
+                    <div class="weekday">Mié</div>
+                    <div class="weekday">Jue</div>
+                    <div class="weekday">Vie</div>
+                    <div class="weekday">Sáb</div>
+                </div>
+                <div class="days-grid" id="daysGrid"></div>
+            </div>
+
+        </div>
+
+
+
+
         <div id="date-info-container">
-            <div id="">
+            <div id="header-date-info">
+                <div>
+                    <h2 id="selectedDate">15 Octubre</h2>
+                </div>
+                <div id="right-header">
+                    <h4>4:00pm - 12:00am</h4>
+                    <span id="mini-decorar" class="mini-info-labels">Decorar</span>
+                    <span id="mini-status-liquidado" class="mini-info-labels">Liquidado</span>
+                </div>
+
+
+
+            </div>
+            <div id="body-date-info">
+                <div id="cliente-date-info" class="section-date-info">
+                    <h4 class="title-section-date-info"><span>Cliente</span></h4>
+
+                    <div class="input-wrapper">
+                        <label class="label-input">Nombre</label><br>
+                        <input class="input-text autoInput" type="text" value="Cesar Alejandro Vazquez Soto"
+                            oninput="ajustarAncho()">
+                        <span class="medidor"></span><br>
+                    </div>
+
+                    <div class="input-wrapper">
+                        <label class="label-input">Dirección</label><br>
+                        <input class="input-text autoInput" type="text" value="Reforma 2007 Sur. Colonia Fundadores"
+                            oninput="ajustarAncho()">
+                        <span class="medidor"></span><br>
+                    </div>
+
+                    <div class="input-wrapper">
+                        <label class="label-input">Teléfono</label><br>
+                        <input class="input-text autoInput" type="text" value="867 326 4533" oninput="ajustarAncho()">
+                        <span class="medidor"></span><br>
+                    </div>
+                </div>
+
+
+                <div class="section-date-info">
+                    <h4 class="title-section-date-info"><span>Evento</span></h4>
+
+
+                    <div class="input-wrapper">
+                        <label class="label-input">Costo</label><br>
+                        <input class="input-text autoInput" type="text" value="$2,500" oninput="ajustarAncho()">
+                        <span class="medidor"></span><br>
+                    </div>
+
+
+                    <div class="input-wrapper">
+                        <label class="label-input">Ultimo Anticipo</label><br>
+                        <input class="input-text autoInput" type="text" value="$1,700" oninput="ajustarAncho()">
+                        <span class="medidor"></span><br>
+                    </div>
+
+
+                </div>
+
+                <div id="nota-date-info" class="">
+                    <h4 class="title-section-date-info"><span>Notas</span></h4>
+                    <textarea name="" id="">Primeras fases del diseño del view</textarea>
+                </div>
 
             </div>
         </div>
@@ -141,7 +324,8 @@
 
 </body>
 <script src="/js/main.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://kit.fontawesome.com/4def35e11d.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script> -->
 
 </html>

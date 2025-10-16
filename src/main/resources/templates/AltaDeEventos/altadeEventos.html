@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Eventos</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 20px; }
+        .container { max-width: 600px; margin: auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+        h2 { text-align: center; color: #333; }
+        label { display: block; margin-bottom: 8px; font-weight: bold; }
+        input[type="text"], input[type="date"], input[type="time"], input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box; /* Importante para padding y border */
+        }
+        button {
+            background-color: #5cb85c;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+        button:hover { background-color: #4cae4c; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Registro de Nuevo Evento</h2>
+    <form action="/api/eventos/crear" method="POST">
+        
+        <h3>Detalles del Evento</h3>
+
+        <label for="fechaEvento">Fecha del Evento:</label>
+        <input type="date" id="fechaEvento" name="fechaEvento" required>
+
+        <label for="horaInicio">Hora de Inicio (4:00pm):</label>
+        <input type="time" id="horaInicio" name="horaInicio" value="16:00" required>
+        
+        <label for="horaFin">Hora de Fin (12:00am):</label>
+        <input type="time" id="horaFin" name="horaFin" value="00:00" required>
+        
+        <label for="saldo">Saldo Pendiente ($500):</label>
+        <input type="number" id="saldo" name="saldo" value="500" min="0" required>
+
+        <h3>Información del Cliente</h3>
+        
+        <label for="nombreCliente">Nombre del Cliente (Cesar Alejandro Vazquez Soto):</label>
+        <input type="text" id="nombreCliente" name="nombreCliente" required>
+
+        <label for="direccion">Dirección (Reforma 2007 Sur...):</label>
+        <input type="text" id="direccion" name="direccion" required>
+
+        <label for="telefono">Teléfono (867 326 4533):</label>
+        <input type="text" id="telefono" name="telefono" pattern="[0-9]{10}" title="Debe contener 10 dígitos numéricos." required>
+
+        <button type="submit">Guardar Evento</button>
+    </form>
+</div>
+
+</body>
+</html>
