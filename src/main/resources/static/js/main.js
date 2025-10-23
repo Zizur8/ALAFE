@@ -16,6 +16,8 @@ const months = [
   "Diciembre",
 ];
 
+
+
 function renderCalendar() {
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
@@ -69,7 +71,33 @@ function renderCalendar() {
 function selectDate(date) {
   selectedDate = date;
   renderCalendar();
+
+  const formNuevoEvento = document.getElementById("form-new-evento");
+  const bgTranslucent = document.getElementById("bg-translucent");
+
+  if (formNuevoEvento && bgTranslucent) {
+    formNuevoEvento.style.visibility = "visible";
+    bgTranslucent.style.visibility = "visible";
+
+    // Esperar al siguiente ciclo para evitar que el clic actual lo cierre
+    setTimeout(() => {
+      document.addEventListener("click", handleOutsideClick);
+    }, 0);
+  }
+
+  function handleOutsideClick(e) {
+    const clickedInsideForm = formNuevoEvento.contains(e.target);
+    const clickedInsideOverlay = bgTranslucent.contains(e.target);
+
+    if (!clickedInsideForm && !clickedInsideOverlay) {
+      formNuevoEvento.style.visibility = "hidden";
+      bgTranslucent.style.visibility = "hidden";
+      document.removeEventListener("click", handleOutsideClick);
+    }
+  }
 }
+
+
 
 function previousMonth() {
   currentDate.setMonth(currentDate.getMonth() - 1);

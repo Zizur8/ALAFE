@@ -21,13 +21,12 @@ body {
   background: linear-gradient(135deg, #e2e2e2 0%, #ffd7c0 100%);
   min-height: 100%;
   color: #333;
-  
+  overflow-y: hidden;
 }
 
 html,
 body {
   height: 100vh;
-
 }
 
 main {
@@ -294,20 +293,17 @@ Es el contenedor que muestra datos del dia seleccionado
 
 */
 
-
 #date-info-container {
-
   position: absolute;
   top: 60%;
   width: 100%;
   height: 50vh;
-  background: rgb(238, 238, 238);
+  background: rgb(252, 252, 252);
   border-radius: 14px;
   border: solid 1px #464646;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-
-  overflow-x: hidden;
   
+  overflow-x: hidden;
 }
 
 #header-date-info {
@@ -322,7 +318,7 @@ Es el contenedor que muestra datos del dia seleccionado
   justify-content: space-between;
   align-items: center;
   padding: 0 20px;
-    overflow-y: hidden;
+  overflow-y: hidden;
 
   * {
     margin: 0;
@@ -361,7 +357,7 @@ Es el contenedor que muestra datos del dia seleccionado
   font-size: 1.5em;
   font-weight: bold;
   margin-bottom: 10px;
-  padding-bottom: 4px;
+  padding-bottom: 5px;
   border-bottom: solid 1px #b1b1b1;
   span {
     font-size: 0.9em;
@@ -385,7 +381,7 @@ Es el contenedor que muestra datos del dia seleccionado
 
 #body-date-info {
   padding: 20px;
-  height: calc(100% - 60px);
+  height: 100%;
   overflow-y: scroll;
 
   .label-input {
@@ -410,8 +406,11 @@ Es el contenedor que muestra datos del dia seleccionado
     margin-bottom: 20px;
   }
 
+
+}
+
   #nota-date-info {
-    margin-bottom: 5px;
+    margin-bottom: 30px;
     textarea {
       width: 100%;
       height: 100px;
@@ -422,4 +421,88 @@ Es el contenedor que muestra datos del dia seleccionado
       resize: none;
     }
   }
+#bg-translucent {
+  visibility: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(148, 148, 148, 0.685);
+}
+
+.form-new-event-container {
+
+  visibility: hidden;
+  position: absolute;
+  margin-top: 10vh;
+  display: flex;
+align-self: center;
+align-items: center;
+align-content: center;
+
+  justify-self: center;
+  height: 80vh;
+  width: 80vw;
+  top: 0;
+  z-index: 999;
+  max-width: 85%;
+  padding: 30px;
+  background: #fff;
+
+
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  overflow-y: scroll;
+  overflow-x: hidden;
+
+  .form-content {
+    width: 100%;
+    height: 100%;
+
+    
+  }
+
+  button {
+    background-color: #5cb85c;
+    color: white;
+    padding: 12px 20px;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+  }
+
+
+  #input-horario-evento-container {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 20px;
+  }
+}
+h2 {
+  text-align: center;
+  color: #333;
+}
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+input[type="text"],
+input[type="date"],
+input[type="time"],
+input[type="number"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box; /* Importante para padding y border */
+}
+
+button:hover {
+  background-color: #4cae4c;
 }
