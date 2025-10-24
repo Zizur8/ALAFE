@@ -152,3 +152,27 @@ function toggleDropdown() {
     .then(data => console.log("Evento creado:", data))
     .catch(err => console.error("Error:", err));
   });
+
+
+  $(document).ready(function () {
+    $("#btnEnviarJQuery").click(function () {
+      const form = document.getElementById("formEvento");
+      const formData = new FormData(form);
+
+      $.ajax({
+        url: "https://httpbin.org/post", 
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false, 
+        success: function (response) {
+          console.log("Respuesta recibida:", response);
+          alert("Formulario enviado con jQuery (simulado)");
+        },
+        error: function (xhr, status, error) {
+          console.error("Error:", error);
+          alert("Error al enviar el formulario");
+        }
+      });
+    });
+  });
