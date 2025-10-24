@@ -138,3 +138,17 @@ function toggleDropdown() {
   dropdown.style.visibility = dropdown.classList.contains("show") ? "visible" : "hidden";
 }
 
+  document.getElementById("formEvento").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const form = e.target;
+    const formData = new FormData(form);
+
+    fetch("https://httpbin.org/post", {
+      method: "POST",
+      body: formData
+    })
+    .then(res => res.ok ? res.json() : Promise.reject("Error en el envío"))
+    .then(data => console.log("Evento creado:", data))
+    .catch(err => console.error("Error:", err));
+  });
