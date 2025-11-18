@@ -8,6 +8,15 @@
   height: 100vh;
   width: 15%;
 } */
+#body-date-info::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+}
+main::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+}
+.ocultar-default {
+  display: none;
+}
 
 #container-sidebar {
   height: 100vh;
@@ -31,42 +40,18 @@ body {
 
 main {
   height: 100%;
-
   overflow-y: scroll;
 }
 
-nav {
-  background-color: #444444;
-  height: 7vh;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-}
 
 #nav-container {
-  display: grid;
-  grid-template-columns: auto auto;
-  height: 100%;
-  justify-content: space-between;
-  align-items: center;
 
-  #dropdown-menu {
-    color: white;
-    margin-left: 20px;
-    cursor: pointer;
-  }
   #last-update {
     color: white;
     margin-right: 20px;
     text-align: right;
     justify-content: center;
     align-items: center;
-
-    * {
-      margin: 0;
-      padding: 0;
-    }
 
     #info-ultimo-registro {
       font-size: small;
@@ -75,18 +60,7 @@ nav {
     }
   }
 
-  #dropdown-menu {
-    align-items: center;
-    justify-content: center;
-    justify-items: center;
-    button {
-      background: none;
-      border: none;
-      color: white;
-      font-size: 24px;
-      cursor: pointer;
-    }
-  }
+
 }
 
 /*
@@ -112,7 +86,6 @@ asidebar
 
   #buttons-container-aside {
     display: flex;
-
     align-items: end;
   }
 
@@ -290,57 +263,81 @@ asidebar
 
 /*
 Es el contenedor que muestra datos del dia seleccionado
-
 */
-
-#date-info-container {
-  position: absolute;
-  top: 60%;
+/*#date-info-container*/
+#form-evento {
+  position: sticky;
   width: 100%;
-  height: 50vh;
+  height:100vh;
   background: rgb(252, 252, 252);
   border-radius: 14px;
   border: solid 1px #464646;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  
-  overflow-x: hidden;
+  padding-top: 5px;
+    display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
 }
 
 #header-date-info {
-  overflow-y: none;
+  overflow-y: hidden;
   display: grid;
   grid-template-columns: auto auto;
   width: 100%;
-  height: 80px;
+  height: 9vh;
   border-bottom: solid 1px #d4d4d4;
   display: flex;
   justify-items: center;
   justify-content: space-between;
   align-items: center;
   padding: 0 20px;
-  overflow-y: hidden;
+  overflow-x: hidden;
 
   * {
     margin: 0;
     padding: 0;
   }
 
+  h2 {
+    margin: 0;
+    font-size: 1.5rem;
+  }
+
+  #mini-horario {
+    margin-bottom: 5px;
+    font-size: 0.8rem;
+    font-weight: normal;
+    color: #4e4e4e;
+  }
   #right-header {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
     justify-items: right;
+    align-items: right;
+    justify-content: right;
+    text-align: right;
+    gap: 5px;
 
     h4 {
       margin-bottom: 5px;
     }
 
+
+
     .mini-info-labels {
-      font-size: medium;
+      font-size: 0.9rem;
       font-weight: bold;
-      border-radius: 15px;
-      padding: 4px 15px;
+      border-radius: 12px;
+      padding: 2px 4%;
       color: #ffffff;
     }
     #mini-decorar {
       background-color: #ff897a;
+    }
+        #mini-tiene-notas {
+      background-color: #b9ab29;
     }
     #mini-status-liquidado {
       /*Verde claro para liquidado*/
@@ -353,18 +350,7 @@ Es el contenedor que muestra datos del dia seleccionado
   }
 }
 
-.title-section-date-info {
-  font-size: 1.5em;
-  font-weight: bold;
-  margin-bottom: 10px;
-  padding-bottom: 5px;
-  border-bottom: solid 1px #b1b1b1;
-  span {
-    font-size: 0.9em;
-    font-weight: normal;
-    color: #4e4e4e;
-  }
-}
+
 
 .input-wrapper {
   position: relative;
@@ -380,6 +366,7 @@ Es el contenedor que muestra datos del dia seleccionado
 }
 
 #body-date-info {
+  
   padding: 20px;
   height: 100%;
   overflow-y: scroll;
@@ -391,36 +378,24 @@ Es el contenedor que muestra datos del dia seleccionado
     color: #4e4e4e;
   }
 
-  .input-text {
-    height: 30px;
-    border-radius: 8px;
-    border: solid 1px #d4d4d4;
-    padding: 6px;
-    font-size: 14px;
-    margin-bottom: 10px;
-    width: auto;
-    min-width: 50px;
-  }
-
   .section-date-info {
     margin-bottom: 20px;
   }
-
-
 }
 
-  #nota-date-info {
-    margin-bottom: 30px;
-    textarea {
-      width: 100%;
-      height: 100px;
-      border-radius: 8px;
-      border: solid 1px #d4d4d4;
-      padding: 10px;
-      font-size: 14px;
-      resize: none;
-    }
+#nota-date-info {
+  margin-bottom: 30px;
+  textarea {
+    width: 100%;
+    height: 100px;
+    border-radius: 8px;
+    border: solid 1px #d4d4d4;
+    padding: 10px;
+    font-size: 14px;
+    resize: none;
   }
+}
+
 #bg-translucent {
   visibility: hidden;
   position: fixed;
@@ -431,57 +406,6 @@ Es el contenedor que muestra datos del dia seleccionado
   background-color: rgba(148, 148, 148, 0.685);
 }
 
-.form-new-event-container {
-
-  visibility: hidden;
-  position: absolute;
-  margin-top: 10vh;
-  display: flex;
-align-self: center;
-align-items: center;
-align-content: center;
-
-  justify-self: center;
-  height: 80vh;
-  width: 80vw;
-  top: 0;
-  z-index: 999;
-  max-width: 85%;
-  padding: 30px;
-  background: #fff;
-
-
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  overflow-y: scroll;
-  overflow-x: hidden;
-
-  .form-content {
-    width: 100%;
-    height: 100%;
-
-    
-  }
-
-  button {
-    background-color: #5cb85c;
-    color: white;
-    padding: 12px 20px;
-    margin-bottom: 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    width: 100%;
-    font-size: 16px;
-  }
-
-
-  #input-horario-evento-container {
-    display: grid;
-    grid-template-columns: auto auto;
-    gap: 20px;
-  }
-}
 h2 {
   text-align: center;
   color: #333;
@@ -491,18 +415,24 @@ label {
   margin-bottom: 8px;
   font-weight: bold;
 }
-input[type="text"],
-input[type="date"],
-input[type="time"],
-input[type="number"] {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 20px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box; /* Importante para padding y border */
-}
 
 button:hover {
   background-color: #4cae4c;
+}
+
+#agendar-evento-container {
+  width: 100%;
+  height: 30vh;
+
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+    .evento-dia {
+  background-color: #ff8349; /* amarillo para destacar */
+  border-radius: 50%;
 }

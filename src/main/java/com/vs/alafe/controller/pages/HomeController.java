@@ -1,4 +1,4 @@
-package com.vs.alafe.controller;
+package com.vs.alafe.controller.pages;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

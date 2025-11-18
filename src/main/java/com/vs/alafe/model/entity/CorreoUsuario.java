@@ -1,0 +1,51 @@
+package com.vs.alafe.model.entity;
+
+import com.vs.alafe.model.entity.interfaces.ALAFEEntity;
+import jakarta.persistence.*;
+import org.antlr.v4.runtime.misc.NotNull;
+
+import java.io.Serializable;
+
+@Entity
+@Table(name = "correo_usuario")
+public class CorreoUsuario implements ALAFEEntity, Serializable {
+
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "id_correo", nullable = false)
+    private Integer id_correo;
+
+    @ManyToOne(fetch = FetchType.LAZY) // o LAZY
+    @JoinColumn(name = "id_usuario", nullable = false)
+    private Usuario usuario;
+
+    @Column(name = "correo", nullable = false)
+    private String correo;
+
+    public Integer getId_correo() {
+        return id_correo;
+    }
+
+    public void setId_correo(Integer id_correo) {
+        this.id_correo = id_correo;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
+    }
+}
