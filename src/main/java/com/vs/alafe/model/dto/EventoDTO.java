@@ -1,83 +1,82 @@
 package com.vs.alafe.model.dto;
 
-import com.vs.alafe.model.entity.Evento;
-import com.vs.alafe.model.entity.EventoNota;
+import com.vs.alafe.model.entities.Evento;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.stream.Collectors;
 
 public class EventoDTO {
 
     private Integer idEvento;
+    private Integer idCliente;
+    private Integer idAgenda;
     private LocalDateTime horarioInicio;
     private LocalDateTime horarioFinal;
-    private Boolean decorar;
-    private Boolean ocupaDosDias;
+    private LocalDateTime horarioDecoracion;
+    private Boolean decoracion;
     private BigDecimal costo;
-    private Boolean esEspecial;
-    private Integer idCliente;
-    private String nombreUsuarioIngreso;
-    private String usuarioUltimaModificacion;
+    private Boolean especial;
+    private Integer idUsuarioIngreso;
+    private Integer idUsuarioModificacion;
     private LocalDateTime fechaUltimaModificacion;
-    private Short cantidadHoraExtras;
+    private Short cantidadHoraExtra;
     private LocalDateTime fechaIngreso;
     private BigDecimal costoHoraExtras;
 
-
-
+    private String nombreUsuarioIngreso;
+    private String usuarioUltimaModificacion;
+    private Integer idEventoNota;
     private String notas;
 
-    public EventoDTO(Integer idEvento, Integer idCliente, LocalDateTime horarioInicio, LocalDateTime horarioFin, Boolean decorar, Boolean ocupadaDosDias, BigDecimal costo, Boolean esEspecial,
-                     String nombreUsuarioIngreso, String usuarioUltimaModificacion, LocalDateTime fechaUltimaModificacion, Short cantidadHoraExtra,
-                     LocalDateTime fechaIngreso, BigDecimal costoHoraExtras, String notas) {
+    public EventoDTO(Integer idEvento, Integer idCliente, LocalDateTime horarioInicio, LocalDateTime horarioFin, Boolean decorar, Boolean ocupadaDosDias,
+        BigDecimal costo, Boolean esEspecial, String nombreUsuarioIngreso, Integer idUsuarioIngreso, Integer idUsuarioModificacion,
+        String usuarioUltimaModificacion, LocalDateTime fechaUltimaModificacion, Short cantidadHoraExtra,
+        LocalDateTime fechaIngreso, BigDecimal costoHoraExtras, String notas, Integer idEventoNota) {
         this.idEvento = idEvento;
         this.idCliente = idCliente;
         this.horarioInicio = horarioInicio;
         this.horarioFinal = horarioFin;
-        this.decorar = decorar;
-        this.ocupaDosDias = ocupadaDosDias;
+        this.decoracion = decorar;
         this.costo = costo;
-        this.esEspecial = esEspecial;
+        this.especial = esEspecial;
         this.nombreUsuarioIngreso = nombreUsuarioIngreso;
+        this.idUsuarioIngreso = idUsuarioIngreso;
         this.usuarioUltimaModificacion = usuarioUltimaModificacion;
         this.fechaUltimaModificacion = fechaUltimaModificacion;
-        this.cantidadHoraExtras = cantidadHoraExtra;
+        this.cantidadHoraExtra = cantidadHoraExtra;
         this.fechaIngreso = fechaIngreso;
         this.costoHoraExtras = costoHoraExtras;
         this.notas = notas;
+        this.idEventoNota = idEventoNota;
     }
 
     public EventoDTO(Evento evento){
-
         this.idEvento = evento.getIdEvento();
-        this.idCliente = evento.getIdCliente();
+        this.idCliente = evento.getCliente().getIdCliente();
         this.horarioInicio = evento.getHorarioInicio();
-        this.horarioFinal = evento.getHorarioFin();
-        this.decorar = evento.getDecoracion();
-        //this.ocupaDosDias = evento.getOcupadaDosDias();
+        this.horarioFinal = evento.getHorarioFinal();
+        this.decoracion = evento.getDecoracion();
         this.costo = evento.getCosto();
-        this.esEspecial = evento.getEspecial();
+        this.especial = evento.getEspecial();
+        this.idUsuarioIngreso = evento.getUsuarioIngreso().getIdUsuario();
+        this.idUsuarioModificacion = evento.getUsuarioModificacion() != null
+                ? evento.getUsuarioModificacion().getIdUsuario()
+                : null;
         this.nombreUsuarioIngreso = evento.getUsuarioIngreso().getNombre();
-        this.usuarioUltimaModificacion = evento.getUsuarioModifico() != null ? evento.getUsuarioModifico().getNombre() : null;
+        this.usuarioUltimaModificacion = evento.getUsuarioModificacion() != null ? evento.getUsuarioModificacion().getNombre() : null;
         this.fechaUltimaModificacion = evento.getFechaUltimaModificacion();
-        this.cantidadHoraExtras = evento.getCantidadHoraExtra();
+        this.cantidadHoraExtra = evento.getCantidadHoraExtra();
         this.fechaIngreso = evento.getFechaIngreso();
         this.costoHoraExtras = evento.getCostoHoraExtra();
-        this.notas = evento.getNotas()
-                .stream()
-                .map(EventoNota::getNota)
-                .collect(Collectors.joining(", "));
+//        this.notas = evento.getNotas()
+//                .stream()
+//                .map(EventoNota::getNota)
+//                .collect(Collectors.joining(", "));
+
+        this.notas = evento.getNota() != null ? evento.getNota().getNota() : null;
+
     }
 
-
-    public Short getCantidadHoraExtras() {
-        return cantidadHoraExtras;
-    }
-
-    public void setCantidadHoraExtras(Short cantidadHoraExtras) {
-        this.cantidadHoraExtras = cantidadHoraExtras;
-    }
 
     public Integer getIdCliente() {
         return idCliente;
@@ -87,20 +86,12 @@ public class EventoDTO {
         this.idCliente = cliente;
     }
 
-    public Boolean getDecorar() {
-        return decorar;
+    public Boolean getDecoracion() {
+        return decoracion;
     }
 
-    public void setDecorar(Boolean decorar) {
-        this.decorar = decorar;
-    }
-
-    public Boolean getEsEspecial() {
-        return esEspecial;
-    }
-
-    public void setEsEspecial(Boolean esEspecial) {
-        this.esEspecial = esEspecial;
+    public void setDecoracion(Boolean decoracion) {
+        this.decoracion = decoracion;
     }
 
     public String getUsuarioUltimaModificacion() {
@@ -120,11 +111,11 @@ public class EventoDTO {
     }
 
     public Short getCantidadHoraExtra() {
-        return cantidadHoraExtras;
+        return cantidadHoraExtra;
     }
 
     public void setCantidadHoraExtra(Short cantidadHoraExtra) {
-        this.cantidadHoraExtras = cantidadHoraExtra;
+        this.cantidadHoraExtra = cantidadHoraExtra;
     }
 
     public LocalDateTime getFechaIngreso() {
@@ -149,6 +140,14 @@ public class EventoDTO {
 
     public void setIdEvento(Integer idEvento) {
         this.idEvento = idEvento;
+    }
+
+    public Integer getIdUsuarioIngreso() {
+        return this.idUsuarioIngreso;
+    }
+
+    public void setIdUsuarioIngreso(Integer idUsuarioIngreso) {
+        this.idUsuarioIngreso = idUsuarioIngreso;
     }
 
     public LocalDateTime getHorarioInicio() {
@@ -191,5 +190,27 @@ public class EventoDTO {
         this.notas = notas;
     }
 
+    public LocalDateTime getHorarioDecoracion() {
+        return horarioDecoracion;
+    }
+
+    public void setHorarioDecoracion(LocalDateTime horarioDecoracion) {
+        this.horarioDecoracion = horarioDecoracion;
+    }
+
+    public Boolean getEspecial() {
+        return especial;
+    }
+
+    public void setEspecial(Boolean especial) {
+        this.especial = especial;
+    }
+        public Integer getIdUsuarioModificacion() {
+        return idUsuarioModificacion;
+    }
+
+    public void setIdUsuarioModificacion(Integer idUsuarioModificacion) {
+        this.idUsuarioModificacion = idUsuarioModificacion;
+    }
 }
 

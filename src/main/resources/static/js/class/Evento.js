@@ -1,33 +1,62 @@
 
 
 export class Evento {
-    constructor(usuario, horarioInicio, horarioFinal, decoracion,costo,especial,gratuito,idUsuarioIngreso
-        ,idUsuarioModificacion,fechaUltimaModificacion,cantidadHoraExtra,fechaIngreso,costoHoraExtra,ocupaDosDias,
-        notasEvento, idCliente,anticipo,moneda,tasaCambio
-    ) {
+    // constructor({
+    //     idEvento = null,
+    //     // cliente = null,
+    //     usuario = null,
+    //     horarioInicio = null,
+    //     horarioFinal = null,
+    //     decoracion = null,
+    //     costo = null,
+    //     especial = null,
+    //     idUsuarioIngreso = null,
+    //     idUsuarioModificacion = null,
+    //     fechaUltimaModificacion = null,
+    //     cantidadHoraExtra = null,
+    //     fechaIngreso = null,
+    //     costoHoraExtra = null,
+    //     //ocupaDosDias = null,
+    //     notasEvento = null,
+    //     idCliente = null,
+    //     //anticipo = null,
+    //     //moneda = null,
+    //     //tasaCambio = null,
+    //     horarioDecoracion = null
+    // } = {}) {
+    //     this.idEvento = idEvento;
+    //     // this.cliente = cliente;
+    //     this.usuario = usuario;
+    //     this.horarioInicio = horarioInicio;
+    //     this.horarioFinal = horarioFinal;
+    //     this.decoracion = decoracion;
+    //     this.costo = costo;
+    //     this.especial = especial;
+    //     this.idUsuarioIngreso = idUsuarioIngreso;
+    //     this.idUsuarioModificacion = idUsuarioModificacion;
+    //     this.fechaUltimaModificacion = fechaUltimaModificacion;
+    //     this.cantidadHoraExtra = cantidadHoraExtra;
+    //     this.fechaIngreso = fechaIngreso;
+    //     this.costoHoraExtra = costoHoraExtra;
+    //     //this.ocupaDosDias = ocupaDosDias;
+    //     this.notasEvento = notasEvento;
+    //     this.idCliente = idCliente;
+    //     //this.anticipo = anticipo;
+    //     //this.moneda = moneda;
+    //     //this.tasaCambio = tasaCambio;
+    //     this.horarioDecoracion = horarioDecoracion;
+    // }
 
-        this.usuario = usuario;
-        this.idCliente = idCliente;
-        this.horarioInicio = horarioInicio;
-        this.horarioFinal = horarioFinal;
-        this.decoracion = decoracion;
-        this.costo = costo;
-        this.especial = especial;
-        this.gratuito = gratuito;
-        this.idUsuarioIngreso = idUsuarioIngreso;
-        this.idUsuarioModificacion = idUsuarioModificacion;
-        this.fechaUltimaModificacion = fechaUltimaModificacion;
-        this.cantidadHoraExtra = cantidadHoraExtra;
-        this.fechaIngreso = fechaIngreso;
-        this.costoHoraExtra = costoHoraExtra;
-        this.ocupaDosDias = ocupaDosDias;
-        this.notasEvento = notasEvento;
-        this.anticipo = anticipo;
-        this.moneda = moneda;
-        this.tasaCambio = tasaCambio;
 
+    constructor (newEvento) {
+        Object.assign(this, newEvento);
     }
-
+    get getIdEvento() {
+        return this.idEvento;
+    }
+    set setIdEvento(idEvento) {
+        this.idEvento = idEvento;
+    }
 
     get getUsuario() {
         return this.usuario;
@@ -56,7 +85,7 @@ export class Evento {
     get getDecoracion() {
         return this.decoracion;
     }
-    set setDecoracion(decoracion) {
+    set setDecoracioon(decoracion) {
         this.decoracion = decoracion;
     }
     get getCosto() {
@@ -144,5 +173,11 @@ export class Evento {
         this.tasaCambio = tasaCambio;
     }
 
+    get getHorarioDecoracion() {
+        return this.horarioDecoracion;
+    }
+    set setHorarioDecoracion(horarioDecoracion) {
+        this.horarioDecoracion = horarioDecoracion;
+    }
     
 }

@@ -2,17 +2,31 @@
 
 
 export class Cliente {
-    constructor(id, nombre,apellidoPaterno,apellidoMaterno,correo,telefono,direccion,colonia,numeroExterior,) {
-        this.id = id;
-        this.nombre = nombre;
-        this.correo = correo;
-        this.apellidoPaterno = apellidoPaterno;
-        this.apellidoMaterno = apellidoMaterno;
+    constructor({
+        idCliente = null,
+        idPropietario = null,
+        telefono = null,
+        nombre = null,
+        apellidoPaterno = null,
+        apellidoMaterno = null,
+        idColonia = null,
+        numeroExterior = null,
+        calle = null,
+        fechaAlta = null,
+    } = {})
+    {
+        this.idCliente = idCliente;
+        this.idPropietario = idPropietario;
         this.telefono = telefono;
-        this.direccion = direccion;
-        this.colonia = colonia;
+        this.nombre = nombre;
+        this.apellidoPaterno = apellidoMaterno;
+        this.apellidoMaterno = apellidoMaterno;
+        this.idColonia = idColonia;
         this.numeroExterior = numeroExterior;
+        this.calle = calle;
+        this.fechaAlta = fechaAlta;
     }
+    
     get getId() {
         return this.id;
     }

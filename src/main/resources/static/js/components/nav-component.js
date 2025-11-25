@@ -4,15 +4,14 @@ class CustomNav extends HTMLElement {
         <nav class="">
             <div id="nav-container">
                 <div id="dropdown-menu" class="">
-                    <button class="" type="button">
-                        <i class="fa-solid fa-bars"></i>
-                    </button>
+                     <button class="" type="button">
+                         <i class="fa-solid fa-bars"></i>
+                     </button>
                 </div>
                 <div id="last-update">
-                    <h3>15 Febrero</h3>
-                    <p id="info-ultimo-registro">Ultimo registro: Victor H.</p>
+                    <h3>ALAFE</h3>
+                    <p id="info-ultimo-registro">Admi</p>
                 </div>
-
             </div>
         </nav>
     `;
@@ -30,7 +29,15 @@ class CustomNav extends HTMLElement {
 }
 customElements.define("custom-nav", CustomNav);
 
-
+                // <div id="dropdown-menu" class="">
+                //     <button class="" type="button">
+                //         <i class="fa-solid fa-bars"></i>
+                //     </button>
+                // </div>
+                // <div id="last-update">
+                //     <h3>15 Febrero</h3>
+                //     <p id="info-ultimo-registro">Ultimo registro: Victor H.</p>
+                // </div>
 // const months = [
 //   "Enero",
 //   "Febrero",

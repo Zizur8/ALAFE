@@ -393,6 +393,7 @@ Es el contenedor que muestra datos del dia seleccionado
     padding: 10px;
     font-size: 14px;
     resize: none;
+    scrollbar-width: none;
   }
 }
 

@@ -1,9 +1,10 @@
 package com.vs.alafe.model.dto;
 
-import com.vs.alafe.model.entity.Cliente;
+import com.vs.alafe.model.entities.Cliente;
 
 public class ClienteDTO {
-    private Long idCliente;
+    private Integer idCliente;
+    private Integer idPropietario;
     private String telefono;
     private String nombre;
     private String apellidoPaterno;
@@ -13,9 +14,10 @@ public class ClienteDTO {
     private String calle;
     private String correo;
 
-    public ClienteDTO(Long idCliente, String telefono, String nombre, String apellidoPaterno, String apellidoMaterno, Integer idColonia, String numeroExterior, String calle
-    ,String correo) {
+    public ClienteDTO(Integer idCliente, Integer idPropietario, String telefono, String nombre, String apellidoPaterno,
+                      String apellidoMaterno, Integer idColonia, String numeroExterior, String calle, String correo) {
         this.idCliente = idCliente;
+        this.idPropietario = idPropietario;
         this.telefono = telefono;
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
@@ -28,6 +30,7 @@ public class ClienteDTO {
 
     public ClienteDTO(Cliente cliente){
         this.idCliente = cliente.getIdCliente();
+        this.idPropietario = cliente.getPropietario().getIdPropietario();
         this.telefono = cliente.getTelefono();
         this.nombre = cliente.getNombre();
         this.apellidoPaterno = cliente.getApellidoPaterno();
@@ -35,15 +38,27 @@ public class ClienteDTO {
         this.idColonia = cliente.getColonia().getIdColonia();
         this.numeroExterior = cliente.getNumeroExterior();
         this.calle = cliente.getCalle();
-        this.correo = cliente.getCorreo().getCorreo();
+        if (cliente.getCorreo() != null) {
+            this.correo = cliente.getCorreo();
+        } else {
+            this.correo = null;
+        }
     }
 
-    public Long getIdCliente() {
+    public Integer getIdCliente() {
         return idCliente;
     }
 
-    public void setIdCliente(Long idCliente) {
+    public void setIdCliente(Integer idCliente) {
         this.idCliente = idCliente;
+    }
+
+    public Integer getIdPropietario() {
+        return idPropietario;
+    }
+
+    public void setIdPropietario(Integer idPropietario) {
+        this.idPropietario = idPropietario;
     }
 
     public String getTelefono() {

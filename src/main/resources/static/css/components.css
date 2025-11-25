@@ -46,6 +46,7 @@ custom-nav {
   font-weight: bolder;
   padding: 5px;
   text-align: center;
+
 }
 
 .message-info {
@@ -61,9 +62,6 @@ custom-nav {
 .title-section-date-info {
   font-size: 1.5em;
   font-weight: bold;
-  margin-bottom: 10px;
-  padding-bottom: 5px;
-  border-bottom: solid 1px #b1b1b1;
   span {
     font-size: 0.9em;
     font-weight: normal;
@@ -102,7 +100,7 @@ custom-nav {
 }
 
 .submit-button {
-  background-color: #5cb85c;
+  background-color: #ffa742;
   color: white;
   border: none;
   border-radius: 8px;
@@ -110,7 +108,117 @@ custom-nav {
   font-weight: bold;
   padding: 10px 20px;
   cursor: pointer;
-  width: 50%;
-  margin: 0 auto 60px auto;
-  display: block;
+  display: inline-block;
+}
+
+.delete-evento-button {
+  background-color: #ff4436;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px 20px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.buttons-actions-form-container {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin: 20px auto 60px auto;
+}
+
+#cantidadHorasExtras {
+  width: 70%;
+}
+#costoPorHoraExtra{
+width: 50%;
+justify-self: right;
+}
+.right-section-input{
+    justify-self: right;
+}
+.sub-label{
+  justify-self: right;
+}
+
+.btn-guardar-cliente {
+    background-color: #ffb056;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+}
+
+.btn-guardar-cliente:hover {
+    background-color: #45a049;
+}
+
+.btn-guardar-cliente:active {
+    background-color: #3e8e41;
+}
+
+#cliente-form-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+      border-bottom: solid 1px #b1b1b1;
+
+}
+
+.info-evento-nota {
+  position: absolute;
+  display: flex;
+  gap: 10px;
+  right: 5%;
+  top: 72%;
+  font-size: 0.7em;
+  color: #414141;
+
+}
+
+
+#container-notas {
+  position: relative;
+}
+
+
+
+.btn-eliminar {
+  position: absolute;
+  left: 95%;
+  top: -5%;
+  background-color: #e53935; 
+  color: #fff;
+  font-size: 12px;
+  font-weight: bold;
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 50%; 
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+
+.btn-eliminar:hover {
+  background-color: #c62828;
+}
+
+.btn-eliminar:active {
+  transform: scale(0.95);
+}
+
+.btn-eliminar:focus-visible {
+  outline: 2px solid #ffcdd2;  /* borde rosado para accesibilidad */
+  outline-offset: 2px;
 }

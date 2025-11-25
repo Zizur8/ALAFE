@@ -31,19 +31,19 @@ document.addEventListener("change", () => {
 //   target.style.display = checkbox.checked ? "block" : "none";
 // });
 
-document.addEventListener("input", (event) => {
-  const input = event.target;
+// document.addEventListener("input", (event) => {
+//   const input = event.target;
 
-  if (input.matches("[data-toggle]")) {
-    const ids = input.dataset.toggle.split(" ");
-    const mostrar = parseFloat(input.value) > 0;
+//   if (input.matches("[data-toggle]")) {
+//     const ids = input.dataset.toggle.split(" ");
+//     const mostrar = parseFloat(input.value) > 0;
 
-    ids.forEach((id) => {
-      const campo = document.getElementById(id);
-      const etiqueta = document.querySelector(`label[for="${id}"]`);
+//     ids.forEach((id) => {
+//       const campo = document.getElementById(id);
+//       const etiqueta = document.querySelector(`label[for="${id}"]`);
 
-      if (campo) campo.classList.toggle("ocultar-default", !mostrar);
-      if (etiqueta) etiqueta.classList.toggle("ocultar-default", !mostrar);
-    });
-  }
-});
+//       if (campo) campo.classList.toggle("ocultar-default", !mostrar);
+//       if (etiqueta) etiqueta.classList.toggle("ocultar-default", !mostrar);
+//     });
+//   }
+// });

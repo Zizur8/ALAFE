@@ -1,6 +1,6 @@
 package com.vs.alafe.model.dto;
 
-import com.vs.alafe.model.entity.Colonia;
+import com.vs.alafe.model.entities.Colonia;
 
 public class ColoniaDTO {
 
