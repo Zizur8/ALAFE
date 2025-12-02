@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import org.antlr.v4.runtime.misc.NotNull;
 
 import java.io.Serializable;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 @Entity
@@ -75,6 +77,12 @@ public class Usuario implements ALAFEEntity, Serializable {
 
     public void setTelefono(String telefono) {
         this.telefono = telefono;
+    }
+
+    public String nombreCompleto() {
+        return Stream.of(nombre, apellidoPaterno, apellidoMaterno)
+                .filter(s -> s != null && !s.isEmpty())
+                .collect(Collectors.joining(" "));
     }
 
     @Override

@@ -59,15 +59,7 @@ custom-nav {
   padding: 10px;
 }
 
-.title-section-date-info {
-  font-size: 1.5em;
-  font-weight: bold;
-  span {
-    font-size: 0.9em;
-    font-weight: normal;
-    color: #4e4e4e;
-  }
-}
+
 
 .input-text {
   height: 30px;
@@ -123,26 +115,6 @@ custom-nav {
   display: inline-block;
 }
 
-.buttons-actions-form-container {
-  display: flex;
-  gap: 20px;
-  justify-content: center;
-  margin: 20px auto 60px auto;
-}
-
-#cantidadHorasExtras {
-  width: 70%;
-}
-#costoPorHoraExtra{
-width: 50%;
-justify-self: right;
-}
-.right-section-input{
-    justify-self: right;
-}
-.sub-label{
-  justify-self: right;
-}
 
 .btn-guardar-cliente {
     background-color: #ffb056;
@@ -163,43 +135,18 @@ justify-self: right;
     background-color: #3e8e41;
 }
 
-#cliente-form-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-      border-bottom: solid 1px #b1b1b1;
-
-}
-
-.info-evento-nota {
-  position: absolute;
-  display: flex;
-  gap: 10px;
-  right: 5%;
-  top: 72%;
-  font-size: 0.7em;
-  color: #414141;
-
-}
-
-
-#container-notas {
-  position: relative;
-}
-
 
 
 .btn-eliminar {
   position: absolute;
-  left: 95%;
-  top: -5%;
+  left: 93%;
+  top: 5%;
   background-color: #e53935; 
   color: #fff;
   font-size: 12px;
   font-weight: bold;
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   border: none;
   border-radius: 50%; 
   cursor: pointer;

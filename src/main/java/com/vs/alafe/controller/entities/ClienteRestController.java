@@ -41,6 +41,10 @@ public class ClienteRestController {
             return ResponseEntity.notFound().build();
         }
 
+        if(cliente.getPropietario() == null) {
+            cliente.setPropietario(findCliente.get().getPropietario());
+        }
+
         Colonia colonia = coloniaService.findById(cliente.getColonia().getIdColonia())
                 .orElseThrow(() -> new RuntimeException("Colonia no encontrada"));
         cliente.setColonia(colonia);

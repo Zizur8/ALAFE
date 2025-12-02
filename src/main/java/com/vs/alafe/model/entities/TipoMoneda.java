@@ -8,36 +8,36 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "tipo_moneda")
-public class Moneda implements ALAFEEntity, Serializable {
+public class TipoMoneda implements ALAFEEntity, Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @NotNull
     @Column(name = "id_moneda", nullable = false)
-    private Integer idMoneda;
+    private Short idMoneda;
 
-    @Column(name = "abreviacion")
-    private String abreaviacion;
+    @Column(name = "abreviacion",columnDefinition = "CHAR(3)")
+    private String abreviacion;
     @Column(name = "nombre_moneda_es")
     private String nombreMonedaEs;
     @Column(name = "nombre_moneda_en")
     private String nombreMonedaEn;
 
-    public Integer getIdMoneda() {
+    public Short getIdMoneda() {
         return idMoneda;
     }
 
-    public void setIdMoneda(Integer idMoneda) {
+    public void setIdMoneda(Short idMoneda) {
         this.idMoneda = idMoneda;
     }
 
-    public String getAbreaviacion() {
-        return abreaviacion;
+    public String getAbreviacion() {
+        return abreviacion;
     }
 
-    public void setAbreaviacion(String abreaviacion) {
-        this.abreaviacion = abreaviacion;
+    public void setAbreviacion(String abreviacion) {
+        this.abreviacion = abreviacion;
     }
 
     public String getNombreMonedaEs() {

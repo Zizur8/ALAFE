@@ -1,0 +1,390 @@
+.form-new-event-container {
+  visibility: hidden;
+  position: absolute;
+  margin-top: 10vh;
+  display: flex;
+  align-self: center;
+  align-items: center;
+  align-content: center;
+
+  justify-self: center;
+  height: 80vh;
+  width: 80vw;
+  top: 0;
+  z-index: 999;
+  max-width: 85%;
+  padding: 30px;
+  background: #fff;
+
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  overflow-y: scroll;
+  overflow-x: hidden;
+
+  button {
+    background-color: #5cb85c;
+    color: white;
+    padding: 12px 20px;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+  }
+}
+
+.input-readonly {
+  background-color: #eeeeee;
+  font-weight: 600;
+}
+
+.form-content {
+  width: 100%;
+  height: 100%;
+}
+
+.input-horario-evento-container {
+
+    display: grid;
+  grid-template-columns: auto auto;
+  gap: 15px;
+  align-content: center;
+  label {
+    height: fit-content;
+  }
+}
+
+.inputs-data-evento {
+    display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  align-content: center;
+  label {
+    height: fit-content;
+  }
+}
+
+#currentDateTitle {
+  text-align: center;
+}
+
+#selectedDate {
+  text-align: left;
+  width: min-content;
+  font-weight: bolder;
+}
+
+select,
+input[type="text"],
+input[type="date"],
+input[type="datetime-local"],
+input[type="time"],
+input[type="email"],
+input[type="number"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+#anticipo {
+  width: 70%;
+  margin-bottom: 0;
+}
+
+#horarioDecoracion {
+  width: 70%;
+  margin: 0;
+}
+
+input[type="checkbox"] {
+  padding: 0;
+  margin: 0;
+  text-align: right;
+  width: 30px;
+}
+
+#numeroExterior {
+  width: 100%;
+}
+
+#colonia-container {}
+
+#numeroExterior {
+  width: 100%;
+}
+
+#container-direccion-cliente {
+  display: grid;
+  grid-template-columns: 60% auto;
+  gap: 10px;
+  grid-template-rows: auto;
+  flex-wrap: nowrap;
+
+}
+
+.sugerencias-lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  max-height: 200px;
+  overflow-y: auto;
+  position: relative;
+  top: -23px;
+  background: white;
+  width: 100%;
+}
+
+ul:has(li) {
+  border: 1px solid #333;
+}
+
+.sugerencias-lista li {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.sugerencias-lista li:hover {
+  background: #eee;
+}
+
+#seccion-acciones-evento {
+  display: flex;
+  gap: 10px;
+  justify-content: right;
+  margin-bottom: 5%;
+}
+
+#container-componentes-anticipo {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  margin-bottom: 5%;
+  justify-content: right;
+  justify-items: right
+
+
+}
+
+  #container-anticipo {
+    display: grid;
+    grid-template-rows: min-content 1fr;
+  justify-items: center; /* Centra horizontalmente */
+  align-items: start; 
+
+    label {
+      color: #5cb85c;
+    }
+  }
+
+#listado-movimientos-evento {
+  display: flex;
+  justify-content: center;
+  justify-items: center;
+  justify-self: center;
+  align-items: center;
+  align-content: center;
+  background-color: #fff7ee;
+  color: white;
+  border: solid #333 1px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 22px;
+  padding: 2px;
+  text-align: center;
+  height: min-content;
+
+}
+
+#moneda {
+  width: 100%;
+  justify-self: right;
+}
+
+#moneda-container {
+  justify-self: right;
+  justify-content: right;
+}
+
+
+#tasaCambio {
+  justify-self: right;
+  margin: 0;
+}
+
+#tasa-cambio-container{
+  display: grid;
+  grid-template-columns: auto 40%;
+  align-items: center;
+  gap: 20px;
+}
+#cliente-form-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+      border-bottom: solid 1px #b1b1b1;
+
+}
+
+.info-evento-nota {
+  /* position: absolute;
+  display: flex; */
+  /* gap: 10px;
+  right: 5%;
+  top: 72%; */
+  font-size: 0.7em;
+  color: #414141;
+
+}
+
+.title-section-date-info {
+  font-size: 1.5em;
+  font-weight: bold;
+  span {
+    font-size: 0.9em;
+    font-weight: normal;
+    color: #4e4e4e;
+  }
+}
+
+.buttons-actions-form-container {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin: 20px auto 60px auto;
+}
+
+#container-notas {
+  position: relative;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  max-height: 200px;
+  border: solid 1px #d4d4d4;
+  border-radius: 5px;
+}
+
+#cantidadHorasExtras {
+  width: 50%;
+}
+#costoPorHoraExtra{
+width: 50%;
+justify-self: right;
+}
+.right-section-input{
+    justify-self: right;
+}
+.sub-label{
+  justify-self: right;
+}
+
+.nota-evento-item {
+  position: relative;
+  border-radius: 5px;
+  padding: 0 15px;
+  margin-bottom: 6px;
+  font-size: 0.9em;
+
+  .info-evento-nota {
+    position: absolute;
+    display: flex;
+    gap: 10px;
+    justify-content: end;
+    margin-top: 5px;
+    right: 5%;
+    top: 70%;
+    font-size: 0.7em;
+    color: #414141;
+    
+  }
+}
+.notaEventoComponent
+{
+  width: 100%;
+  height: 80px;
+  border-radius: 8px;
+  border: solid 1px #d4d4d4;
+  font-size: 14px;
+  resize: none;
+  scrollbar-width: none;
+}
+
+#container-title-notas {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#icon-display-list-notas {
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  border: solid 1px #333;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  span {
+    width: 12px;
+    height: 2px;
+    background-color: #333;
+    position: relative;
+
+    &::before {
+      content: "";
+      position: absolute;
+      width: 12px;
+      height: 2px;
+      background-color: #333;
+      transform: rotate(90deg);
+    }
+  }
+}
+
+
+#nota-date-info {
+  margin-bottom: 5%;
+  textarea {
+    width: 100%;
+    height: 100px;
+    border-radius: 8px;
+    border: solid 1px #d4d4d4;
+    padding: 10px;
+    font-size: 14px;
+    resize: none;
+    scrollbar-width: none;
+  }
+}
+
+#btnMostrarOcultarNotasEvento {
+  background: #ff8843;
+  border-color: rgb(255, 157, 91);
+  border-radius: 8px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.notas-mostradas
+{
+  height: 200px;
+  max-height: 200px;
+  overflow-y: scroll;
+}
+.notas-ocultas
+{
+  height: 0;
+  max-height: 0;
+  overflow: hidden;
+}
+#btnAgregarNotaEvento {
+  background: #ff7728;
+  border-color: rgb(255, 157, 91);
+  border-radius: 8px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}

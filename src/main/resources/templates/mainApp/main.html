@@ -10,11 +10,13 @@
     <link rel="icon" type="image/png" th:href="@{/img/faviconApp.png}">
     <link rel="stylesheet" th:href="@{/css/main.css}">
     <link rel="stylesheet" th:href="@{/css/components.css}">
-    <link rel="stylesheet" th:href="@{/css/mainApp/form-nuevo-evento.css}">
+    <link rel="stylesheet" th:href="@{/css/mainApp/form-main.css}">
     <script type="module" th:src="@{/js/mainApp/main.js}"></script>
     <script type="module" th:src="@{/js/components/nav-component.js}"></script>
     <script th:src="@{/js/mainApp/inputs-visual.js}"></script>
     <script th:src="@{/js/components/calendar-component.js}"></script>
+    <script  type="module" th:src="@{/js/components/notas-component.js}"></script>
+
 
 </head>
 
@@ -55,7 +57,7 @@
                 <label for="horarioFin">Horario Fin</label>
                 <input type="time" id="horarioFin" name="horarioFin" value="23:00" required>
 
-                <div class="input-horario-evento-container">
+                <div class="inputs-data-evento">
                     <label for="ocupaDosDias">Ocupa Dos Dias</label>
                     <input class="right-section-input" type="checkbox" id="ocupaDosDias" name="ocupaDosDias">
                     <label for="decorar">Decorar</label>
@@ -71,28 +73,33 @@
                         P/Hora</label>
                     <input class="ocultar-default" type="number" id="costoPorHoraExtra" name="costoPorHora" step="any"
                         min="0" max="9999" value="350">
+
                 </div>
+ 
 
 
                 <label for="costoEvento">Costo</label>
                 <input type="number" id="costoEvento" name="costoEvento" min="0" placeholder="$" data-toggle="anticipo">
                 <div id="nota-date-info" class="">
-                    <h4 class="title-section-date-info"><span>Notas</span></h4>
-                    <div id="container-notas">
-                        <textarea name="notaEvento" id="notaEvento" class="notaEventoComponent"></textarea>
-                        <div class="info-evento-nota">
-                            <p class="user-name">Cesar Vazquez</p>
-                            <p class="nota-fecha-alta">25/Noviembre/2025</p>
+
+                    <div id="container-title-notas">
+                        <h4 class="title-section-date-info"><span>Notas</span></h4>
+                        <div id="buttons-display-list-notas">
+                            <button id="btnAgregarNotaEvento" type="button" aria-label="Agregar Nota">➕</button>
+                            <button id="btnMostrarOcultarNotasEvento" type="button" aria-label="Mostrar/Ocultar Notas">📝</button>
                         </div>
-                        <button  class="btn-eliminar" type="button" aria-label="Eliminar">
-                            ✖
-                        </button>
+                    </div>
+
+                    <div id="container-notas" >
+
+                        
+
                     </div>
                 </div>
 
                 <div id="cliente-form-header" class="cliente-header-section">
                     <h3 class="title-section-date-info">Cliente</h3>
-                    <button id="btnGuardarCliente" class="btn-guardar-cliente">💾</button>
+                    <!-- <button id="btnGuardarCliente" class="btn-guardar-cliente">💾</button> -->
                 </div>
 
                 <div>
@@ -136,24 +143,30 @@
 
                 <!-- <label id="lblAnticipoSubtotal" for=""><h4>Anticipo</h4></label>
                 <input type="text" id="anticipoSubtotal" name="" value="100" readonly> -->
+                                <div id="seccion-acciones-evento">
+                    <button id="listado-movimientos-evento" type="button"><span>📋</span></button>
+                    <button id="listado-movimientos-evento" type="button"><span>↩️</span></button>
+                    <button id="listado-movimientos-evento" type="button"><span>ℹ️</span></button>
 
+                </div>
                 <div>
                     <label id="lblCostoTotal" for="">
                         <h4>Costo Total</h4>
                     </label>
                     <input class="input-readonly" type="text" id="costoTotal" name="" value="5000" readonly>
 
-                    <div>
-                        <label id="lblAnticipos" for="anticipo" class="ocultar-default sub-label">
-                            <h54>Anticipo</h5>
-                        </label>
-                        <input class="ocultar-default right-section-input" type="number" id="anticipo" name="anticipo"
-                            placeholder="$" min="0">
-                        <div id="container-componentes-anticipo">
-                            <!-- <input class="ocultar-default right-section-input" type="number" id="anticipo" name="anticipo" placeholder="$"
-                                min="0"> -->
-                            <!-- <button id="listado-movimientos-evento" type="button"><span>=  </span></button> -->
+
+                    <div id="container-componentes-anticipo">
+                        <div id="container-anticipo">
+                            <label id="lblAnticipos" for="anticipo" class="sub-label">
+                                <h54>Anticipo</h5>
+                            </label>
+                            <input class="right-section-input" type="number" id="anticipo" name="anticipo"
+                                placeholder="$" min="0">
                         </div>
+                        <!-- <input class="ocultar-default right-section-input" type="number" id="anticipo" name="anticipo" placeholder="$"
+                                                                    min="0"> -->
+
 
                     </div>
 
@@ -185,7 +198,7 @@
                 <p id="warning-ocupada-dos-dias" class="warning ocultar-default">El evento ocupa dos dias seguidos</p>
                 <!-- <p id="" class="warning">2 Horas Extras. Evento Finaliza El 17 Noviembre Con Hora 3:00am</p> -->
                 <div class="buttons-actions-form-container">
-                    <button id="submit-evento" class="delete-evento-button" type="submit">Eliminar Evento</button>
+                    <button id="delete-evento" class="delete-evento-button" type="submit">Eliminar Evento</button>
 
                     <button id="submit-evento" class="submit-button" type="submit">Agendar Evento</button>
                 </div>

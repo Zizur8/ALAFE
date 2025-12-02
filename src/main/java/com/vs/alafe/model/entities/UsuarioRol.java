@@ -1,30 +1,27 @@
 package com.vs.alafe.model.entities;
 
-import com.vs.alafe.model.interfaces.ALAFEEntity;
 import jakarta.persistence.*;
-import org.antlr.v4.runtime.misc.NotNull;
 
 import java.io.Serializable;
 
 @Entity
 @Table(name = "usuario_rol")
-public class UsuarioRol implements ALAFEEntity, Serializable {
+public class UsuarioRol implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "id_rol", nullable = false)
-    private Integer idRol;
+    private Short idRol;
 
     @Column(name = "nombre_rol")
     private String rol;
 
-    public Integer getIdRol() {
+    public Short getIdRol() {
         return idRol;
     }
 
-    public void setIdRol(Integer idRol) {
+    public void setIdRol(Short idRol) {
         this.idRol = idRol;
     }
 

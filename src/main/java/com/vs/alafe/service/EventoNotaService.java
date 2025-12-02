@@ -1,7 +1,10 @@
 package com.vs.alafe.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+
+import com.vs.alafe.model.entities.Evento;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +19,11 @@ public class EventoNotaService {
 
     @Transactional
     public EventoNota save(EventoNota eventoNota) {
+
+        if (eventoNota.getFechaIngreso() == null) {
+            eventoNota.setFechaIngreso(LocalDateTime.now());
+        }
+
         return eventoNotaRepository.save(eventoNota);
     }
 

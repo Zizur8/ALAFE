@@ -1,6 +1,21 @@
 import { Evento } from "../class/Evento.js";
 import { Cliente } from "../class/Cliente.js";
+import { Nota } from "../class/Nota.js";
 import { FormularioMain } from "../class/FormularioMain.js";
+import { crearNotaComponent } from "../components/notas-component.js";
+
+
+
+window.AppConfig = {
+  usuarioSession : {idUsuario: 1, nombre: "Cesar", apellidoPaterno: "Vazquez", apellidoMaterno: "Soto", 
+    idRol: 1, telefono: "867 326 9900", propietario: 1, correo: null},
+    agenda : {idAgenda: 1,nombreAgenda: "Morena Linda",descripcion: "Agenda del restaurant Morena Linda",
+      numeroExterior: "3454",calle: "Av. Ocampo",fechaAlta: "2025-11-25T23:00:01.173"}
+};
+
+
+
+const contenedorNotas = document.getElementById("container-notas");
 const calendarComponent = document.querySelector("custom-calendar");
 const formulario = new FormularioMain();
 let currentDate = new Date();
@@ -8,6 +23,7 @@ let selectedDate = null;
 formulario.limpiarFormulario();
 formulario.actualizarTags();
 window.addEventListener("DOMContentLoaded", ajustarAncho);
+
 
 // await cargarEvento(currentDate);
 
@@ -84,26 +100,27 @@ async function cargarEvento(date) {
     const evento = new Evento(eventoFetch[0]);
     console.log("Evento objeto: ---->", evento);
 
-    let clienteFetch;
-    const clienteId = evento?.idCliente || evento.idCliente;
-    if (clienteId) {
-      const clienteResponse = await obtenerCliente(clienteId);
-      if (!clienteResponse.ok) throw new Error("Error al consultar cliente");
-      clienteFetch = await clienteResponse.json();
-    }
+    // let clienteFetch;
+    // const clienteId = evento?.idCliente || evento.idCliente;
+    // if (clienteId) {
+    //   const clienteResponse = await obtenerCliente(clienteId);
+    //   if (!clienteResponse.ok) throw new Error("Error al consultar cliente");
+    //   clienteFetch = await clienteResponse.json();
+    // }
 
-    if (clienteFetch == null && clienteFetch == undefined) {
-      return;
-    }
-    console.log("Cliente fetch:", clienteFetch);
+    // if (clienteFetch == null && clienteFetch == undefined) {
+    //   return;
+    // }
+    // console.log("Cliente fetch:", clienteFetch);
 
-    const cliente = fabricarCliente(clienteFetch);
-    console.log("Cliente objeto:", cliente);
+    // const cliente = fabricarCliente(clienteFetch);
+    // console.log("Cliente objeto:", cliente);
 
     formulario.estadoFormulario = "edit";
-    formulario.cliente = cliente;
+    // formulario.cliente = cliente;
     formulario.evento = evento;
-    formulario.llenarFormulario(evento, cliente);
+    formulario.llenarFormulario(evento);
+    formulario.cliente = evento.cliente;
     formulario.actualizarTags();
     formulario.actualizarBotonSubmit();
   } catch (error) {
@@ -206,18 +223,33 @@ document.addEventListener("submit", function (e) {
   cliente = formulario.obtenerClienteParaCrear();
   formulario.cliente = cliente;
   console.log("Cliente prueba: ",cliente);
-  
+  let movimiento;
   if (formulario.estadoFormulario == "edit") {
     console.log("Modo EDIT");
     evento = formulario.obtenerEventoParaEditar();
+    evento.notas = formulario.obtenerNotasEvento();
+    evento.agenda = window.AppConfig.agenda;
     formulario.evento = evento;
     editarEvento();
+    console.log("Evento ediiiit: ", formulario.evento);
+    movimiento = formulario.generarMovimientoAbono();
   } else {
     console.log("Modo creaar");
     evento = formulario.obtenerEventoParaEditar();
+    evento.notas = formulario.obtenerNotasEvento();
+    evento.agenda = window.AppConfig.agenda;
     formulario.evento = evento;
-    crearEvento();
+    const nuevoEvento = crearEvento();
+    console.log("Evento nuevo-----response: ", nuevoEvento);
+    formulario.evento = nuevoEvento;
+    console.log("Evento creadooooo: ", formulario.evento);
+    movimiento = formulario.generarMovimientoAnticipo();
   }
+
+
+  console.log("aaa-----",  formulario.evento);
+  crearTransaccion(movimiento);
+
 
   //   if (formulario.evento.notasEvento !== "") {
   // editarEventoNota(evento);
@@ -228,8 +260,32 @@ document.addEventListener("submit", function (e) {
   console.log("Evento enviado: ", evento);
 });
 
+function crearTransaccion(movimiento) {
+  fetch(`/alafe/v1/movimiento`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(movimiento),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Error al crear el movimiento");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Movimiento creado con éxito:", data);
+      alert("Movimiento creado correctamente con ID: " + data.idMovimiento);
+    })
+    .catch((error) => {
+      console.error("Error en la petición:", error);
+    });
+
+}
+
+
 function crearEvento() {
-  console.log("Evento en formulario crear:" + formulario.evento);
+  console.log("Evento en formulario crear:", formulario.evento);
+
   fetch(`/alafe/v1/evento`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -239,15 +295,19 @@ function crearEvento() {
       if (!response.ok) {
         throw new Error("Error al crear el evento");
       }
-      return response.json();
+      return response.json(); // ✅ leer JSON una sola vez
     })
     .then((data) => {
-      console.log("Evento creado con éxito:", data);
+      // ✅ ahora sí tienes el objeto evento completo
+      formulario.evento = data;
+      formulario.cliente = data.cliente;
+
+      console.log("Evento creado:", formulario.evento);
       alert("Evento creado correctamente con ID: " + data.idEvento);
     })
     .catch((error) => {
       console.error("Error en la petición:", error);
-      alert("No se pudo editar el evento");
+      alert("No se pudo crear el evento");
     });
 }
 function editarEvento() {
@@ -433,6 +493,7 @@ telefonoInput.addEventListener("input", async () => {
 
       formulario.llenarFormularioConDatosCliente(fabricarCliente(cliente));
       formulario.cliente = cliente;
+      formulario.idCliente = cliente.idCliente;
       sugerenciasLista.innerHTML = "";
     });
     sugerenciasLista.appendChild(li);
@@ -453,3 +514,33 @@ if (calendar.selectedDate) {
     month: "long",
   });
 }
+
+
+function crearNota() {
+  const idEvento = formulario.evento?.idEvento ?? null;
+  const nombreUsuarioIngreso = `${window.AppConfig.usuarioSession.nombre} ${window.AppConfig.usuarioSession.apellidoPaterno}`;
+  const nota = new Nota(null, idEvento, "", nombreUsuarioIngreso);
+  const notaElemento = crearNotaComponent(nota,window.AppConfig.usuarioSession);
+  contenedorNotas.appendChild(notaElemento);
+  //formulario.evento.notas.push(nota);
+  console.log(formulario.evento);
+  console.log("Nota agregada al contenedor");
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("click", (e) => {
+    if (e.target.classList.contains("btn-eliminar")) {
+      const notaItem = e.target.closest(".nota-evento-item");
+      if (notaItem) notaItem.remove();
+    }
+    if (e.target.id === "btnAgregarNotaEvento") {
+      crearNota();
+    }
+    if (e.target.id === "btnMostrarOcultarNotasEvento") {
+      contenedorNotas.className = contenedorNotas.className === "notas-ocultas" ? "notas-mostradas" : "notas-ocultas";
+    }
+
+
+
+  });
+});

@@ -1,35 +1,46 @@
 package com.vs.alafe.controller.entities;
 
-import com.vs.alafe.model.dto.EventoDTO;
-import com.vs.alafe.model.entities.Cliente;
-import com.vs.alafe.model.entities.Evento;
-import com.vs.alafe.model.entities.Usuario;
-import com.vs.alafe.service.ClienteService;
-import com.vs.alafe.service.EventoService;
-import com.vs.alafe.service.UsuarioService;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.vs.alafe.model.entities.*;
+import com.vs.alafe.service.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import com.vs.alafe.model.dto.EventoDTO;
 
 @RestController
 @RequestMapping("/alafe/v1")
 public class EventoRestController {
 
-    @Autowired
-    private EventoService eventoService;
-    @Autowired
-    private ClienteService clienteService;
-    @Autowired
-    private UsuarioService usuarioService;
 
+    private final EventoService eventoService;
+    private final ClienteService clienteService;
+    private final UsuarioService usuarioService;
+    private final EventoNotaService eventoNotaService;
+    private final AgendaService agendaService;
+
+    public EventoRestController(EventoService eventoService, ClienteService clienteService, UsuarioService usuarioService,
+                                EventoNotaService eventoNotaService, AgendaService agendaService) {
+        this.eventoService = eventoService;
+        this.clienteService = clienteService;
+        this.usuarioService = usuarioService;
+        this.eventoNotaService = eventoNotaService;
+        this.agendaService = agendaService;
+    }
+
+
+
+    @GetMapping("evento/prueba/{decoracion}")
+    public ResponseEntity<List<EventoDTO>> showEventosDecoracion(@PathVariable Boolean decoracion) {
+        List<Evento> eventos = eventoService.findEventosDecoracion(decoracion);
+        if (eventos == null) return ResponseEntity.notFound().build();
+
+        List<EventoDTO> dtos = eventos.stream().map(EventoDTO::new).toList();
+        return ResponseEntity.ok((dtos));
+    }
 
     @GetMapping("evento/{id}")
     public ResponseEntity<EventoDTO> showById(@PathVariable Integer id) {
@@ -55,122 +66,52 @@ public class EventoRestController {
     @PostMapping("evento")
     public ResponseEntity<EventoDTO> create(@RequestBody Evento evento) {
         System.out.println("Mi evento post: " + evento.toString());
-        evento.setFechaIngreso(LocalDateTime.now());
+        Usuario usuarioSession = usuarioService.findById(1)
+                .orElseThrow(() -> new RuntimeException("usuario session no encontrado"));
+        if (evento.getUsuarioIngreso() == null) {
+            evento.setUsuarioIngreso(usuarioSession);
+        }
+
+        evento.setFechaAlta(LocalDateTime.now());
+        evento.setFechaUltimaModificacion(LocalDateTime.now());
         Evento guardado = eventoService.save(evento);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(new EventoDTO(guardado));
     }
-//    @PostMapping("evento")
-//    public ResponseEntity<EventoDTO> create(@RequestBody Evento evento) {
-//        // relaciones obligatorias
-//        Cliente cliente = clienteService.findById(evento.getIdCliente())
-//                .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
-//
-//        Usuario usuarioIngreso = usuarioService.findById(evento.getUsuarioIngreso().getIdUsuario())
-//                .orElseThrow(() -> new RuntimeException("Usuario ingreso no encontrado"));
-//        evento.setUsuarioIngreso(usuarioIngreso);
-//
-//        if (evento.getUsuarioModificacion() != null && evento.getUsuarioModificacion().getIdUsuario() != null) {
-//            Usuario usuarioModificacion = usuarioService.findById(evento.getUsuarioModificacion().getIdUsuario())
-//                    .orElseThrow(() -> new RuntimeException("Usuario modificacion no encontrado"));
-//            evento.setUsuarioModificacion(usuarioModificacion);
-//        }
-//
-//        evento.setFechaIngreso(LocalDateTime.now());
-//        evento.setFechaUltimaModificacion(LocalDateTime.now());
-//
-//        Evento guardado = eventoService.save(evento);
-//        return ResponseEntity.ok(new EventoDTO(guardado));
-//    }
 
-
-//    @PutMapping("evento")
-//    public Evento update(@RequestBody Evento evento){
-//        Cliente cliente = clienteService.findById(evento.getIdCliente())
-//                .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
-//        evento.setCliente(cliente);
-//        Usuario usuario = usuarioService.findById(evento.getUsuarioIngreso().getIdUsuario())
-//                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-//        evento.setUsuarioIngreso(usuario);
-//        Usuario usuarioModifico = usuarioService.findById(evento.getIdUsuarioModifico())
-//                .orElseThrow(() -> new RuntimeException("Usuario modifico no encontrado"));
-//        evento.setUsuarioModifico(usuarioModifico);
-//
-//        return eventoService.save(evento);
-//    }
-// @PutMapping("evento/{id}")
-// public ResponseEntity<Evento> update(@PathVariable Integer id, @RequestBody Evento evento){
-//     Optional<Evento> existente = eventoService.findById(id);
-//     if (existente.isEmpty()) {
-//         return ResponseEntity.notFound().build();
-//     }
-
-//     // Reutilizas el existente y actualizas campos
-//     Evento actual = existente.get();
-//     actual.setHorarioInicio(evento.getHorarioInicio());
-//     actual.setHorarioFinal(evento.getHorarioFin());
-//     actual.setDecoracion(evento.getDecoracion());
-//     actual.setCosto(evento.getCosto());
-//     actual.setEspecial(evento.getEspecial());
-//     actual.setGratuito(evento.getGratuito());
-//     actual.setCantidadHoraExtra(evento.getCantidadHoraExtra());
-//     actual.setCostoHoraExtra(evento.getCostoHoraExtra());
-//     actual.setHorarioDecoracion(evento.getHorarioDecoracion());
-//     actual.setFechaUltimaModificacion(LocalDateTime.now());
-
-//     // Relaciones
-//     Cliente cliente = clienteService.findById(evento.getIdCliente())
-//             .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
-//     actual.setCliente(cliente);
-
-//     Usuario usuarioIngreso = usuarioService.findById(evento.getUsuarioIngreso().getIdUsuario())
-//             .orElseThrow(() -> new RuntimeException("Usuario ingreso no encontrado"));
-//     actual.setUsuarioIngreso(usuarioIngreso);
-
-//     if (evento.getUsuarioModifico() != null && evento.getUsuarioModifico().getIdUsuario() != null) {
-//         Usuario usuarioModifico = usuarioService.findById(evento.getUsuarioModifico().getIdUsuario())
-//                 .orElseThrow(() -> new RuntimeException("Usuario modifico no encontrado"));
-//         actual.setUsuarioModifico(usuarioModifico);
-//     }
-
-
-    //     return ResponseEntity.ok(eventoService.save(actual));
-// }
-
-
-    //    @PostMapping("evento")
-//    public Evento create(@RequestBody Evento evento){
-//        return eventoService.save(evento);
-//    }
     @PutMapping("evento/{id}")
     public ResponseEntity<EventoDTO> update(@PathVariable Integer id, @RequestBody Evento evento) {
-        System.out.println("Mi evento put: " + evento);
+        Usuario usuarioSession = usuarioService.findById(1)
+                .orElseThrow(() -> new RuntimeException("usuario session no encontrado"));
+        System.out.println("Mi evento put: " + evento.toString());
 
         Evento existente = eventoService.findById(id)
                 .orElseThrow(() -> new RuntimeException("Evento no encontrado"));
-
-        evento.setIdEvento(id);
-
-        if (evento.getUsuarioIngreso() == null || evento.getUsuarioIngreso().getIdUsuario() == null) {
-            evento.setUsuarioIngreso(existente.getUsuarioIngreso());
-        } else {
-            Usuario ingreso = usuarioService.findById(evento.getUsuarioIngreso().getIdUsuario())
-                    .orElseThrow(() -> new RuntimeException("Usuario ingreso no encontrado"));
-            evento.setUsuarioIngreso(ingreso);
-        }
-
-        Usuario modificacion = usuarioService.findById(evento.getUsuarioModificacion().getIdUsuario())
-                .orElseThrow(() -> new RuntimeException("Usuario modificación no encontrado"));
-        evento.setUsuarioModificacion(modificacion);
-
         Cliente cliente = clienteService.findById(evento.getCliente().getIdCliente())
                 .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
 
-//        BeanUtils.copyProperties(evento.getCliente(), cliente, "idCliente");
-        evento.setCliente(cliente);
+        if(evento.getCliente().getPropietario() == null) {
+            evento.getCliente().setPropietario(cliente.getPropietario());
+        }
+        evento.getNotas().forEach(nota -> {
+            nota.setUsuario(usuarioSession);
+            nota.setEvento(existente);
+            if (nota.getFechaIngreso() == null) {
+                nota.setFechaIngreso(LocalDateTime.now());
+            }
+            System.out.println(nota.toString());
+        });
+
+        if (evento.getUsuarioIngreso() == null) {
+            evento.setUsuarioIngreso(existente.getUsuarioIngreso());
+        }
+        evento.setIdEvento(id);
+        evento.setUsuarioModificacion(usuarioSession);
         evento.setFechaUltimaModificacion(LocalDateTime.now());
+        evento.setFechaAlta(LocalDateTime.now());
+        System.out.println("Mi evento  depsues del cotnroller antes del service: " + evento.toString());
         Evento guardado = eventoService.save(evento);
         return ResponseEntity.ok(new EventoDTO(guardado));
     }
@@ -215,6 +156,91 @@ public class EventoRestController {
         eventoService.delete(evento.orElseThrow());
         return ResponseEntity.noContent().build();
     }
+
+
+    //    @PostMapping("evento")
+//    public ResponseEntity<EventoDTO> create(@RequestBody Evento evento) {
+//        // relaciones obligatorias
+//        Cliente cliente = clienteService.findById(evento.getIdCliente())
+//                .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+//
+//        Usuario usuarioIngreso = usuarioService.findById(evento.getUsuarioIngreso().getIdUsuario())
+//                .orElseThrow(() -> new RuntimeException("Usuario ingreso no encontrado"));
+//        evento.setUsuarioIngreso(usuarioIngreso);
+//
+//        if (evento.getUsuarioModificacion() != null && evento.getUsuarioModificacion().getIdUsuario() != null) {
+//            Usuario usuarioModificacion = usuarioService.findById(evento.getUsuarioModificacion().getIdUsuario())
+//                    .orElseThrow(() -> new RuntimeException("Usuario modificacion no encontrado"));
+//            evento.setUsuarioModificacion(usuarioModificacion);
+//        }
+//
+//        evento.setFechaAlta(LocalDateTime.now());
+//        evento.setFechaUltimaModificacion(LocalDateTime.now());
+//
+//        Evento guardado = eventoService.save(evento);
+//        return ResponseEntity.ok(new EventoDTO(guardado));
+//    }
+
+
+//    @PutMapping("evento")
+//    public Evento update(@RequestBody Evento evento){
+//        Cliente cliente = clienteService.findById(evento.getIdCliente())
+//                .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+//        evento.setCliente(cliente);
+//        Usuario usuario = usuarioService.findById(evento.getUsuarioIngreso().getIdUsuario())
+//                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+//        evento.setUsuarioIngreso(usuario);
+//        Usuario usuarioModifico = usuarioService.findById(evento.getIdUsuarioModifico())
+//                .orElseThrow(() -> new RuntimeException("Usuario modifico no encontrado"));
+//        evento.setUsuarioModifico(usuarioModifico);
+//
+//        return eventoService.save(evento);
+//    }
+// @PutMapping("evento/{id}")
+// public ResponseEntity<Evento> update(@PathVariable Integer id, @RequestBody Evento evento){
+//     Optional<Evento> existente = eventoService.findById(id);
+//     if (existente.isEmpty()) {
+//         return ResponseEntity.notFound().build();
+//     }
+
+//     // Reutilizas el existente y actualizas campos
+//     Evento actual = existente.get();
+//     actual.setHorarioInicio(evento.getHorarioInicio());
+//     actual.setHorarioFinal(evento.getHorarioFin());
+//     actual.setDecoracion(evento.getDecoracion());
+//     actual.setCosto(evento.getCosto());
+//     actual.setEspecial(evento.getEspecial());
+//     actual.setGratuito(evento.getGratuito());
+//     actual.setHorasExtras(evento.getHorasExtras());
+//     actual.setCostoHoraExtra(evento.getCostoHoraExtra());
+//     actual.setHorarioDecoracion(evento.getHorarioDecoracion());
+//     actual.setFechaUltimaModificacion(LocalDateTime.now());
+
+//     // Relaciones
+//     Cliente cliente = clienteService.findById(evento.getIdCliente())
+//             .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+//     actual.setCliente(cliente);
+
+//     Usuario usuarioIngreso = usuarioService.findById(evento.getUsuarioIngreso().getIdUsuario())
+//             .orElseThrow(() -> new RuntimeException("Usuario ingreso no encontrado"));
+//     actual.setUsuarioIngreso(usuarioIngreso);
+
+//     if (evento.getUsuarioModifico() != null && evento.getUsuarioModifico().getIdUsuario() != null) {
+//         Usuario usuarioModifico = usuarioService.findById(evento.getUsuarioModifico().getIdUsuario())
+//                 .orElseThrow(() -> new RuntimeException("Usuario modifico no encontrado"));
+//         actual.setUsuarioModifico(usuarioModifico);
+//     }
+
+
+    //     return ResponseEntity.ok(eventoService.save(actual));
+// }
+
+
+    //    @PostMapping("evento")
+//    public Evento create(@RequestBody Evento evento){
+//        return eventoService.save(evento);
+//    }
+
 
 
 }

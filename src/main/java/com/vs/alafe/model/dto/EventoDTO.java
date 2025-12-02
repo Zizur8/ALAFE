@@ -1,14 +1,16 @@
 package com.vs.alafe.model.dto;
 
 import com.vs.alafe.model.entities.Evento;
+import com.vs.alafe.model.entities.EventoNota;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class EventoDTO {
 
     private Integer idEvento;
-    private Integer idCliente;
     private Integer idAgenda;
     private LocalDateTime horarioInicio;
     private LocalDateTime horarioFinal;
@@ -19,21 +21,24 @@ public class EventoDTO {
     private Integer idUsuarioIngreso;
     private Integer idUsuarioModificacion;
     private LocalDateTime fechaUltimaModificacion;
-    private Short cantidadHoraExtra;
+    private Short horasExtras;
     private LocalDateTime fechaIngreso;
-    private BigDecimal costoHoraExtras;
-
+    private BigDecimal costoHoraExtra;
     private String nombreUsuarioIngreso;
     private String usuarioUltimaModificacion;
     private Integer idEventoNota;
-    private String notas;
+    //private String notas;
+    private List<EventoNotaDTO> notas;
+
+
+
+    private ClienteDTO cliente;
 
     public EventoDTO(Integer idEvento, Integer idCliente, LocalDateTime horarioInicio, LocalDateTime horarioFin, Boolean decorar, Boolean ocupadaDosDias,
         BigDecimal costo, Boolean esEspecial, String nombreUsuarioIngreso, Integer idUsuarioIngreso, Integer idUsuarioModificacion,
-        String usuarioUltimaModificacion, LocalDateTime fechaUltimaModificacion, Short cantidadHoraExtra,
-        LocalDateTime fechaIngreso, BigDecimal costoHoraExtras, String notas, Integer idEventoNota) {
+        String usuarioUltimaModificacion, LocalDateTime fechaUltimaModificacion, Short horasExtras,
+        LocalDateTime fechaIngreso, BigDecimal costoHoraExtras, List<EventoNotaDTO> notas, Integer idEventoNota, ClienteDTO cliente) {
         this.idEvento = idEvento;
-        this.idCliente = idCliente;
         this.horarioInicio = horarioInicio;
         this.horarioFinal = horarioFin;
         this.decoracion = decorar;
@@ -43,16 +48,16 @@ public class EventoDTO {
         this.idUsuarioIngreso = idUsuarioIngreso;
         this.usuarioUltimaModificacion = usuarioUltimaModificacion;
         this.fechaUltimaModificacion = fechaUltimaModificacion;
-        this.cantidadHoraExtra = cantidadHoraExtra;
+        this.horasExtras = horasExtras;
         this.fechaIngreso = fechaIngreso;
-        this.costoHoraExtras = costoHoraExtras;
+        this.costoHoraExtra = costoHoraExtras;
         this.notas = notas;
         this.idEventoNota = idEventoNota;
+        this.cliente = cliente;
     }
 
     public EventoDTO(Evento evento){
         this.idEvento = evento.getIdEvento();
-        this.idCliente = evento.getCliente().getIdCliente();
         this.horarioInicio = evento.getHorarioInicio();
         this.horarioFinal = evento.getHorarioFinal();
         this.decoracion = evento.getDecoracion();
@@ -65,26 +70,22 @@ public class EventoDTO {
         this.nombreUsuarioIngreso = evento.getUsuarioIngreso().getNombre();
         this.usuarioUltimaModificacion = evento.getUsuarioModificacion() != null ? evento.getUsuarioModificacion().getNombre() : null;
         this.fechaUltimaModificacion = evento.getFechaUltimaModificacion();
-        this.cantidadHoraExtra = evento.getCantidadHoraExtra();
-        this.fechaIngreso = evento.getFechaIngreso();
-        this.costoHoraExtras = evento.getCostoHoraExtra();
-//        this.notas = evento.getNotas()
-//                .stream()
-//                .map(EventoNota::getNota)
-//                .collect(Collectors.joining(", "));
+        this.horasExtras = evento.getHorasExtras();
+        this.fechaIngreso = evento.getFechaAlta();
+        this.costoHoraExtra = evento.getCostoHoraExtra();
+        this.notas = evento.getNotas().stream()
+                .map(eventoNota -> {
+                    EventoNotaDTO eventoNotaDTO = new EventoNotaDTO(eventoNota);
+                    return eventoNotaDTO;
+                })
+                .collect(Collectors.toList());
+        this.cliente = new ClienteDTO(evento.getCliente());
 
-        this.notas = evento.getNota() != null ? evento.getNota().getNota() : null;
+//        this.notas = evento.getNota() != null ? evento.getNota().getNota() : null;
 
     }
 
 
-    public Integer getIdCliente() {
-        return idCliente;
-    }
-
-    public void setIdCliente(Integer cliente) {
-        this.idCliente = cliente;
-    }
 
     public Boolean getDecoracion() {
         return decoracion;
@@ -110,12 +111,12 @@ public class EventoDTO {
         this.fechaUltimaModificacion = fechaUltimaModificacion;
     }
 
-    public Short getCantidadHoraExtra() {
-        return cantidadHoraExtra;
+    public Short getHorasExtras() {
+        return horasExtras;
     }
 
-    public void setCantidadHoraExtra(Short cantidadHoraExtra) {
-        this.cantidadHoraExtra = cantidadHoraExtra;
+    public void setHorasExtras(Short cantidadHoraExtra) {
+        this.horasExtras = cantidadHoraExtra;
     }
 
     public LocalDateTime getFechaIngreso() {
@@ -126,12 +127,12 @@ public class EventoDTO {
         this.fechaIngreso = fechaIngreso;
     }
 
-    public BigDecimal getCostoHoraExtras() {
-        return costoHoraExtras;
+    public BigDecimal getCostoHoraExtra() {
+        return costoHoraExtra;
     }
 
-    public void setCostoHoraExtras(BigDecimal costoHoraExtras) {
-        this.costoHoraExtras = costoHoraExtras;
+    public void setCostoHoraExtra(BigDecimal costoHoraExtra) {
+        this.costoHoraExtra = costoHoraExtra;
     }
 
     public Integer getIdEvento() {
@@ -182,13 +183,13 @@ public class EventoDTO {
         this.nombreUsuarioIngreso = nombreUsuarioIngreso;
     }
 
-    public String getNotas() {
-        return notas;
-    }
-
-    public void setNotas(String notas) {
-        this.notas = notas;
-    }
+//    public String getNotas() {
+//        return notas;
+//    }
+//
+//    public void setNotas(String notas) {
+//        this.notas = notas;
+//    }
 
     public LocalDateTime getHorarioDecoracion() {
         return horarioDecoracion;
@@ -211,6 +212,22 @@ public class EventoDTO {
 
     public void setIdUsuarioModificacion(Integer idUsuarioModificacion) {
         this.idUsuarioModificacion = idUsuarioModificacion;
+    }
+
+    public List<EventoNotaDTO> getNotas() {
+        return notas;
+    }
+
+    public void setNotas(List<EventoNotaDTO> notas) {
+        this.notas = notas;
+    }
+
+    public ClienteDTO getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(ClienteDTO cliente) {
+        this.cliente = cliente;
     }
 }
 

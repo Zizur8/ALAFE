@@ -3,32 +3,31 @@ package com.vs.alafe.model.entities;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.*;
-import org.antlr.v4.runtime.misc.NotNull;
 
 @Entity
 @Table(name = "evento")
-public class Evento implements  Serializable {
+public class Evento implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_evento", nullable = false)
     private Integer idEvento;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_cliente", nullable = false)
+    @JoinColumn(name = "id_cliente", nullable = true)
     private Cliente cliente;
-    @JoinColumn(name = "id_propietario")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Propietario propietario;
 
-    @Column(name = "horario_inicio")
+    @Column(name = "horario_inicio", nullable = false)
     private LocalDateTime horarioInicio;
-    @Column(name = "horario_final")
+    @Column(name = "horario_final", nullable = false)
     private LocalDateTime horarioFinal;
-    @Column(name = "decoracion")
+    @Column(name = "decoracion", nullable = false)
     private Boolean decoracion;
-    @Column(name = "costo")
+    @Column(name = "costo", nullable = false)
     private BigDecimal costo;
-    @Column(name = "es_especial")
+    @Column(name = "es_especial", nullable = false)
     private Boolean especial;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "id_usuario_ingreso", nullable = false)
@@ -36,20 +35,23 @@ public class Evento implements  Serializable {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "id_usuario_modificacion", nullable = true)
     private Usuario usuarioModificacion;
-    @Column(name = "fecha_ultima_modificacion")
+    @Column(name = "fecha_ultima_modificacion", nullable = false)
     private LocalDateTime fechaUltimaModificacion;
-    @Column(name = "cantidad_hora_extra")
-    private Short cantidadHoraExtra;
-    @Column(name = "fecha_ingreso")
-    private LocalDateTime fechaIngreso;
-    @Column(name = "costo_hora_extra")
+    @Column(name = "fecha_alta", nullable = false)
+    private LocalDateTime fechaAlta;
+    @Column(name = "costo_hora_extra", nullable = false)
     private BigDecimal costoHoraExtra;
+    @Column(name = "horas_extras", nullable = false)
+    private Short horasExtras;
     @Column(name = "horario_decoracion")
     private LocalDateTime horarioDecoracion;
-    //    @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL)
-//    private List<EventoNota notas = new ArrayList<>();
-    @OneToOne(mappedBy = "evento", cascade = CascadeType.ALL)
-    private EventoNota nota;
+    @OneToMany(mappedBy = "evento", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+    private List<EventoNota> notas = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_agenda", nullable = false)
+    private Agenda agenda;
+//    @OneToOne(mappedBy = "evento", cascade = CascadeType.ALL)
+//    private EventoNota nota;
 
     public Evento() {
     }
@@ -65,14 +67,6 @@ public class Evento implements  Serializable {
 
     public void setIdEvento(Integer idEvento) {
         this.idEvento = idEvento;
-    }
-
-    public Propietario getPropietario() {
-        return propietario;
-    }
-
-    public void setPropietario(Propietario propietario) {
-        this.propietario = propietario;
     }
 
     public Cliente getCliente() {
@@ -103,13 +97,13 @@ public class Evento implements  Serializable {
         return decoracion;
     }
 
-    public EventoNota getNota() {
-        return nota;
-    }
-
-    public void setNota(EventoNota nota) {
-        this.nota = nota;
-    }
+//    public EventoNota getNota() {
+//        return nota;
+//    }
+//
+//    public void setNota(EventoNota nota) {
+//        this.nota = nota;
+//    }
 
     public void setDecoracion(Boolean decoracion) {
         this.decoracion = decoracion;
@@ -139,20 +133,20 @@ public class Evento implements  Serializable {
         this.fechaUltimaModificacion = fechaUltimaModificacion;
     }
 
-    public Short getCantidadHoraExtra() {
-        return cantidadHoraExtra;
+    public Short getHorasExtras() {
+        return horasExtras;
     }
 
-    public void setCantidadHoraExtra(Short cantidadHoraExtra) {
-        this.cantidadHoraExtra = cantidadHoraExtra;
+    public void setHorasExtras(Short horasExtras) {
+        this.horasExtras = horasExtras;
     }
 
-    public LocalDateTime getFechaIngreso() {
-        return fechaIngreso;
+    public LocalDateTime getFechaAlta() {
+        return fechaAlta;
     }
 
-    public void setFechaIngreso(LocalDateTime fechaIngreso) {
-        this.fechaIngreso = fechaIngreso;
+    public void setFechaAlta(LocalDateTime fechaAlta) {
+        this.fechaAlta = fechaAlta;
     }
 
     public BigDecimal getCostoHoraExtra() {
@@ -178,14 +172,14 @@ public class Evento implements  Serializable {
     public void setUsuarioModificacion(Usuario usuarioModificacion) {
         this.usuarioModificacion = usuarioModificacion;
     }
-//
-//    public List<EventoNota> getNotas() {
-//        return notas;
-//    }
-//
-//    public void setNotas(List<EventoNota> notas) {
-//        this.notas = notas;
-//    }
+
+    public List<EventoNota> getNotas() {
+        return notas;
+    }
+
+    public void setNotas(List<EventoNota> notas) {
+        this.notas = notas;
+    }
 
     public LocalDateTime getHorarioDecoracion() {
         return horarioDecoracion;
@@ -193,6 +187,14 @@ public class Evento implements  Serializable {
 
     public void setHorarioDecoracion(LocalDateTime horarioDecoracion) {
         this.horarioDecoracion = horarioDecoracion;
+    }
+
+    public Agenda getAgenda() {
+        return agenda;
+    }
+
+    public void setAgenda(Agenda agenda) {
+        this.agenda = agenda;
     }
 
     @Override
@@ -208,11 +210,10 @@ public class Evento implements  Serializable {
                 ", usuarioIngreso=" + usuarioIngreso +
                 ", usuarioModificacion=" + usuarioModificacion +
                 ", fechaUltimaModificacion=" + fechaUltimaModificacion +
-                ", cantidadHoraExtra=" + cantidadHoraExtra +
-                ", fechaIngreso=" + fechaIngreso +
+                ", horasExtras=" + horasExtras +
+                ", fechaAlta=" + fechaAlta +
                 ", costoHoraExtra=" + costoHoraExtra +
                 ", horarioDecoracion=" + horarioDecoracion +
-                ", nota=" + nota +
                 '}';
     }
 }

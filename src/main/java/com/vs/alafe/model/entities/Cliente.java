@@ -7,17 +7,18 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Entity
 @Table(name = "cliente")
-public class Cliente implements ALAFEEntity,Serializable{
+public class Cliente implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NotNull
-    @Column(name = "id_cliente")
+    @Column(name = "id_cliente",nullable = false)
     private Integer idCliente;
-    @JoinColumn(name = "id_propietario")
+    @JoinColumn(name = "id_propietario",nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private Propietario propietario;
     @Column(name = "telefono")
@@ -137,6 +138,12 @@ public class Cliente implements ALAFEEntity,Serializable{
 
     public void setCorreo(String correo) {
         this.correo = correo;
+    }
+
+    public String nombreCompleto() {
+        return Stream.of(nombre, apellidoPaterno, apellidoMaterno)
+                .filter(s -> s != null && !s.isEmpty())
+                .collect(Collectors.joining(" "));
     }
 
     @Override
