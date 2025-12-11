@@ -15,4 +15,6 @@ public interface MovimientoRepository extends JpaRepository<Movimiento,Integer> 
     @Query("SELECT COALESCE(MAX(m.secuencial), 0) FROM Movimiento m WHERE m.evento.idEvento = :idEvento")
     Integer findMaxSecuencial(@Param("idEvento") Integer idEvento);
 
+    boolean existsByEvento_IdEvento(Integer idEvento);
+
 }

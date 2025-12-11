@@ -1,9 +1,11 @@
 package com.vs.alafe.service;
 
 import com.vs.alafe.model.dto.MovimientoClienteDTO;
+import com.vs.alafe.model.dto.MovimientoNuevoDTO;
 import com.vs.alafe.model.entities.*;
 import com.vs.alafe.repository.MovimientoRepository;
 import jakarta.annotation.PostConstruct;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -38,27 +40,27 @@ public class MovimientoService {
     }
 
     @Transactional
-    public Movimiento save(MovimientoClienteDTO movimientoClienteDTO) throws Exception {
+    public Movimiento save(MovimientoNuevoDTO movimientoNuevoDTO) {
 
         Movimiento movimiento = new Movimiento();
 
-        Optional<Evento> evento = eventoService.findById(movimientoClienteDTO.getIdEvento());
+        Optional<Evento> evento = eventoService.findById(movimientoNuevoDTO.getIdEvento());
         if (evento.isEmpty()) {
-            throw new Exception("Evento no encontrado con id: " + movimientoClienteDTO.getIdEvento());
+            throw new IllegalArgumentException("Evento no encontrado con id: " + movimientoNuevoDTO.getIdEvento());
         }
 
-        Optional<Cliente> cliente = clienteService.findById(movimientoClienteDTO.getIdCliente());
+        Optional<Cliente> cliente = clienteService.findById(movimientoNuevoDTO.getIdCliente());
         if (cliente.isEmpty()) {
-            throw new Exception("Cliente no encontrado con id: " + movimientoClienteDTO.getIdCliente());
+            throw new IllegalArgumentException("Cliente no encontrado con id: " + movimientoNuevoDTO.getIdCliente());
         }
-        Optional<TipoMoneda> moneda = tipoMonedaService.findById(movimientoClienteDTO.getIdTipoMoneda());
-        Optional<TipoOperacionMovimiento> tipoOperacionMovimiento = tipoOperacionMovimientoService.findById(movimientoClienteDTO.getIdTipoOperacionMovimiento());
+        Optional<TipoMoneda> moneda = tipoMonedaService.findById(movimientoNuevoDTO.getIdTipoMoneda());
+        Optional<TipoOperacionMovimiento> tipoOperacionMovimiento = tipoOperacionMovimientoService.findById(movimientoNuevoDTO.getIdTipoOperacionMovimiento());
 
         movimiento.setCliente(cliente.get());
         movimiento.setMoneda(moneda.get());
-        movimiento.setMonto(movimientoClienteDTO.getMonto());
+        movimiento.setMonto(movimientoNuevoDTO.getMonto());
         movimiento.setTipoOperacionMovimiento(tipoOperacionMovimiento.get());
-        movimiento.setTasaCambio(movimientoClienteDTO.getTasaCambio());
+        movimiento.setTasaCambio(movimientoNuevoDTO.getTasaCambio());
         movimiento.setEvento(evento.get());
         movimiento.setUsuario(usuarioSession);
 
@@ -76,6 +78,16 @@ public class MovimientoService {
         return movimientoRepository.findById(id);
     }
 
-
+    @Transactional(readOnly = true)
+    public boolean existsByEvento_IdEvento(Integer idEvento) {
+        if (idEvento == null) {
+            throw new IllegalArgumentException("El idEvento no puede ser nulo");
+        }
+        // Primero valida que el evento exista
+        if (!eventoService.existsById(idEvento)) {
+            throw new EntityNotFoundException("No existe el evento con id " + idEvento);
+        }
+        return movimientoRepository.existsByEvento_IdEvento(idEvento);
+    }
 
 }

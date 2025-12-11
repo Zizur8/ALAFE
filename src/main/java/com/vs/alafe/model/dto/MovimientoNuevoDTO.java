@@ -1,10 +1,8 @@
 package com.vs.alafe.model.dto;
 
-import com.vs.alafe.model.entities.Movimiento;
-
 import java.math.BigDecimal;
 
-public class MovimientoClienteDTO {
+public class MovimientoNuevoDTO {
 
     private Integer idCliente;
     private Integer idEvento;
@@ -12,18 +10,16 @@ public class MovimientoClienteDTO {
     private Integer idTipoMoneda;
     private BigDecimal tasaCambio;
     private Integer idTipoOperacionMovimiento;
-    private BigDecimal montoEquivalente;
     private Integer idUsuario;
 
-    public MovimientoClienteDTO() {}
+    public MovimientoNuevoDTO() {}
 
-    public MovimientoClienteDTO(MovimientoClienteDTO movimientoClienteDTO) {
+    public MovimientoNuevoDTO(MovimientoClienteDTO movimientoClienteDTO) {
         this.idCliente = movimientoClienteDTO.getIdCliente();
         this.idEvento = movimientoClienteDTO.getIdEvento();
         this.monto = movimientoClienteDTO.getMonto();
         this.idTipoMoneda = movimientoClienteDTO.getIdTipoMoneda();
         this.tasaCambio = movimientoClienteDTO.getTasaCambio();
-        this.montoEquivalente = movimientoClienteDTO.getMontoEquivalente();
         this.idUsuario = movimientoClienteDTO.getIdUsuario();
     }
 
@@ -73,14 +69,6 @@ public class MovimientoClienteDTO {
 
     public void setIdTipoOperacionMovimiento(Integer idTipoOperacionMovimiento) {
         this.idTipoOperacionMovimiento = idTipoOperacionMovimiento;
-    }
-
-    public BigDecimal getMontoEquivalente() {
-        return montoEquivalente;
-    }
-
-    public void setMontoEquivalente(BigDecimal montoEquivalente) {
-        this.montoEquivalente = montoEquivalente;
     }
 
     public Integer getIdUsuario() {

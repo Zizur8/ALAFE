@@ -1,7 +1,6 @@
 package com.vs.alafe.model.dto;
 
 import com.vs.alafe.model.entities.Evento;
-import com.vs.alafe.model.entities.EventoNota;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -11,6 +10,7 @@ import java.util.stream.Collectors;
 public class EventoDTO {
 
     private Integer idEvento;
+    private Integer idCliente;
     private Integer idAgenda;
     private LocalDateTime horarioInicio;
     private LocalDateTime horarioFinal;
@@ -24,42 +24,40 @@ public class EventoDTO {
     private Short horasExtras;
     private LocalDateTime fechaIngreso;
     private BigDecimal costoHoraExtra;
-    private String nombreUsuarioIngreso;
-    private String usuarioUltimaModificacion;
-    private Integer idEventoNota;
-    //private String notas;
     private List<EventoNotaDTO> notas;
-
-
-
+    private MovimientoNuevoDTO movimientoNuevoDTO;
     private ClienteDTO cliente;
 
-    public EventoDTO(Integer idEvento, Integer idCliente, LocalDateTime horarioInicio, LocalDateTime horarioFin, Boolean decorar, Boolean ocupadaDosDias,
-        BigDecimal costo, Boolean esEspecial, String nombreUsuarioIngreso, Integer idUsuarioIngreso, Integer idUsuarioModificacion,
-        String usuarioUltimaModificacion, LocalDateTime fechaUltimaModificacion, Short horasExtras,
-        LocalDateTime fechaIngreso, BigDecimal costoHoraExtras, List<EventoNotaDTO> notas, Integer idEventoNota, ClienteDTO cliente) {
+
+    public EventoDTO(){}
+    public EventoDTO(Integer idEvento, Integer idCliente, LocalDateTime horarioInicio, LocalDateTime horarioDecoracion, LocalDateTime horarioFin, Boolean decorar,
+        BigDecimal costo, Boolean esEspecial, Integer idUsuarioIngreso, LocalDateTime fechaUltimaModificacion, Short horasExtras,
+        LocalDateTime fechaIngreso,ClienteDTO cliente,BigDecimal costoHoraExtras, List<EventoNotaDTO> notas ,MovimientoNuevoDTO movimientoNuevoDTO) {
         this.idEvento = idEvento;
+        this.idCliente = idCliente;
         this.horarioInicio = horarioInicio;
         this.horarioFinal = horarioFin;
+        this.horarioDecoracion = horarioDecoracion;
         this.decoracion = decorar;
         this.costo = costo;
         this.especial = esEspecial;
-        this.nombreUsuarioIngreso = nombreUsuarioIngreso;
         this.idUsuarioIngreso = idUsuarioIngreso;
-        this.usuarioUltimaModificacion = usuarioUltimaModificacion;
         this.fechaUltimaModificacion = fechaUltimaModificacion;
         this.horasExtras = horasExtras;
         this.fechaIngreso = fechaIngreso;
         this.costoHoraExtra = costoHoraExtras;
         this.notas = notas;
-        this.idEventoNota = idEventoNota;
+        this.movimientoNuevoDTO = movimientoNuevoDTO;
         this.cliente = cliente;
     }
 
     public EventoDTO(Evento evento){
         this.idEvento = evento.getIdEvento();
+        this.cliente = evento.getCliente() != null ? new ClienteDTO(evento.getCliente()) : null;
+        this.idCliente = evento.getCliente() != null ? evento.getCliente().getIdCliente() : null;
         this.horarioInicio = evento.getHorarioInicio();
         this.horarioFinal = evento.getHorarioFinal();
+        this.horarioDecoracion = evento.getHorarioDecoracion();
         this.decoracion = evento.getDecoracion();
         this.costo = evento.getCosto();
         this.especial = evento.getEspecial();
@@ -67,8 +65,6 @@ public class EventoDTO {
         this.idUsuarioModificacion = evento.getUsuarioModificacion() != null
                 ? evento.getUsuarioModificacion().getIdUsuario()
                 : null;
-        this.nombreUsuarioIngreso = evento.getUsuarioIngreso().getNombre();
-        this.usuarioUltimaModificacion = evento.getUsuarioModificacion() != null ? evento.getUsuarioModificacion().getNombre() : null;
         this.fechaUltimaModificacion = evento.getFechaUltimaModificacion();
         this.horasExtras = evento.getHorasExtras();
         this.fechaIngreso = evento.getFechaAlta();
@@ -79,7 +75,6 @@ public class EventoDTO {
                     return eventoNotaDTO;
                 })
                 .collect(Collectors.toList());
-        this.cliente = new ClienteDTO(evento.getCliente());
 
 //        this.notas = evento.getNota() != null ? evento.getNota().getNota() : null;
 
@@ -93,14 +88,6 @@ public class EventoDTO {
 
     public void setDecoracion(Boolean decoracion) {
         this.decoracion = decoracion;
-    }
-
-    public String getUsuarioUltimaModificacion() {
-        return usuarioUltimaModificacion;
-    }
-
-    public void setUsuarioUltimaModificacion(String usuarioUltimaModificacion) {
-        this.usuarioUltimaModificacion = usuarioUltimaModificacion;
     }
 
     public LocalDateTime getFechaUltimaModificacion() {
@@ -175,22 +162,6 @@ public class EventoDTO {
         this.costo = costo;
     }
 
-    public String getNombreUsuarioIngreso() {
-        return nombreUsuarioIngreso;
-    }
-
-    public void setNombreUsuarioIngreso(String nombreUsuarioIngreso) {
-        this.nombreUsuarioIngreso = nombreUsuarioIngreso;
-    }
-
-//    public String getNotas() {
-//        return notas;
-//    }
-//
-//    public void setNotas(String notas) {
-//        this.notas = notas;
-//    }
-
     public LocalDateTime getHorarioDecoracion() {
         return horarioDecoracion;
     }
@@ -222,12 +193,60 @@ public class EventoDTO {
         this.notas = notas;
     }
 
+    public MovimientoNuevoDTO getMovimientoNuevoDTO() {
+        return movimientoNuevoDTO;
+    }
+
+    public void setMovimientoNuevoDTO(MovimientoNuevoDTO movimientoNuevoDTO) {
+        this.movimientoNuevoDTO = movimientoNuevoDTO;
+    }
+
+    public LocalDateTime getHorarioFinal() {
+        return horarioFinal;
+    }
+
+    public void setHorarioFinal(LocalDateTime horarioFinal) {
+        this.horarioFinal = horarioFinal;
+    }
+
+    public Integer getIdCliente() {
+        return idCliente;
+    }
+
+    public void setIdCliente(Integer idCliente) {
+        this.idCliente = idCliente;
+    }
+
     public ClienteDTO getCliente() {
         return cliente;
     }
 
     public void setCliente(ClienteDTO cliente) {
         this.cliente = cliente;
+    }
+
+    @Override
+    public String toString() {
+        return "EventoDTO{" +
+                "idEvento=" + idEvento +
+                ", idCliente=" + idCliente +
+                ", idAgenda=" + idAgenda +
+                ", horarioInicio=" + horarioInicio +
+                ", horarioFinal=" + horarioFinal +
+                ", horarioDecoracion=" + horarioDecoracion +
+                ", decoracion=" + decoracion +
+                ", costo=" + costo +
+                ", especial=" + especial +
+                ", idUsuarioIngreso=" + idUsuarioIngreso +
+                ", idUsuarioModificacion=" + idUsuarioModificacion +
+                ", fechaUltimaModificacion=" + fechaUltimaModificacion +
+                ", horasExtras=" + horasExtras +
+                ", fechaIngreso=" + fechaIngreso +
+                ", costoHoraExtra=" + costoHoraExtra +
+                ", notas=" + notas +
+                ", movimientoNuevoDTO=" + movimientoNuevoDTO +
+                ", cliente=" + cliente +
+                '}';
     }
 }
 

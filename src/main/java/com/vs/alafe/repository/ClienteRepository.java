@@ -11,6 +11,7 @@ public interface ClienteRepository extends JpaRepository<Cliente, Integer> {
 
     List<Cliente> findByTelefonoContaining(String telefono);
 
+    boolean existsByIdCliente(Integer idCliente);
 
 
 }

@@ -10,8 +10,20 @@ import java.util.List;
 
 @Repository
 public interface EventoRepository extends EntityRepository<Evento> {
-    List<Evento> findByHorarioInicioBetween(LocalDateTime horarioInicio, LocalDateTime horarioFin);
+    List<Evento> findByHorarioInicioBetweenAndEliminadoFalse(LocalDateTime horarioInicio, LocalDateTime horarioFin);
 
     @Query("SELECT e FROM Evento e WHERE e.decoracion = :decoracion")
     List<Evento> findEventosDecoracion(@Param("decoracion") Boolean isDecoracion);
+
+    boolean existsById(Integer idEvento);
+
+    boolean existsByMovimientos_Evento_IdEvento(Integer idEvento);
+
+    @Query("SELECT e FROM Evento e " +
+            "WHERE e.eliminado = false " +
+            "AND e.horarioInicio <= :horarioFin " +
+            "AND e.horarioFinal >= :horarioInicio")
+    List<Evento> findEventosEnRango(@Param("horarioInicio") LocalDateTime inicio,
+                                    @Param("horarioFin") LocalDateTime fin);
+
 }

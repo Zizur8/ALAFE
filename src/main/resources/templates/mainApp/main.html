@@ -15,7 +15,8 @@
     <script type="module" th:src="@{/js/components/nav-component.js}"></script>
     <script th:src="@{/js/mainApp/inputs-visual.js}"></script>
     <script th:src="@{/js/components/calendar-component.js}"></script>
-    <script  type="module" th:src="@{/js/components/notas-component.js}"></script>
+    <script type="module" th:src="@{/js/components/notas-component.js}"></script>
+    <script type="module" th:src="@{/js/components/modal-movimiento-financiero.js}"></script>
 
 
 </head>
@@ -26,6 +27,65 @@
     </header>
 
     <custom-aside></custom-aside>
+
+    <!-- <div id="modalMovimiento">
+        <div class="header">
+            <h2>Nuevo Movimiento</h2>
+        </div>
+
+        <div >
+            <div class="anticipo-formaPago-container">
+                <div>
+                    <label id="lblAnticipos" for="anticipo" class="">
+                        <h54>Anticipo</h5>
+                    </label>
+                    <input class="right-section-input" type="number" id="anticipo" name="anticipo" placeholder="$"
+                        min="0">
+                </div>
+                <div>
+                    <label id="lblFormaPago" for="lblFormaPago" class="">
+                        <h54>Forma Pago</h5>
+                    </label>
+                    <select id="forma-pago" name="forma-pago" class="" required>
+                        <option value="Efectivo" selected>Efectivo</option>
+                        <option value="Deposito">Deposito</option>
+                        <option value="Transferencia">Transferencia</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="anticipo-formaPago-container">
+                                <div>
+                    <label id="lblTasaCambio" for="tasaCambio" class="">Tasa
+                        cambio</label>
+                    <input type="number" class="" id="tasaCambio" name="tasaCambio" step="any" min="0" max="9999" value="18.50"
+                        placeholder="$">
+                </div>
+                <div>
+                <label id="lblMoneda" for="moneda-movimiento" class="">Moneda</label>
+                <select id="moneda-movimiento" name="moneda-movimiento" class="" required>
+                    <option value="MXN" selected>MXN</option>
+                    <option value="USD">USD</option>
+                </select>
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+        <div class="footer">
+            <button id="cancelar-movimiento" class="cancelar-button" type="button">Cancelar</button>
+            <button id="guardar-movimiento" class="submit-button" type="button">Guardar</button>
+
+        </div>
+
+
+    </div>
+        <div class="bg-translucent"></div> -->
 
     <main>
 
@@ -53,9 +113,9 @@
             <div id="body-date-info">
 
                 <label for="horarioInicio">Horario Inicio</label>
-                <input type="time" id="horarioInicio" name="horarioInicio" value="16:00" required>
+                <input type="time" id="horarioInicio" name="horarioInicio" value="16:00" >
                 <label for="horarioFin">Horario Fin</label>
-                <input type="time" id="horarioFin" name="horarioFin" value="23:00" required>
+                <input type="time" id="horarioFin" name="horarioFin" value="23:00" >
 
                 <div class="inputs-data-evento">
                     <label for="ocupaDosDias">Ocupa Dos Dias</label>
@@ -75,7 +135,7 @@
                         min="0" max="9999" value="350">
 
                 </div>
- 
+
 
 
                 <label for="costoEvento">Costo</label>
@@ -86,13 +146,14 @@
                         <h4 class="title-section-date-info"><span>Notas</span></h4>
                         <div id="buttons-display-list-notas">
                             <button id="btnAgregarNotaEvento" type="button" aria-label="Agregar Nota">➕</button>
-                            <button id="btnMostrarOcultarNotasEvento" type="button" aria-label="Mostrar/Ocultar Notas">📝</button>
+                            <button id="btnMostrarOcultarNotasEvento" type="button"
+                                aria-label="Mostrar/Ocultar Notas">📝</button>
                         </div>
                     </div>
 
-                    <div id="container-notas" >
+                    <div id="container-notas">
 
-                        
+
 
                     </div>
                 </div>
@@ -105,14 +166,14 @@
                 <div>
                     <label for="telefonoCliente">Teléfono</label>
                     <input type="text" id="telefonoCliente" name="telefonoCliente" pattern="[0-9]{10}"
-                        autocomplete="8673265329" title="Debe contener 10 dígitos numéricos." required>
+                        autocomplete="8673265329" title="Debe contener 10 dígitos numéricos." >
                     <ul id="sugerenciasClientes" class="sugerencias-lista"></ul>
                 </div>
 
                 <label for="correoCliente">Correo</label>
                 <input type="email" id="correoCliente" name="correo">
                 <label for="direccionCliente">Dirección</label>
-                <input type="text" id="direccionCliente" name="direccionCliente" required>
+                <input type="text" id="direccionCliente" name="direccionCliente" >
 
                 <div id="container-direccion-cliente" class="">
                     <div>
@@ -127,15 +188,15 @@
                     <div>
                         <label for="numeroExterior">Num. Exterior</label>
 
-                        <input type="text" id="numeroExterior" name="numeroExterior" placeholder="#" required>
+                        <input type="text" id="numeroExterior" name="numeroExterior" placeholder="#" >
                     </div>
 
                 </div>
 
                 <label for="nombreCliente">Nombre</label>
-                <input type="text" id="nombreCliente" name="nombreCliente" required>
+                <input type="text" id="nombreCliente" name="nombreCliente" >
                 <label for="apellidoPaternoCliente">Apellido Paterno</label>
-                <input type="text" id="apellidoPaternoCliente" name="apellidoPaternoCliente" required>
+                <input type="text" id="apellidoPaternoCliente" name="apellidoPaternoCliente" >
                 <label for="apellidoMaternoCliente">Apellido Materno</label>
                 <input type="text" id="apellidoMaternoCliente" name="apellidoMaternoCliente">
 
@@ -143,7 +204,7 @@
 
                 <!-- <label id="lblAnticipoSubtotal" for=""><h4>Anticipo</h4></label>
                 <input type="text" id="anticipoSubtotal" name="" value="100" readonly> -->
-                                <div id="seccion-acciones-evento">
+                <div id="seccion-acciones-evento">
                     <button id="listado-movimientos-evento" type="button"><span>📋</span></button>
                     <button id="listado-movimientos-evento" type="button"><span>↩️</span></button>
                     <button id="listado-movimientos-evento" type="button"><span>ℹ️</span></button>
@@ -154,39 +215,16 @@
                         <h4>Costo Total</h4>
                     </label>
                     <input class="input-readonly" type="text" id="costoTotal" name="" value="5000" readonly>
+                    <label id="lblAnticipo" for="">
+                        <h5>Anticipo</h5>
+                    </label>
 
-
-                    <div id="container-componentes-anticipo">
-                        <div id="container-anticipo">
-                            <label id="lblAnticipos" for="anticipo" class="sub-label">
-                                <h54>Anticipo</h5>
-                            </label>
-                            <input class="right-section-input" type="number" id="anticipo" name="anticipo"
-                                placeholder="$" min="0">
-                        </div>
-                        <!-- <input class="ocultar-default right-section-input" type="number" id="anticipo" name="anticipo" placeholder="$"
-                                                                    min="0"> -->
-
-
+                    <div id="anticipo-container">
+                            <input class="input-readonly" type="text" id="anticipo" name="" value="100" readonly>
+                            <button id="btn-agregar-pago" type="button">✏️</button>
                     </div>
 
-                    <div id="moneda-container">
-                        <div class="input-horario-evento-container">
-                            <label id="lblMoneda" for="moneda" class="ocultar-default sub-label">Moneda</label>
-                            <select id="moneda" name="moneda" class="ocultar-default" required>
-                                <option value="MXN" selected>MXN</option>
-                                <option value="USD">USD</option>
-                            </select>
-                        </div>
 
-                        <div id="tasa-cambio-container" class="">
-                            <label id="lblTasaCambio" for="tasaCambio" class="ocultar-default sub-label">Tasa
-                                cambio</label>
-                            <input type="number" class="ocultar-default" id="tasaCambio" name="tasaCambio" step="any"
-                                min="0" max="9999" value="18.50" placeholder="$">
-                        </div>
-
-                    </div>
 
                     <label id="lblSaldoOperacion" for="">
                         <h5>Saldo</h5>
@@ -198,7 +236,7 @@
                 <p id="warning-ocupada-dos-dias" class="warning ocultar-default">El evento ocupa dos dias seguidos</p>
                 <!-- <p id="" class="warning">2 Horas Extras. Evento Finaliza El 17 Noviembre Con Hora 3:00am</p> -->
                 <div class="buttons-actions-form-container">
-                    <button id="delete-evento" class="delete-evento-button" type="submit">Eliminar Evento</button>
+                    <button id="delete-evento" class="delete-evento-button" type="">Eliminar Evento</button>
 
                     <button id="submit-evento" class="submit-button" type="submit">Agendar Evento</button>
                 </div>

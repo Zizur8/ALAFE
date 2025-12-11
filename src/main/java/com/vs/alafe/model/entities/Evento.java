@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.vs.alafe.model.dto.EventoDTO;
 import jakarta.persistence.*;
 
 @Entity
@@ -15,7 +16,7 @@ public class Evento implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_evento", nullable = false)
     private Integer idEvento;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "id_cliente", nullable = true)
     private Cliente cliente;
 
@@ -45,15 +46,30 @@ public class Evento implements Serializable {
     private Short horasExtras;
     @Column(name = "horario_decoracion")
     private LocalDateTime horarioDecoracion;
-    @OneToMany(mappedBy = "evento", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+    @OneToMany(mappedBy = "evento", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<EventoNota> notas = new ArrayList<>();
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_agenda", nullable = false)
     private Agenda agenda;
+    @Column(name = "eliminado")
+    private Boolean eliminado;
+    @OneToMany(mappedBy = "evento", fetch = FetchType.LAZY)
+    private List<Movimiento> movimientos = new ArrayList<>();
 //    @OneToOne(mappedBy = "evento", cascade = CascadeType.ALL)
 //    private EventoNota nota;
 
     public Evento() {
+    }
+
+    public Evento(EventoDTO eventoDTO) {
+        this.idEvento = eventoDTO.getIdEvento();
+        this.costo = eventoDTO.getCosto();
+        this.costoHoraExtra = eventoDTO.getCostoHoraExtra();
+        this.decoracion = eventoDTO.getDecoracion();
+        this.especial = eventoDTO.getEspecial();
+        this.horarioInicio = eventoDTO.getHorarioInicio();
+        this.horarioFinal = eventoDTO.getHorarioFinal();
+        this.horasExtras = eventoDTO.getHorasExtras();
     }
 
     public Evento(Integer idEvento) {
@@ -195,6 +211,22 @@ public class Evento implements Serializable {
 
     public void setAgenda(Agenda agenda) {
         this.agenda = agenda;
+    }
+
+    public Boolean getEliminado() {
+        return eliminado;
+    }
+
+    public void setEliminado(Boolean eliminado) {
+        this.eliminado = eliminado;
+    }
+
+    public List<Movimiento> getMovimientos() {
+        return movimientos;
+    }
+
+    public void setMovimientos(List<Movimiento> movimientos) {
+        this.movimientos = movimientos;
     }
 
     @Override

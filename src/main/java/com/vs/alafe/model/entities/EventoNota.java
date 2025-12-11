@@ -1,6 +1,7 @@
 package com.vs.alafe.model.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.vs.alafe.model.dto.EventoNotaDTO;
 import com.vs.alafe.model.interfaces.ALAFEEntity;
 import jakarta.persistence.*;
 import org.antlr.v4.runtime.misc.NotNull;
@@ -27,6 +28,8 @@ public class EventoNota implements Serializable{
     private Usuario usuario;
     @Column(name = "fecha_ingreso")
     private LocalDateTime fechaIngreso;
+
+    public EventoNota(){}
 
     public Integer getIdEventoNota() {
         return idEventoNota;

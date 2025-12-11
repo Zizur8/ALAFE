@@ -2,6 +2,7 @@ package com.vs.alafe.controller.entities;
 
 import com.vs.alafe.model.dto.MovimientoClienteDTO;
 import com.vs.alafe.model.dto.MovimientoDTO;
+import com.vs.alafe.model.dto.MovimientoNuevoDTO;
 import com.vs.alafe.model.entities.*;
 import com.vs.alafe.repository.MovimientoRepository;
 import com.vs.alafe.service.*;
@@ -51,9 +52,9 @@ public class MovimientoRestController {
     }
 
     @PostMapping("/movimiento")
-    public ResponseEntity<MovimientoDTO> guardarMovimiento(@RequestBody MovimientoClienteDTO movimientoClienteDTO) throws Exception {
+    public ResponseEntity<MovimientoDTO> guardarMovimiento(@RequestBody MovimientoNuevoDTO movimientoNuevoDTO) throws Exception {
 
-        Movimiento nuevoMovimiento = movimientoService.save(movimientoClienteDTO);
+        Movimiento nuevoMovimiento = movimientoService.save(movimientoNuevoDTO);
         // Devuelve 201 Created con el DTO
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new MovimientoDTO(nuevoMovimiento));

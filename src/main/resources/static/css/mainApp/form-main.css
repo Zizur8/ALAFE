@@ -11,7 +11,7 @@
   height: 80vh;
   width: 80vw;
   top: 0;
-  z-index: 999;
+  z-index: 50;
   max-width: 85%;
   padding: 30px;
   background: #fff;
@@ -31,6 +31,26 @@
     cursor: pointer;
     width: 100%;
     font-size: 16px;
+  }
+}
+
+#anticipo-container{
+  display: grid;
+  grid-template-columns: auto 15%;
+  gap: 15px;
+  align-content: center;
+  label {
+    height: fit-content;
+  }
+
+  #btn-agregar-pago {
+    background: #ff8843;
+    border-color: rgb(255, 157, 91);
+    border-radius: 8px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    
   }
 }
 
@@ -84,14 +104,10 @@ input[type="email"],
 input[type="number"] {
   width: 100%;
   padding: 10px;
-  margin-bottom: 20px;
+  /*margin-bottom: 20px;*/
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
-}
-#anticipo {
-  width: 70%;
-  margin-bottom: 0;
 }
 
 #horarioDecoracion {
@@ -198,10 +214,7 @@ ul:has(li) {
 
 }
 
-#moneda {
-  width: 100%;
-  justify-self: right;
-}
+
 
 #moneda-container {
   justify-self: right;

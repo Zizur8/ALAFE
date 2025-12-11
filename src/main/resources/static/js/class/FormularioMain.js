@@ -2,6 +2,7 @@ import { Evento } from "../class/Evento.js";
 import { Cliente } from "../class/Cliente.js";
 import { Nota } from "../class/Nota.js";
 import { crearNotaComponent } from "../components/notas-component.js";
+
 export class FormularioMain {
   constructor(formId = "form-evento") {
     this.fechaSelected = null;
@@ -10,6 +11,7 @@ export class FormularioMain {
     this.cliente = null;
     this.idCliente = null;
     this.evento = null;
+
     this.inputs = {
       horarioInicio: this.form.querySelector("#horarioInicio"),
       horarioFin: this.form.querySelector("#horarioFin"),
@@ -54,7 +56,7 @@ export class FormularioMain {
       miniStatusLiquidado: this.form.querySelector("#mini-status-liquidado"),
     };
     this.labels = {
-      anticipos: this.form.querySelector("#lblAnticipos"),
+      anticipos: this.form.querySelector("#lblAnticipo"),
       horarioDecoracion: this.form.querySelector("#lblHorarioDecoracion"),
       tasaCambio: this.form.querySelector("#lblTasaCambio"),
       moneda: this.form.querySelector("#lblMoneda"),
@@ -66,7 +68,7 @@ export class FormularioMain {
     this.TipoMovimiento = Object.freeze({
       ANTICIPO: 1,
       ABONO: 2,
-      DEVOLUCION: 3
+      DEVOLUCION: 3,
     });
 
     this.initListeners();
@@ -75,12 +77,6 @@ export class FormularioMain {
   initListeners() {
     this.inputs.decorar.addEventListener("change", () =>
       this.actualizarHorarioDecoracion()
-    );
-    this.inputs.anticipo.addEventListener("change", () =>
-      this.actualizarComponentesMonetarios()
-    );
-    this.inputs.tasaCambio.addEventListener("change", () =>
-      this.actualizarComponentesMonetarios()
     );
     this.inputs.costoEvento.addEventListener("change", () =>
       this.actualizarComponentesMonetarios()
@@ -91,28 +87,36 @@ export class FormularioMain {
     this.inputs.costoPorHoraExtra.addEventListener("change", () =>
       this.calcularCostoTotal()
     );
-    this.inputs.moneda.addEventListener("change", () =>
-      this.actualizarComponentesMonetarios()
-    );
+
   }
 
   limpiarFormulario() {
-    this.inputs.decorar.checked = true;
-    Object.values(this.inputs).forEach((input) => {
-      if (input.type === "checkbox") {
+    console.log("Limpiar formulario");
+    Object.values(this.inputs || {}).forEach((input) => {
+      if (!input) return;
+
+      const tag = input.tagName?.toLowerCase();
+
+      if (tag === "input" && input.type === "checkbox") {
         input.checked = false;
-      } else if (input.tagName === "SELECT") {
+      } else if (tag === "select") {
         input.selectedIndex = 0;
-      } else {
+      } else if ("value" in input) {
         input.value = "";
       }
+
       input.style.display = "";
     });
-    this.inputs.tasaCambio.value = 17.0;
+    this.inputs.decorar.checked = true;
+    this.inputs.costoEvento.value = 0;
     this.actualizarHorarioDecoracion();
     this.actualizarComponentesMonetarios();
     const contenedorNotas = document.getElementById("container-notas");
+    this.evento = null;
+    this.cliente = null;
     contenedorNotas.innerHTML = "";
+    this.renderizarBotonEliminarEvento();
+    this.actualizarBotonSubmit();
   }
 
   llenarFormulario(evento) {
@@ -121,10 +125,14 @@ export class FormularioMain {
     console.log("evento recibido en llenarFormulario:", evento);
     this.inputs.horarioInicio.value = this.formatearHora(evento?.horarioInicio);
     this.inputs.horarioFin.value = this.formatearHora(evento?.horarioFin);
+    this.inputs.horarioDecoracion.value = this.formatearHora(
+      evento?.horarioDecoracion
+    );
     this.inputs.cantidadHorasExtras.value = Number(
       evento?.cantidadHoraExtras ?? 0
     );
     this.inputs.costoEvento.value = Number(evento?.costo ?? 0);
+    console.log("Costo evento llenado:", this.inputs.costoEvento.value);
     this.inputs.anticipo.value = Number(evento?.anticipo ?? 0);
     this.inputs.decorar.checked = !!evento?.decoracion;
     this.inputs.esEspecial.checked = !!evento?.especial;
@@ -136,14 +144,13 @@ export class FormularioMain {
     this.inputs.nombreCliente.value = cliente?.nombre ?? "";
     this.inputs.apellidoPaternoCliente.value = cliente?.apellidoPaterno ?? "";
     this.inputs.apellidoMaternoCliente.value = cliente?.apellidoMaterno ?? "";
-    //this.inputs.notaEvento.value = evento?.notasEvento ?? "";
     this.inputs.costoPorHoraExtra.value = evento?.costoHoraExtra ?? "";
-
-    this.actualizarComponentesAnticipos();
+  console.log("antes de actualizar componentes anticipos");
+    console.log("Despues de actualizar componentes anticipos");
+    this.actualizarComponentesMonetarios();
     this.calcularCostoTotal();
     this.actualizarLabelMovimiento();
     this.actualizarComponentesHorasExtras();
-    // this.mostrarBotonListadoMovimientos();
     this.llenarNotasEnFormulario(evento?.notas || []);
   }
 
@@ -192,10 +199,20 @@ export class FormularioMain {
     }
   }
 
+  renderizarBotonEliminarEvento() {
+    console.log("Renderizar boton eliminar evento" + this.estadoFormulario);
+    const btnEliminar = this.form.querySelector("#delete-evento");
+    if (this.estadoFormulario === "edit") {
+      btnEliminar.style.display = "inline-block";
+      return;
+    }
+    btnEliminar.style.display = "none";
+  }
+
   actualizarBotonSubmit() {
     console.log("Estado formlario:" + this.estadoFormulario);
     this.buttons.submitEvento.innerHTML =
-      this.estadoFormulario == "create" ? "Agendar Evento" : "Guardar Evento";
+      this.estadoFormulario === "create" ? "Agendar Evento" : "Guardar Evento";
   }
 
   actualizarTags() {
@@ -216,13 +233,6 @@ export class FormularioMain {
       : "none";
   }
 
-  actualizarComponentesAnticipos() {
-    this.labels.anticipos.style.display =
-      this.inputs.costoEvento.value > 0 ? "inline" : "none";
-    this.inputs.anticipo.style.display =
-      this.inputs.costoEvento.value > 0 ? "inline" : "none";
-  }
-
   actualizarComponentesHorasExtras() {
     this.labels.costoPorHoraExtra.style.display =
       this.inputs.cantidadHorasExtras.value > 0 ? "inline" : "none";
@@ -232,34 +242,15 @@ export class FormularioMain {
   }
 
   actualizarComponentesMonetarios() {
+    console.log(this.inputs.costoEvento.value + "-----emtodo monerarios");
     const costoEventoValido =
       Number(this.inputs.costoEvento.value) > 0 ? true : false;
-    const anticipoCampo = Number(this.inputs.anticipo.value) > 0 ? true : false;
-    console.log(costoEventoValido);
-    const indexMonedaActual = this.inputs.moneda.selectedIndex;
-
-    if (indexMonedaActual == 0) {
-      this.inputs.tasaCambio.value = 1;
-    } else {
-      this.inputs.tasaCambio.value = 17.0;
-    }
-
-    this.labels.anticipos.style.display = costoEventoValido ? "inline" : "none";
-    this.inputs.anticipo.style.display = costoEventoValido ? "inline" : "none";
-    this.labels.moneda.style.display = anticipoCampo ? "inline" : "none";
-    this.inputs.moneda.style.display = anticipoCampo ? "inline" : "none";
-
-    this.labels.tasaCambio.style.display =
-      indexMonedaActual == 0 ? "none" : "inline";
-    this.inputs.tasaCambio.style.display =
-      indexMonedaActual == 0 ? "none" : "inline";
-
+    console.log(costoEventoValido + "**********");
     this.calcularCostoTotal();
   }
 
   calcularCostoTotal() {
-    this.inputs.costoTotal.value = "";
-    console.log(this.inputs.costoEvento.value);
+    console.log(this.inputs.costoEvento.value + "--------------");
     console.log(this.inputs.costoPorHoraExtra.value);
     console.log(this.inputs.cantidadHorasExtras.value);
     this.inputs.costoTotal.value =
@@ -282,10 +273,12 @@ export class FormularioMain {
     const horarioInicio =
       fecha && horaInicio ? `${fecha}T${horaInicio}:00` : null;
     const horarioFin = fecha && horaFin ? `${fecha}T${horaFin}:00` : null;
-    // const horarioInicio = (this.fechaSelected && horaInicio) ? new Date(`${this.fechaSelected}T${horaInicio}:00`) : null;
-    // const horarioFin = (this.fechaSelected && horaFin) ? new Date(`${this.fechaSelected}T${horaFin}:00`) : null;
-    const horarioDecoracionValue = this.inputs.horarioDecoracion.value.trim();
-    //const nota = this.inputs.notaEvento.value.trim();
+    const horarioDecoracionValue = 
+      this.inputs.decorar.checked
+        ? this.inputs.horarioDecoracion.value.trim()
+        : "";
+
+    const nota = this.inputs.notaEvento.value.trim();
     const horasExtras = Number(this.inputs.cantidadHorasExtras.value);
     let evento = new Evento({
       idCliente: Number(this.cliente.idCliente),
@@ -324,39 +317,17 @@ export class FormularioMain {
       fecha && horaInicio ? `${fecha}T${horaInicio}:00` : null;
     const horarioFinal = fecha && horaFin ? `${fecha}T${horaFin}:00` : null; // const horarioInicio = (this.fechaSelected && horaInicio) ? new Date(`${this.fechaSelected}T${horaInicio}:00`) : null;
     // const horarioFin = (this.fechaSelected && horaFin) ? new Date(`${this.fechaSelected}T${horaFin}:00`) : null;
-    const horarioDecoracionValue = this.inputs.horarioDecoracion.value.trim();
+    const horarioDecoracionValue = 
+      this.inputs.decorar.checked 
+        ? this.inputs.horarioDecoracion.value.trim()
+        : "";
+        console.log("Horario decoracion value: ", horarioDecoracionValue);
     //const nota = this.inputs.notaEvento.value.trim();
     const horasExtras = Number(this.inputs.cantidadHorasExtras.value);
-    // let evento = new Evento({
-    //   // idEvento: this.evento.idEvento || null,
-    //   // cliente: {idCliente: this.cliente.idCliente},
-    //   idCliente: Number(this.cliente.idCliente),
-    //   horarioInicio: horarioInicio,
-    //   horarioFinal: horarioFinal,
-    //   decoracion: this.inputs.decorar.checked,
-    //   costo: Number(this.inputs.costoEvento.value),
-    //   especial: this.inputs.esEspecial.checked,
-    //   idUsuarioIngreso: 1,
-    //   fechaUltimaModificacion: new Date(),
-    //   cantidadHoraExtra: horasExtras > 0 ? horasExtras : null,
-    //   fechaIngreso: new Date(),
-    //   costoHoraExtra:
-    //     Number(this.inputs.costoPorHoraExtra.value) === 0
-    //       ? null
-    //       : Number(this.inputs.costoPorHoraExtra.value),
-    //   horarioDecoracion:
-    //     horarioDecoracionValue === ""
-    //       ? null
-    //       : new Date(
-    //           `${
-    //             new Date().toISOString().split("T")[0]
-    //           }T${horarioDecoracionValue}:00`
-    //         ),
-    //   notasEvento: nota.length > 0 ? nota : null,
-    // });
+
     let evento = {};
     evento.idAgenda = 1;
-    if (this.estadoFormulario == "edit") evento.idEvento = this.evento.idEvento;
+    if (this.estadoFormulario == "edit" || this.estadoFormulario == "delete") evento.idEvento = this.evento.idEvento;
     evento.cliente = this.cliente;
     // evento.idCliente = Number(this.cliente.idCliente);
     if (horarioInicio) evento.horarioInicio = horarioInicio;
@@ -418,6 +389,7 @@ export class FormularioMain {
       fechaAlta: new Date(),
     });
 
+    console.log("Cliente para crear:", this.cliente);
     if (this.cliente != null) {
       cliente.idCliente = this.cliente.idCliente;
     }
@@ -432,22 +404,6 @@ export class FormularioMain {
     const minutos = String(date.getMinutes()).padStart(2, "0");
     return `${horas}:${minutos}`;
   }
-
-  // // obtenerNotasEvento() {
-  // //   const contenedorNotas = this.form.querySelector("#contenedor-notas-evento");
-  // //   let notas = [];
-  // //   const nota = new Nota();
-  // //   const textareaNotas = contenedorNotas.querySelectorAll(
-  // //     "textarea.notaEventoComponent"
-  // //   );
-  // //   textareaNotas.forEach((textarea) => {
-  // //     const notaTexto = textarea.value.trim();
-  // //     if (notaTexto !== "") {
-  // //       notas.push(notaTexto);
-  // //     }
-  // //   });
-  // //   return notas;
-  // // }
 
   obtenerNotasEvento() {
     let notas = [];
@@ -491,7 +447,10 @@ export class FormularioMain {
       monto: Number(this.inputs.anticipo.value),
       idTipoMoneda: this.inputs.moneda.selectedIndex + 1,
       idTipoOperacionMovimiento: this.TipoMovimiento.ANTICIPO,
-      tasaCambio: this.inputs.moneda.selectedIndex == 0 ? 1 : Number(this.inputs.tasaCambio.value),
+      tasaCambio:
+        this.inputs.moneda.selectedIndex == 0
+          ? 1
+          : Number(this.inputs.tasaCambio.value),
       idUsuario: window.AppConfig.usuarioSession.idUsuario,
     };
     console.log("Movimiento anticipo generado:", movimiento);
@@ -505,12 +464,13 @@ export class FormularioMain {
       monto: Number(this.inputs.anticipo.value),
       idTipoMoneda: this.inputs.moneda.selectedIndex + 1,
       idTipoOperacionMovimiento: this.TipoMovimiento.ABONO,
-      tasaCambio: this.inputs.moneda.selectedIndex == 0 ? 1 : Number(this.inputs.tasaCambio.value),
+      tasaCambio:
+        this.inputs.moneda.selectedIndex == 0
+          ? 1
+          : Number(this.inputs.tasaCambio.value),
       idUsuario: window.AppConfig.usuarioSession.idUsuario,
     };
     console.log("Movimiento abono generado:", movimiento);
     return movimiento;
   }
-
-
 }

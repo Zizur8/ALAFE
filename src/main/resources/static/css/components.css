@@ -5,7 +5,7 @@ custom-nav {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     position: sticky;
     top: 0;
-    z-index: 1000;
+    z-index: 9999;
   }
 
   #nav-container {
@@ -168,4 +168,76 @@ custom-nav {
 .btn-eliminar:focus-visible {
   outline: 2px solid #ffcdd2;  /* borde rosado para accesibilidad */
   outline-offset: 2px;
+}
+
+  .bg-translucent {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(139, 139, 139, 0.5);
+    z-index: 9999;
+  }
+
+#modalMovimiento {
+  position: absolute;
+  top: 30dvh;
+  left: 10dvw;
+  border-radius: 8px;
+  z-index: 99999;
+  background: #ffffff;
+  border: solid 1px #ccc;
+  width: 80dvw;
+  padding: 20px;
+
+
+
+  .header {
+    font-family: 'Avenir', sans-serif;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .footer {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+
+    button {
+      font-size: 16px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+    }
+  }
+
+  #moneda-movimiento {
+    width: 100%;
+    justify-self: right;
+  }
+
+  .anticipo-formaPago-container {
+    display: grid;
+    grid-template-columns: 60% auto;
+    gap: 15px;
+    justify-self: right;
+    width: 100%;
+  }
+
+  
+}
+
+.cancelar-button {
+  background-color: #ccc;
+  color: #333;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px 20px;
+  cursor: pointer;
+  display: inline-block;
 }

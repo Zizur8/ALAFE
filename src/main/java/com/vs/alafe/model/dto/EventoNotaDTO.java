@@ -12,6 +12,8 @@ public class EventoNotaDTO {
     private String nombreUsuarioIngreso;
     private LocalDateTime fechaIngreso;
 
+    public EventoNotaDTO(){}
+
     public EventoNotaDTO(Integer idEventoNota, Integer idEvento, String nota, Integer idUsuarioIngreso, String nombreUsuarioIngreso, LocalDateTime fechaIngreso) {
         this.idEventoNota = idEventoNota;
         this.idEvento = idEvento;

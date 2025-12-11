@@ -3,34 +3,42 @@ import { Cliente } from "../class/Cliente.js";
 import { Nota } from "../class/Nota.js";
 import { FormularioMain } from "../class/FormularioMain.js";
 import { crearNotaComponent } from "../components/notas-component.js";
-
-
+import { modalMovimientoFinanciero } from "../components/modal-movimiento-financiero.js";
 
 window.AppConfig = {
-  usuarioSession : {idUsuario: 1, nombre: "Cesar", apellidoPaterno: "Vazquez", apellidoMaterno: "Soto", 
-    idRol: 1, telefono: "867 326 9900", propietario: 1, correo: null},
-    agenda : {idAgenda: 1,nombreAgenda: "Morena Linda",descripcion: "Agenda del restaurant Morena Linda",
-      numeroExterior: "3454",calle: "Av. Ocampo",fechaAlta: "2025-11-25T23:00:01.173"}
+  usuarioSession: {
+    idUsuario: 1,
+    nombre: "Cesar",
+    apellidoPaterno: "Vazquez",
+    apellidoMaterno: "Soto",
+    idRol: 1,
+    telefono: "867 326 9900",
+    propietario: 1,
+    correo: null,
+  },
+  agenda: {
+    idAgenda: 1,
+    nombreAgenda: "Morena Linda",
+    descripcion: "Agenda del restaurant Morena Linda",
+    numeroExterior: "3454",
+    calle: "Av. Ocampo",
+    fechaAlta: "2025-11-25T23:00:01.173",
+  },
 };
-
-
 
 const contenedorNotas = document.getElementById("container-notas");
 const calendarComponent = document.querySelector("custom-calendar");
 const formulario = new FormularioMain();
 let currentDate = new Date();
 let selectedDate = null;
-formulario.limpiarFormulario();
 formulario.actualizarTags();
+formulario.limpiarFormulario();
 window.addEventListener("DOMContentLoaded", ajustarAncho);
-
 
 // await cargarEvento(currentDate);
 
 const calendar = document.querySelector("custom-calendar");
 const salida = document.getElementById("selectedDate");
-
-
 
 async function selectDate(date) {
   selectedDate = date;
@@ -63,23 +71,34 @@ async function selectDate(date) {
   }
 }
 
+function formatLocalISO(date) {
+  const pad = (n) => String(n).padStart(2, "0");
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+}
 
 async function obtenerEventosRangoPorMes(date) {
-    const horarioInicio = new Date(date);
-    const horarioFin = new Date(date);
-    horarioInicio.setHours(0, 0, 0, 0);
-    horarioFin.setHours(23, 59, 59, 999);
-    console.log("Fechas para fetch:", horarioInicio, horarioFin);
-      const response = await fetch(
-      `/alafe/v1/evento?horarioInicio=${horarioInicio.toISOString()}&horarioFin=${horarioFin.toISOString()}`
-    );
-    return response;
-} 
+  let horarioInicio = new Date(date);
+  let horarioFin = new Date(date);
+
+  horarioInicio.setHours(0, 0, 0, 0);
+  horarioFin.setHours(23, 59, 59, 999);
+
+  const inicioLocal = formatLocalISO(horarioInicio);
+  const finLocal = formatLocalISO(horarioFin);
+
+  console.log("Fechas para fetch:", inicioLocal, finLocal);
+
+  const response = await fetch(
+    `/alafe/v1/evento?horarioInicio=${inicioLocal}&horarioFin=${finLocal}`
+  );
+  return response;
+}
+
 
 async function obtenerCliente(id) {
   const clienteResponse = await fetch(`/alafe/v1/cliente/${id}`);
   return clienteResponse;
-}   
+}
 
 async function cargarEvento(date) {
   try {
@@ -92,6 +111,7 @@ async function cargarEvento(date) {
       console.log("no hay evento");
       formulario.estadoFormulario = "create";
       formulario.actualizarBotonSubmit();
+      formulario.renderizarBotonEliminarEvento();
       return;
     }
 
@@ -100,34 +120,22 @@ async function cargarEvento(date) {
     const evento = new Evento(eventoFetch[0]);
     console.log("Evento objeto: ---->", evento);
 
-    // let clienteFetch;
-    // const clienteId = evento?.idCliente || evento.idCliente;
-    // if (clienteId) {
-    //   const clienteResponse = await obtenerCliente(clienteId);
-    //   if (!clienteResponse.ok) throw new Error("Error al consultar cliente");
-    //   clienteFetch = await clienteResponse.json();
-    // }
-
-    // if (clienteFetch == null && clienteFetch == undefined) {
-    //   return;
-    // }
-    // console.log("Cliente fetch:", clienteFetch);
-
-    // const cliente = fabricarCliente(clienteFetch);
-    // console.log("Cliente objeto:", cliente);
-
     formulario.estadoFormulario = "edit";
-    // formulario.cliente = cliente;
     formulario.evento = evento;
-    formulario.llenarFormulario(evento);
     formulario.cliente = evento.cliente;
-    formulario.actualizarTags();
-    formulario.actualizarBotonSubmit();
+    console.log("Eventaaaaaaaaaaaaaaaaa");
+    formularioCargado();
   } catch (error) {
     console.error("No se pudo cargar el evento:", error);
-    formulario.limpiarFormulario();
-    formulario.estadoFormulario = "";
+    formulario.estadoFormulario = "create";
   }
+}
+
+function formularioCargado() {
+  formulario.llenarFormulario(formulario.evento);
+  formulario.actualizarTags();
+  formulario.actualizarBotonSubmit();
+  formulario.renderizarBotonEliminarEvento();
 }
 
 function buscarNotas(evento) {
@@ -186,17 +194,13 @@ function fabricarEvento(eventoData) {
 }
 
 // Inicializar calendario
-document.addEventListener("DOMContentLoaded", () => {
-
-});
+document.addEventListener("DOMContentLoaded", () => {});
 
 const calendario = document.querySelector("custom-calendar");
 
 calendario.addEventListener("fecha-seleccionada", (event) => {
-  formulario.limpiarFormulario();
   formulario.fechaSelected = event.detail.date;
-
-  formulario.actualizarTags();
+  formulario.limpiarFormulario();
   cargarEvento(event.detail.date);
 });
 
@@ -215,6 +219,10 @@ function ajustarAncho() {
 }
 
 document.addEventListener("submit", function (e) {
+  console.log(
+    formulario.estadoFormulario +
+      "---- estado formulariasdasdadasd+++dasdasd+++"
+  );
   e.preventDefault();
   let evento;
   let eventoNota = {};
@@ -222,8 +230,12 @@ document.addEventListener("submit", function (e) {
 
   cliente = formulario.obtenerClienteParaCrear();
   formulario.cliente = cliente;
-  console.log("Cliente prueba: ",cliente);
+  console.log("Cliente prueba: ", cliente);
+  console.log(
+    formulario.estadoFormulario + "---- estado formulario++++++++++++++++++++++"
+  );
   let movimiento;
+
   if (formulario.estadoFormulario == "edit") {
     console.log("Modo EDIT");
     evento = formulario.obtenerEventoParaEditar();
@@ -232,8 +244,8 @@ document.addEventListener("submit", function (e) {
     formulario.evento = evento;
     editarEvento();
     console.log("Evento ediiiit: ", formulario.evento);
-    movimiento = formulario.generarMovimientoAbono();
-  } else {
+    //movimiento = formulario.generarMovimientoAbono();
+  } else if (formulario.estadoFormulario == "create") {
     console.log("Modo creaar");
     evento = formulario.obtenerEventoParaEditar();
     evento.notas = formulario.obtenerNotasEvento();
@@ -243,13 +255,11 @@ document.addEventListener("submit", function (e) {
     console.log("Evento nuevo-----response: ", nuevoEvento);
     formulario.evento = nuevoEvento;
     console.log("Evento creadooooo: ", formulario.evento);
-    movimiento = formulario.generarMovimientoAnticipo();
+    //movimiento = formulario.generarMovimientoAnticipo();
   }
 
-
-  console.log("aaa-----",  formulario.evento);
-  crearTransaccion(movimiento);
-
+  console.log("aaa-----", formulario.evento);
+  //crearTransaccion(movimiento);
 
   //   if (formulario.evento.notasEvento !== "") {
   // editarEventoNota(evento);
@@ -258,6 +268,7 @@ document.addEventListener("submit", function (e) {
   //   }
 
   console.log("Evento enviado: ", evento);
+  formulario.limpiarFormulario();
 });
 
 function crearTransaccion(movimiento) {
@@ -279,9 +290,7 @@ function crearTransaccion(movimiento) {
     .catch((error) => {
       console.error("Error en la petición:", error);
     });
-
 }
-
 
 function crearEvento() {
   console.log("Evento en formulario crear:", formulario.evento);
@@ -429,8 +438,6 @@ function llenarFormulario(evento, cliente) {
   }
 }
 
-function limpiarFormulario() {}
-
 //document.getElementById("horasExtras").addEventListener("change", () => formulario.actualizarComponentesMonetarios());
 document
   .getElementById("cantidadHorasExtras")
@@ -470,8 +477,8 @@ const telefonoInput = document.getElementById("telefonoCliente");
 const sugerenciasLista = document.getElementById("sugerenciasClientes");
 
 telefonoInput.addEventListener("input", async () => {
-      formulario.cliente = null;
-    
+  formulario.cliente = null;
+
   const query = telefonoInput.value;
   if (query.length < 3) {
     sugerenciasLista.innerHTML = "";
@@ -481,7 +488,7 @@ telefonoInput.addEventListener("input", async () => {
   const response = await fetch(`/alafe/v1/cliente/telefono/${query}`);
   const clientes = await response.json();
   console.log("Respuesta del backend:", clientes);
-  
+
   sugerenciasLista.innerHTML = "";
 
   clientes.forEach((cliente) => {
@@ -515,16 +522,42 @@ if (calendar.selectedDate) {
   });
 }
 
-
 function crearNota() {
   const idEvento = formulario.evento?.idEvento ?? null;
   const nombreUsuarioIngreso = `${window.AppConfig.usuarioSession.nombre} ${window.AppConfig.usuarioSession.apellidoPaterno}`;
   const nota = new Nota(null, idEvento, "", nombreUsuarioIngreso);
-  const notaElemento = crearNotaComponent(nota,window.AppConfig.usuarioSession);
+  const notaElemento = crearNotaComponent(
+    nota,
+    window.AppConfig.usuarioSession
+  );
   contenedorNotas.appendChild(notaElemento);
   //formulario.evento.notas.push(nota);
   console.log(formulario.evento);
   console.log("Nota agregada al contenedor");
+}
+
+function eliminarEvento() {
+  if (!formulario.evento || !formulario.evento.idEvento) {
+    alert("No hay evento seleccionado para eliminar.");
+    return;
+  }
+
+  fetch(`/alafe/v1/evento/${formulario.evento.idEvento}`, {
+    method: "DELETE",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Error al eliminar el evento");
+      }
+      alert("Evento eliminado correctamente.");
+      formulario.limpiarFormulario();
+      formulario.estadoFormulario = "create";
+      formulario.actualizarBotonSubmit();
+    })
+    .catch((error) => {
+      console.error("Error en la petición:", error);
+      alert("No se pudo eliminar el evento.");
+    });
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -537,10 +570,38 @@ document.addEventListener("DOMContentLoaded", () => {
       crearNota();
     }
     if (e.target.id === "btnMostrarOcultarNotasEvento") {
-      contenedorNotas.className = contenedorNotas.className === "notas-ocultas" ? "notas-mostradas" : "notas-ocultas";
+      contenedorNotas.className =
+        contenedorNotas.className === "notas-ocultas"
+          ? "notas-mostradas"
+          : "notas-ocultas";
     }
-
-
-
   });
+});
+
+document.getElementById("btn-agregar-pago").addEventListener("click", () => {
+  const tituloMovimiento =
+    formulario.estadoFormulario === "create" ? "Anticipo" : "Abono";
+  const titulo = "Nuevo " + tituloMovimiento;
+  abrirModalMovimientoFinanciero(titulo);
+});
+
+function abrirModalMovimientoFinanciero(titulo) {
+  modalMovimientoFinanciero({
+    labelTitulo: titulo,
+    onSave: (data) => {
+      console.log("Datos guardados:", data);
+    },
+    onCancel: () => {
+      console.log("Cancelado");
+    },
+  });
+}
+document.getElementById("delete-evento").addEventListener("click", (e) => {
+  console.log("Botón clicado:", e.currentTarget.id);
+  formulario.estadoFormulario = "delete";
+  const evento = formulario.obtenerEventoParaEditar();
+  formulario.evento = evento;
+  console.log(formulario.evento);
+  eliminarEvento();
+  console.log("Evento eliminado: ", formulario.evento);
 });

@@ -14,6 +14,8 @@ public class ClienteDTO {
     private String calle;
     private String correo;
 
+    public ClienteDTO(){}
+
     public ClienteDTO(Integer idCliente, Integer idPropietario, String telefono, String nombre, String apellidoPaterno,
                       String apellidoMaterno, Integer idColonia, String numeroExterior, String calle, String correo) {
         this.idCliente = idCliente;
