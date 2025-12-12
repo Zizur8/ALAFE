@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 public class EventoNota implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NotNull
     @Column(name = "id_evento_nota", nullable = false)
     private Integer idEventoNota;
     @ManyToOne(fetch = FetchType.LAZY)

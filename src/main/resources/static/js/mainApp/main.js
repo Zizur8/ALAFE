@@ -29,47 +29,14 @@ window.AppConfig = {
 const contenedorNotas = document.getElementById("container-notas");
 const calendarComponent = document.querySelector("custom-calendar");
 const formulario = new FormularioMain();
-let currentDate = new Date();
-let selectedDate = null;
 formulario.actualizarTags();
 formulario.limpiarFormulario();
 window.addEventListener("DOMContentLoaded", ajustarAncho);
 
-// await cargarEvento(currentDate);
 
 const calendar = document.querySelector("custom-calendar");
 const salida = document.getElementById("selectedDate");
 
-async function selectDate(date) {
-  selectedDate = date;
-  calendarComponent.renderCalendar();
-
-  await cargarEvento(date);
-
-  //const formNuevoEvento = document.getElementById("form-new-evento");
-  //const bgTranslucent = document.getElementById("bg-translucent");
-
-  // if (formNuevoEvento && bgTranslucent) {
-  //   formNuevoEvento.style.visibility = "visible";
-  //   bgTranslucent.style.visibility = "visible";
-
-  //   // Esperar al siguiente ciclo para evitar que el clic actual lo cierre
-  //   setTimeout(() => {
-  //     document.addEventListener("click", handleOutsideClick);
-  //   }, 0);
-  // }
-
-  function handleOutsideClick(e) {
-    const clickedInsideForm = formNuevoEvento.contains(e.target);
-    const clickedInsideOverlay = bgTranslucent.contains(e.target);
-
-    if (!clickedInsideForm && !clickedInsideOverlay) {
-      formNuevoEvento.style.visibility = "hidden";
-      bgTranslucent.style.visibility = "hidden";
-      document.removeEventListener("click", handleOutsideClick);
-    }
-  }
-}
 
 function formatLocalISO(date) {
   const pad = (n) => String(n).padStart(2, "0");
@@ -174,25 +141,6 @@ function fabricarCliente(clienteData) {
   return cliente;
 }
 
-function fabricarEvento(eventoData) {
-  const evento = new Evento();
-  evento.idEvento = eventoData[0].idEvento || null;
-  evento.idCliente = eventoData[0].idCliente || null;
-  evento.usuario = eventoData[0].usuario || null;
-  evento.horarioInicio = eventoData[0].horarioInicio || null;
-  evento.horarioFin = eventoData[0].horarioFin || null;
-  evento.costo = eventoData[0].costo || 0.0;
-  evento.costoHoraExtra = eventoData[0].costoHoraExtras || null;
-  evento.tasaCambio = eventoData[0].tasaCambio || 1;
-  evento.moneda = eventoData[0].moneda || "";
-  evento.cantidadHoraExtras = eventoData[0].cantidadHoraExtra || 0;
-  evento.especial = Boolean(eventoData[0].esEspecial);
-  evento.decorar = eventoData[0].decorar || false;
-  evento.ocupaDosDias = eventoData[0].ocupaDosDias || false;
-  evento.notasEvento = eventoData[0].notas || null;
-  return evento;
-}
-
 // Inicializar calendario
 document.addEventListener("DOMContentLoaded", () => {});
 
@@ -219,10 +167,6 @@ function ajustarAncho() {
 }
 
 document.addEventListener("submit", function (e) {
-  console.log(
-    formulario.estadoFormulario +
-      "---- estado formulariasdasdadasd+++dasdasd+++"
-  );
   e.preventDefault();
   let evento;
   let eventoNota = {};
@@ -231,9 +175,7 @@ document.addEventListener("submit", function (e) {
   cliente = formulario.obtenerClienteParaCrear();
   formulario.cliente = cliente;
   console.log("Cliente prueba: ", cliente);
-  console.log(
-    formulario.estadoFormulario + "---- estado formulario++++++++++++++++++++++"
-  );
+
   let movimiento;
 
   if (formulario.estadoFormulario == "edit") {
@@ -259,7 +201,14 @@ document.addEventListener("submit", function (e) {
   }
 
   console.log("aaa-----", formulario.evento);
-  //crearTransaccion(movimiento);
+  if (formulario.movimientoRegistrado != null) {
+      formulario.movimientoRegistrado.idEvento = formulario.evento.idEvento;
+  formulario.movimientoRegistrado.idCliente = formulario.cliente.idCliente;
+  formulario.movimientoRegistrado.idUsuarioIngreso = window.AppConfig.usuarioSession.idUsuario;
+  crearTransaccion(formulario.movimientoRegistrado);
+  formulario.movimientoRegistrado = null;
+  }
+
 
   //   if (formulario.evento.notasEvento !== "") {
   // editarEventoNota(evento);
@@ -342,136 +291,19 @@ function editarEvento() {
     });
 }
 
-function crearEventoNota(evento) {
-  let e = {};
-  e.idEvento = evento.idEvento;
-  let eventoNota = {
-    e,
-    nota: evento.notasEvento,
-  };
-  console.log("/////", evento);
-  fetch(`/alafe/v1/eventoNota`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(evento),
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Error al editar el evento");
-      }
-      return response.json();
-    })
-    .then((data) => {
-      console.log("Nota creada con éxito:", data);
-      alert("Evento creado correctamente con ID: " + data.id);
-    })
-    .catch((error) => {
-      console.error("Error en la petición:", error);
-      alert("No se pudo editar la Nota");
-    });
-}
-
-function editarEventoNota(evento) {
-  console.log("/////", evento);
-  fetch(`/alafe/v1/eventoNota?idEvento=${formulario.evento.idEventoNota}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(evento),
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Error al editar  Nota");
-      }
-      return response.json();
-    })
-    .then((data) => {
-      console.log("Nota editada con éxito:", data);
-      alert("Nota creada correctamente con ID: " + data.id);
-    })
-    .catch((error) => {
-      console.error("Error en la petición:", error);
-      alert("No se pudo editar la nota");
-    });
-}
-
-function llenarFormulario(evento, cliente) {
-  console.log("Llenando formulario con evento y cliente:", evento, cliente);
-  document.querySelector("#horarioInicio").value = evento.horarioInicio || "";
-  document.querySelector("#horarioFin").value = evento.horarioFin || "";
-  //document.querySelector("#notaEvento").value = evento.notaEvento || "";
-  document.querySelector("#telefonoCliente").value = cliente.telefono || "";
-  document.querySelector("#correoCliente").value = cliente.correo || "";
-  document.querySelector("#direccionCliente").value = cliente.direccion || "";
-  document.querySelector("#coloniaCliente").value = cliente.colonia || "";
-  document.querySelector("#numeroExterior").value =
-    cliente.numeroExterior || "";
-  document.querySelector("#nombreCliente").value = cliente.nombre || "";
-  document.querySelector("#apellidoPaternoCliente").value =
-    cliente.apellidoPaterno || "";
-  document.querySelector("#apellidoMaternoCliente").value =
-    cliente.apellidoMaterno || "";
-
-  document.querySelector("#costoEvento").value =
-    Number(evento?.costoEvento) || 0;
-  document.querySelector("#costoPorHora").value = evento.costoHoraExtra || "";
-  document.querySelector("#tasaCambio").value = evento.tasaCambio || "";
-  document.querySelector("#moneda").value = evento.moneda || "";
-  document.querySelector("#horasExtras").value =
-    evento.cantidadHoraExtras || "";
-  document.querySelector("#esEspecial").checked = evento.especial === true;
-  document.querySelector("#decorar").value = evento.decoracion || "";
-  document.querySelector("#ocupaDosDias").value = evento.ocupaDosDias || "";
-
-  document.querySelector("#notaEvento").value = evento.notasEvento || "";
-  console.log("evento.notasEvento:", evento);
-  document.getElementById("mini-tiene-notas").style.visibility =
-    evento.notasEvento && evento.notasEvento.trim() !== ""
-      ? "visible"
-      : "hidden";
-
-  const campoHorasExtras = document.getElementById("mini-horas-extras");
-  if (evento.cantidadHoraExtras !== 0) {
-    campoHorasExtras.style.display = "inline";
-    campoHorasExtras.textContent = "H. Extras: " + evento.cantidadHoraExtras;
-  } else {
-    campoHorasExtras.style.display = "none";
-  }
-}
-
-//document.getElementById("horasExtras").addEventListener("change", () => formulario.actualizarComponentesMonetarios());
 document
   .getElementById("cantidadHorasExtras")
-  .addEventListener("change", () =>
+  .addEventListener("input", () =>
     formulario.actualizarComponentesHorasExtras()
   );
 
-async function buscarClientePorTelefono() {
-  const telefono = document.getElementById("telefonoCliente").value.trim();
+  document
+  .getElementById("costoPorHoraExtra")
+  .addEventListener("input", () =>
+    formulario.actualizarComponentesHorasExtras()
+  );
 
-  if (telefono.length < 3) {
-    console.log("Escribe al menos 3 dígitos");
-    return;
-  }
 
-  try {
-    const response = await fetch(
-      `http://localhost:8080/alafe/v1/cliente/telefono/${encodeURIComponent(
-        telefono
-      )}`
-    );
-    if (!response.ok) throw new Error("Error en la búsqueda");
-
-    const clientes = await response.json();
-    console.log("Resultados:", clientes);
-
-    // aquí puedes mostrar sugerencias o rellenar el formulario
-    if (clientes.length > 0) {
-      formulario.rellenarCliente(clientes[0]); // ejemplo: tomar el primero
-    }
-  } catch (error) {
-    console.error("Error:", error);
-  }
-}
 
 const telefonoInput = document.getElementById("telefonoCliente");
 const sugerenciasLista = document.getElementById("sugerenciasClientes");
@@ -585,11 +417,15 @@ document.getElementById("btn-agregar-pago").addEventListener("click", () => {
   abrirModalMovimientoFinanciero(titulo);
 });
 
+
 function abrirModalMovimientoFinanciero(titulo) {
   modalMovimientoFinanciero({
     labelTitulo: titulo,
     onSave: (data) => {
       console.log("Datos guardados:", data);
+      formulario.movimientoRegistrado = data;
+      formulario.inputs.nuevoPago.value = Number(data.monto ?? 0);
+      formulario.calcularSaldo();
     },
     onCancel: () => {
       console.log("Cancelado");

@@ -3,6 +3,8 @@ package com.vs.alafe.service;
 import com.vs.alafe.model.dto.MovimientoClienteDTO;
 import com.vs.alafe.model.dto.MovimientoNuevoDTO;
 import com.vs.alafe.model.entities.*;
+import com.vs.alafe.repository.EventoNotaRepository;
+import com.vs.alafe.repository.EventoRepository;
 import com.vs.alafe.repository.MovimientoRepository;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityNotFoundException;
@@ -11,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -20,6 +23,8 @@ public class MovimientoService {
 
     @Autowired
     private MovimientoRepository movimientoRepository;
+    @Autowired
+    private EventoRepository eventoRepository;
     @Autowired
     private UsuarioService usuarioService;
     @Autowired
@@ -31,46 +36,38 @@ public class MovimientoService {
     @Autowired
     private TipoOperacionMovimientoService tipoOperacionMovimientoService;
 
-    private Usuario usuarioSession;
-
-    @PostConstruct
-    public void init() {
-        usuarioSession = usuarioService.findById(1)
-                .orElseThrow(() -> new RuntimeException("usuario session no encontrado"));
-    }
 
     @Transactional
     public Movimiento save(MovimientoNuevoDTO movimientoNuevoDTO) {
 
         Movimiento movimiento = new Movimiento();
 
-        Optional<Evento> evento = eventoService.findById(movimientoNuevoDTO.getIdEvento());
-        if (evento.isEmpty()) {
-            throw new IllegalArgumentException("Evento no encontrado con id: " + movimientoNuevoDTO.getIdEvento());
-        }
+        Evento evento = eventoService.findById(movimientoNuevoDTO.getIdEvento())
+                .orElseThrow(() -> new IllegalArgumentException("Evento no existente."));
+        Cliente cliente = clienteService.findById(movimientoNuevoDTO.getIdCliente())
+                .orElseThrow(() -> new IllegalArgumentException("Cliente no encontrado con id: " + movimientoNuevoDTO.getIdCliente()));
+        TipoMoneda moneda = tipoMonedaService.findById(movimientoNuevoDTO.getIdTipoMoneda())
+                .orElseThrow(() -> new IllegalArgumentException("ID Tipo de moneda invalida: " + movimientoNuevoDTO.getIdTipoMoneda()));
+        TipoOperacionMovimiento tipoOperacionMovimiento = tipoOperacionMovimientoService.findById(movimientoNuevoDTO.getIdTipoOperacionMovimiento())
+                .orElseThrow(() -> new IllegalArgumentException("ID tipo operacion movimiento inexistente: " + movimientoNuevoDTO.getIdTipoOperacionMovimiento().toString()));
+        Usuario usuarioSession = usuarioService.findById(movimientoNuevoDTO.getIdUsuarioIngreso())
+                .orElseThrow(() -> new IllegalArgumentException("Usuario Ingreso Invalido o inexistente."));
+        BigDecimal montoPagos = eventoRepository.calcularMontoPagosEvento(evento.getIdEvento());
+        if (montoPagos.equals(evento.getCosto())) {throw new RuntimeException("Pago rechazado: El movimiento ya se encuentra liquidado.");}
 
-        Optional<Cliente> cliente = clienteService.findById(movimientoNuevoDTO.getIdCliente());
-        if (cliente.isEmpty()) {
-            throw new IllegalArgumentException("Cliente no encontrado con id: " + movimientoNuevoDTO.getIdCliente());
-        }
-        Optional<TipoMoneda> moneda = tipoMonedaService.findById(movimientoNuevoDTO.getIdTipoMoneda());
-        Optional<TipoOperacionMovimiento> tipoOperacionMovimiento = tipoOperacionMovimientoService.findById(movimientoNuevoDTO.getIdTipoOperacionMovimiento());
-
-        movimiento.setCliente(cliente.get());
-        movimiento.setMoneda(moneda.get());
+        movimiento.setCliente(cliente);
+        movimiento.setMoneda(moneda);
         movimiento.setMonto(movimientoNuevoDTO.getMonto());
-        movimiento.setTipoOperacionMovimiento(tipoOperacionMovimiento.get());
+        movimiento.setTipoOperacionMovimiento(tipoOperacionMovimiento);
         movimiento.setTasaCambio(movimientoNuevoDTO.getTasaCambio());
-        movimiento.setEvento(evento.get());
+        movimiento.setEvento(evento);
         movimiento.setUsuario(usuarioSession);
+        movimiento.setFecha(LocalDateTime.now());
 
         Integer maxSecuencial = movimientoRepository.findMaxSecuencial(movimiento.getEvento().getIdEvento());
         movimiento.setSecuencial(maxSecuencial + 1);
 
-        System.out.println(movimiento.toString());
-        movimiento.setFecha(LocalDateTime.now());
         return movimientoRepository.save(movimiento);
-
     }
 
     @Transactional(readOnly = true)

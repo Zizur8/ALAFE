@@ -11,6 +11,7 @@ export class FormularioMain {
     this.cliente = null;
     this.idCliente = null;
     this.evento = null;
+    this.movimientoRegistrado = null;
 
     this.inputs = {
       horarioInicio: this.form.querySelector("#horarioInicio"),
@@ -22,7 +23,6 @@ export class FormularioMain {
       cantidadHorasExtras: this.form.querySelector("#cantidadHorasExtras"),
       costoPorHoraExtra: this.form.querySelector("#costoPorHoraExtra"),
       costoEvento: this.form.querySelector("#costoEvento"),
-      anticipo: this.form.querySelector("#anticipo"),
       moneda: this.form.querySelector("#moneda"),
       tasaCambio: this.form.querySelector("#tasaCambio"),
       telefonoCliente: this.form.querySelector("#telefonoCliente"),
@@ -40,6 +40,8 @@ export class FormularioMain {
       //notaEvento: this.form.querySelector("#notaEvento"),
       costoTotal: this.form.querySelector("#costoTotal"),
       saldoOperacion: this.form.querySelector("#saldoOperacion"),
+      nuevoPago: this.form.querySelector("#nuevoPago"),
+      montoPagos : this.form.querySelector("#montoPagos"),
     };
     this.buttons = {
       mostrarListadoMovimientos: this.form.querySelector(
@@ -47,6 +49,7 @@ export class FormularioMain {
       ),
       submitEvento: this.form.querySelector("#submit-evento"),
       listMovimientos: this.form.querySelector("#listado-movimientos-evento"),
+      agregarPago: this.form.querySelector("#btn-agregar-pago")
     };
     this.tags = {
       miniDecorar: this.form.querySelector("#mini-decorar"),
@@ -70,7 +73,9 @@ export class FormularioMain {
       ABONO: 2,
       DEVOLUCION: 3,
     });
-
+    this.containers = {
+      nuevoPago: this.form.querySelector("#nuevo-pago-container")
+    };
     this.initListeners();
   }
 
@@ -108,6 +113,7 @@ export class FormularioMain {
       input.style.display = "";
     });
     this.inputs.decorar.checked = true;
+    this.inputs.montoPagos.value = Number(0);
     this.inputs.costoEvento.value = 0;
     this.actualizarHorarioDecoracion();
     this.actualizarComponentesMonetarios();
@@ -132,8 +138,9 @@ export class FormularioMain {
       evento?.cantidadHoraExtras ?? 0
     );
     this.inputs.costoEvento.value = Number(evento?.costo ?? 0);
+    this.inputs.montoPagos.value = Number(evento?.montoPagos ?? 0);
+    console.log("motnpagosssssss: " + evento?.montoPagos);
     console.log("Costo evento llenado:", this.inputs.costoEvento.value);
-    this.inputs.anticipo.value = Number(evento?.anticipo ?? 0);
     this.inputs.decorar.checked = !!evento?.decoracion;
     this.inputs.esEspecial.checked = !!evento?.especial;
     this.inputs.telefonoCliente.value = cliente?.telefono ?? "";
@@ -147,13 +154,20 @@ export class FormularioMain {
     this.inputs.costoPorHoraExtra.value = evento?.costoHoraExtra ?? "";
   console.log("antes de actualizar componentes anticipos");
     console.log("Despues de actualizar componentes anticipos");
+    this.actualizarTags();
     this.actualizarComponentesMonetarios();
     this.calcularCostoTotal();
-    this.actualizarLabelMovimiento();
+    //this.actualizarLabelMovimiento();
     this.actualizarComponentesHorasExtras();
     this.llenarNotasEnFormulario(evento?.notas || []);
   }
 
+actualizarBotonNuevoPago() {
+  console.log(this.inputs.costoTotal.value);
+  console.log(this.inputs.montoPagos.value);
+  this.buttons.agregarPago.disabled = this.inputs.costoTotal.value == this.inputs.montoPagos.value;
+  this.renderizarNuevoPagoContainer();
+}
   llenarNotasEnFormulario(notas) {
     console.log("Llenar notas en formulario:", notas);
     const contenedorNotas = this.form.querySelector("#container-notas");
@@ -189,15 +203,15 @@ export class FormularioMain {
       this.estadoFormulario == "edit" ? "inline-block" : "none";
   }
 
-  actualizarLabelMovimiento() {
-    if (this.estadoFormulario == "edit") {
-      console.log("ediiiit");
-      this.labels.anticipos.textContent = "Abono/Anticipo";
-    } else {
-      console.log("elseee");
-      this.labels.anticipos.textContent = "Anticipo";
-    }
-  }
+  // actualizarLabelMovimiento() {
+  //   if (this.estadoFormulario == "edit") {
+  //     console.log("ediiiit");
+  //     this.labels.anticipos.textContent = "Abono/Anticipo";
+  //   } else {
+  //     console.log("elseee");
+  //     this.labels.anticipos.textContent = "Anticipo";
+  //   }
+  // }
 
   renderizarBotonEliminarEvento() {
     console.log("Renderizar boton eliminar evento" + this.estadoFormulario);
@@ -216,12 +230,14 @@ export class FormularioMain {
   }
 
   actualizarTags() {
-    this.tags.miniHorasExtras.innerHTML =
-      "H. Extras: " + this.inputs.cantidadHorasExtras.value.trim();
-    this.tags.miniHorasExtras.style.display =
-      this.inputs.cantidadHorasExtras.value > 0 ? "inline" : "none";
-    //this.tags.miniTieneNotas.style.display =
-    // this.inputs.notaEvento.value !== "" ? "inline" : "none";
+    // this.tags.miniHorasExtras.innerHTML =
+    //   "H. Extras: " + this.inputs.cantidadHorasExtras.value.trim();
+    // this.tags.miniHorasExtras.style.display =
+    //   this.inputs.cantidadHorasExtras.value > 0 ? "inline" : "none";
+    this.tags.miniStatusLiquidado.style.display = this.evento?.liquidado == true ? 'inline' : 'none'
+
+    this.tags.miniTieneNotas.style.display =
+    this.evento?.notas.length > 0 ? "inline" : "none";
   }
 
   actualizarHorarioDecoracion() {
@@ -233,37 +249,45 @@ export class FormularioMain {
       : "none";
   }
 
+renderizarNuevoPagoContainer() {
+  const costo = Number(this.inputs.costoTotal.value) || 0;
+  const pagos = Number(this.inputs.montoPagos.value) || 0;
+  console.log(costo === pagos);
+  this.containers.nuevoPago.style.display = costo === pagos ? "none" : "grid";
+}
+
+
+
   actualizarComponentesHorasExtras() {
     this.labels.costoPorHoraExtra.style.display =
       this.inputs.cantidadHorasExtras.value > 0 ? "inline" : "none";
     this.inputs.costoPorHoraExtra.style.display =
       this.inputs.cantidadHorasExtras.value > 0 ? "inline" : "none";
-    this.calcularCostoTotal();
+    this.actualizarComponentesMonetarios();
   }
 
   actualizarComponentesMonetarios() {
-    console.log(this.inputs.costoEvento.value + "-----emtodo monerarios");
-    const costoEventoValido =
-      Number(this.inputs.costoEvento.value) > 0 ? true : false;
-    console.log(costoEventoValido + "**********");
     this.calcularCostoTotal();
+    this.calcularSaldo();
+    this.actualizarBotonNuevoPago();
+
   }
 
   calcularCostoTotal() {
-    console.log(this.inputs.costoEvento.value + "--------------");
-    console.log(this.inputs.costoPorHoraExtra.value);
-    console.log(this.inputs.cantidadHorasExtras.value);
     this.inputs.costoTotal.value =
       Number(this.inputs.costoEvento.value) +
       Number(this.inputs.costoPorHoraExtra.value) *
         Number(this.inputs.cantidadHorasExtras.value);
-    this.calcularSaldo();
   }
 
   calcularSaldo() {
     this.inputs.saldoOperacion.value = "";
+    console.log("Calculando saldo...");
+    console.log(this.inputs.costoTotal.value + " costo total");
+    console.log(this.inputs.nuevoPago.value + " nuevo pago");
+    console.log(this.inputs.montoPagos.value + "sumatoria");
     this.inputs.saldoOperacion.value =
-      Number(this.inputs.costoTotal.value) - Number(this.inputs.anticipo.value);
+      Number(this.inputs.costoTotal.value) - Number(this.inputs.nuevoPago.value) - Number(this.inputs.montoPagos.value);
   }
 
   obtenerEventoParaCrear() {
@@ -430,8 +454,7 @@ export class FormularioMain {
         idEventoNota: notas.idEventoNota || null,
         idEvento: this.evento ? this.evento.idEvento : null,
         nota: notaTexto,
-        usuarioIngreso: window.AppConfig.usuarioSession,
-        fechaIngreso: new Date(),
+        idUsuarioIngreso: window.AppConfig.usuarioSession.idUsuario
       };
 
       notas.push(nota);

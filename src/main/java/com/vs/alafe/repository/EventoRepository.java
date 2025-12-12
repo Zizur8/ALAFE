@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -26,4 +27,7 @@ public interface EventoRepository extends EntityRepository<Evento> {
     List<Evento> findEventosEnRango(@Param("horarioInicio") LocalDateTime inicio,
                                     @Param("horarioFin") LocalDateTime fin);
 
+
+    @Query("SELECT COALESCE(SUM(m.monto), 0) FROM Movimiento m WHERE m.evento.idEvento = :idEvento")
+    BigDecimal calcularMontoPagosEvento(@Param("idEvento") Integer idEvento);
 }

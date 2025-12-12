@@ -55,6 +55,8 @@ public class Evento implements Serializable {
     private Boolean eliminado;
     @OneToMany(mappedBy = "evento", fetch = FetchType.LAZY)
     private List<Movimiento> movimientos = new ArrayList<>();
+    @Transient
+    private BigDecimal montoPagos = BigDecimal.ZERO;
 //    @OneToOne(mappedBy = "evento", cascade = CascadeType.ALL)
 //    private EventoNota nota;
 
@@ -75,7 +77,6 @@ public class Evento implements Serializable {
     public Evento(Integer idEvento) {
         this.idEvento = idEvento;
     }
-
 
     public Integer getIdEvento() {
         return idEvento;
@@ -227,6 +228,14 @@ public class Evento implements Serializable {
 
     public void setMovimientos(List<Movimiento> movimientos) {
         this.movimientos = movimientos;
+    }
+
+    public BigDecimal getMontoPagos() {
+        return montoPagos;
+    }
+
+    public void setMontoPagos(BigDecimal montoPagos) {
+        this.montoPagos = montoPagos;
     }
 
     @Override

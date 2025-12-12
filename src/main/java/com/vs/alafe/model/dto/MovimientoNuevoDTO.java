@@ -10,7 +10,7 @@ public class MovimientoNuevoDTO {
     private Integer idTipoMoneda;
     private BigDecimal tasaCambio;
     private Integer idTipoOperacionMovimiento;
-    private Integer idUsuario;
+    private Integer idUsuarioIngreso;
 
     public MovimientoNuevoDTO() {}
 
@@ -20,7 +20,7 @@ public class MovimientoNuevoDTO {
         this.monto = movimientoClienteDTO.getMonto();
         this.idTipoMoneda = movimientoClienteDTO.getIdTipoMoneda();
         this.tasaCambio = movimientoClienteDTO.getTasaCambio();
-        this.idUsuario = movimientoClienteDTO.getIdUsuario();
+        this.idUsuarioIngreso = movimientoClienteDTO.getIdUsuario();
     }
 
     public Integer getIdCliente() {
@@ -71,11 +71,24 @@ public class MovimientoNuevoDTO {
         this.idTipoOperacionMovimiento = idTipoOperacionMovimiento;
     }
 
-    public Integer getIdUsuario() {
-        return idUsuario;
+    public Integer getIdUsuarioIngreso() {
+        return idUsuarioIngreso;
     }
 
-    public void setIdUsuario(Integer idUsuario) {
-        this.idUsuario = idUsuario;
+    public void setIdUsuarioIngreso(Integer idUsuario) {
+        this.idUsuarioIngreso = idUsuario;
+    }
+
+    @Override
+    public String toString() {
+        return "MovimientoNuevoDTO{" +
+                "idCliente=" + idCliente +
+                ", idEvento=" + idEvento +
+                ", monto=" + monto +
+                ", idTipoMoneda=" + idTipoMoneda +
+                ", tasaCambio=" + tasaCambio +
+                ", idTipoOperacionMovimiento=" + idTipoOperacionMovimiento +
+                ", idUsuarioIngreso=" + idUsuarioIngreso +
+                '}';
     }
 }

@@ -54,8 +54,8 @@ public class MovimientoRestController {
     @PostMapping("/movimiento")
     public ResponseEntity<MovimientoDTO> guardarMovimiento(@RequestBody MovimientoNuevoDTO movimientoNuevoDTO) throws Exception {
 
+        System.out.println(movimientoNuevoDTO.toString());
         Movimiento nuevoMovimiento = movimientoService.save(movimientoNuevoDTO);
-        // Devuelve 201 Created con el DTO
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new MovimientoDTO(nuevoMovimiento));
     }

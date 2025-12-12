@@ -38,7 +38,7 @@ export function modalMovimientoFinanciero(options = {}) {
             <div class="anticipo-formaPago-container">
                 <div>
                     <label>Tasa Cambio</label>
-                    <input type="number" id="tasaCambio" step="any" min="0" max="9999" value="18.50">
+                    <input type="number" id="tasaCambio" step="any" min="0" max="9999" value="1">
                 </div>
 
                 <div>
@@ -64,11 +64,16 @@ export function modalMovimientoFinanciero(options = {}) {
     };
 
     modal.querySelector("#guardar-movimiento").onclick = () => {
+        const monto = Number(document.getElementById("anticipo-modal").value) || 0;
+        const idTipoOperacionMovimiento = document.getElementById("forma-pago").selectedIndex + 1;
+        const tasaCambio = Number(document.getElementById("tasaCambio").value);
+        const idTipoMoneda = document.getElementById("moneda-movimiento").selectedIndex + 1;
+        
         const data = {
-            anticipo: Number(document.getElementById("anticipo-modal").value) || 0,
-            formaPago: document.getElementById("forma-pago").value,
-            tasaCambio: Number(document.getElementById("tasaCambio").value) || 0,
-            moneda: document.getElementById("moneda-movimiento").value
+            monto: monto,
+            idTipoOperacionMovimiento: idTipoOperacionMovimiento,
+            tasaCambio: tasaCambio,
+            idTipoMoneda: idTipoMoneda
         };
 
         onSave(data);

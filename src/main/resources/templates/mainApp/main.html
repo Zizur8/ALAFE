@@ -100,10 +100,10 @@
                 </div>
                 <div id="right-header">
                     <!-- <span id="mini-decorar" class="mini-info-labels">Decorar: 3pm</span> -->
-                    <!-- <span id="mini-status-liquidado" class="mini-info-labels">Liquidado</span> -->
+                    <span id="mini-status-liquidado" class="mini-info-labels">Liquidado</span>
                     <!-- <span id="mini-saldo" class="mini-info-labels">Saldo: $500</span> -->
                     <!-- <span id="mini-especial" class="mini-info-labels">Especial</span> -->
-                    <span id="mini-horas-extras" class="mini-info-labels">H. Extras: 2</span>
+                    <!-- <span id="mini-horas-extras" class="mini-info-labels">H. Extras: 2</span> -->
                     <span id="mini-tiene-notas" class="mini-info-labels">Notas</span>
                     <!-- <span id="mini-ocupa-dos-dias" class="mini-info-labels">Ocupa Dos Días</span> -->
                     <!-- <p id="" class="message-info">No Agendado</p> -->
@@ -113,9 +113,9 @@
             <div id="body-date-info">
 
                 <label for="horarioInicio">Horario Inicio</label>
-                <input type="time" id="horarioInicio" name="horarioInicio" value="16:00" >
+                <input type="time" id="horarioInicio" name="horarioInicio" value="16:00">
                 <label for="horarioFin">Horario Fin</label>
-                <input type="time" id="horarioFin" name="horarioFin" value="23:00" >
+                <input type="time" id="horarioFin" name="horarioFin" value="23:00">
 
                 <div class="inputs-data-evento">
                     <label for="ocupaDosDias">Ocupa Dos Dias</label>
@@ -166,14 +166,14 @@
                 <div>
                     <label for="telefonoCliente">Teléfono</label>
                     <input type="text" id="telefonoCliente" name="telefonoCliente" pattern="[0-9]{10}"
-                        autocomplete="8673265329" title="Debe contener 10 dígitos numéricos." >
+                        autocomplete="8673265329" title="Debe contener 10 dígitos numéricos.">
                     <ul id="sugerenciasClientes" class="sugerencias-lista"></ul>
                 </div>
 
                 <label for="correoCliente">Correo</label>
                 <input type="email" id="correoCliente" name="correo">
                 <label for="direccionCliente">Dirección</label>
-                <input type="text" id="direccionCliente" name="direccionCliente" >
+                <input type="text" id="direccionCliente" name="direccionCliente">
 
                 <div id="container-direccion-cliente" class="">
                     <div>
@@ -188,15 +188,15 @@
                     <div>
                         <label for="numeroExterior">Num. Exterior</label>
 
-                        <input type="text" id="numeroExterior" name="numeroExterior" placeholder="#" >
+                        <input type="text" id="numeroExterior" name="numeroExterior" placeholder="#">
                     </div>
 
                 </div>
 
                 <label for="nombreCliente">Nombre</label>
-                <input type="text" id="nombreCliente" name="nombreCliente" >
+                <input type="text" id="nombreCliente" name="nombreCliente">
                 <label for="apellidoPaternoCliente">Apellido Paterno</label>
-                <input type="text" id="apellidoPaternoCliente" name="apellidoPaternoCliente" >
+                <input type="text" id="apellidoPaternoCliente" name="apellidoPaternoCliente">
                 <label for="apellidoMaternoCliente">Apellido Materno</label>
                 <input type="text" id="apellidoMaternoCliente" name="apellidoMaternoCliente">
 
@@ -210,27 +210,26 @@
                     <button id="listado-movimientos-evento" type="button"><span>ℹ️</span></button>
 
                 </div>
-                <div>
-                    <label id="lblCostoTotal" for="">
-                        <h4>Costo Total</h4>
-                    </label>
-                    <input class="input-readonly" type="text" id="costoTotal" name="" value="5000" readonly>
-                    <label id="lblAnticipo" for="">
-                        <h5>Anticipo</h5>
-                    </label>
-
-                    <div id="anticipo-container">
-                            <input class="input-readonly" type="text" id="anticipo" name="" value="100" readonly>
-                            <button id="btn-agregar-pago" type="button">✏️</button>
+                <div class="finanzas-container">
+                    <div class="campo-financiero">
+                        <label for="costoTotal">Costo Total</label>
+                        <input class="input-readonly" type="text" id="costoTotal" value="5000" readonly>
                     </div>
 
+                    <div class="campo-financiero">
+                        <label for="sumatoriaAnticipoAbono">Monto Pagos</label>
+                        <input class="input-readonly pago" type="text" id="montoPagos" value="" readonly>
+                    </div>
 
+                    <div id="nuevo-pago-container" class="campo-financiero pago-nuevo">
+                        <input class="input-readonly pago" type="text" id="nuevoPago" value="100" readonly>
+                        <button id="btn-agregar-pago" type="button">Nuevo Pago</button>
+                    </div>
 
-                    <label id="lblSaldoOperacion" for="">
-                        <h5>Saldo</h5>
-                    </label>
-                    <input class="input-readonly" type="text" id="saldoOperacion" name="" value="4900" readonly>
-
+                    <div class="campo-financiero">
+                        <label for="saldoOperacion">Saldo</label>
+                        <input class="input-readonly saldo" type="text" id="saldoOperacion" value="0" readonly>
+                    </div>
                 </div>
 
                 <p id="warning-ocupada-dos-dias" class="warning ocultar-default">El evento ocupa dos dias seguidos</p>

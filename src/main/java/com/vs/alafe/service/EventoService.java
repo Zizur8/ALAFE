@@ -3,12 +3,14 @@ package com.vs.alafe.service;
 import com.vs.alafe.model.dto.EventoDTO;
 import com.vs.alafe.model.entities.*;
 import com.vs.alafe.repository.EventoRepository;
+import com.vs.alafe.repository.MovimientoRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.swing.text.html.Option;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,18 +20,20 @@ import java.util.Optional;
 public class EventoService {
 
     private final EventoRepository eventoRepository;
+    private final MovimientoRepository movimientoRepository;
     private final ClienteService clienteService;
     private final UsuarioService usuarioService;
     private final EventoNotaService eventoNotaService;
     private final AgendaService agendaService;
 
     public EventoService(EventoRepository eventoRepository, ClienteService clienteService, UsuarioService usuarioService,
-                         EventoNotaService eventoNotaService, AgendaService agendaService) {
+                         EventoNotaService eventoNotaService, AgendaService agendaService,MovimientoRepository movimientoRepository) {
         this.eventoRepository = eventoRepository;
         this.clienteService = clienteService;
         this.usuarioService = usuarioService;
         this.eventoNotaService = eventoNotaService;
         this.agendaService = agendaService;
+        this.movimientoRepository = movimientoRepository;
     }
 
     @Transactional
@@ -85,7 +89,6 @@ public class EventoService {
 
         Usuario usuarioSession = usuarioService.findById(1)
                 .orElseThrow(() -> new RuntimeException("usuario session no encontrado"));
-
         Evento eventoExistente = eventoRepository.findById(evento.getIdEvento())
                 .orElseThrow(() -> new RuntimeException("Evento no existente para actualizar."));
 
@@ -127,9 +130,7 @@ public class EventoService {
         evento.setHorarioFinal(eventoDTO.getHorarioFinal());
         evento.setDecoracion(eventoDTO.getDecoracion());
         if (evento.getDecoracion()) {
-            System.out.println("es deocracioooon");
             if (eventoDTO.getHorarioDecoracion() == null) {
-                System.out.println("errororooasdasd");
                 throw new IllegalArgumentException("Horario decoracion no fue ingresado cuando el campo decoracion se encuentra marcado.");
             }
             evento.setHorarioDecoracion(eventoDTO.getHorarioDecoracion());
@@ -184,9 +185,23 @@ public class EventoService {
 
     @Transactional(readOnly = true)
     public List<Evento> findEventosEnRango(LocalDateTime horarioInicio, LocalDateTime horarioFin) {
-        System.out.println(horarioInicio);
-        System.out.println(horarioFin);
-        return eventoRepository.findEventosEnRango(horarioInicio,horarioFin);
+        System.out.println("foind evnetos ranfo nnnnnnnnnn");
+       List<Evento> eventos = eventoRepository.findEventosEnRango(horarioInicio,horarioFin);
+        eventos.stream().forEach(evento -> {
+            System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            System.out.println(evento); // si quieres imprimir el objeto
+        });
+
+
+        eventos.stream().forEach(evento -> {
+            BigDecimal montoPagos = eventoRepository.calcularMontoPagosEvento(evento.getIdEvento());
+            System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            System.out.println(montoPagos);
+            evento.setMontoPagos(montoPagos);
+        });
+
+
+       return eventos;
     }
 
     public List<Evento> findEventosDecoracion(Boolean decoracion) {

@@ -80,4 +80,16 @@ public class EventoNotaDTO {
     public void setFechaIngreso(LocalDateTime fechaIngreso) {
         this.fechaIngreso = fechaIngreso;
     }
+
+    @Override
+    public String toString() {
+        return "EventoNotaDTO{" +
+                "idEventoNota=" + idEventoNota +
+                ", idEvento=" + idEvento +
+                ", nota='" + nota + '\'' +
+                ", idUsuarioIngreso=" + idUsuarioIngreso +
+                ", nombreUsuarioIngreso='" + nombreUsuarioIngreso + '\'' +
+                ", fechaIngreso=" + fechaIngreso +
+                '}';
+    }
 }

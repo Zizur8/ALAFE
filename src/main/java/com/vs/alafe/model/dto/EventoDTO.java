@@ -1,6 +1,7 @@
 package com.vs.alafe.model.dto;
 
 import com.vs.alafe.model.entities.Evento;
+import com.vs.alafe.model.entities.Movimiento;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -25,14 +26,17 @@ public class EventoDTO {
     private LocalDateTime fechaIngreso;
     private BigDecimal costoHoraExtra;
     private List<EventoNotaDTO> notas;
-    private MovimientoNuevoDTO movimientoNuevoDTO;
+    //private MovimientoNuevoDTO movimientoNuevoDTO;
     private ClienteDTO cliente;
+    private BigDecimal montoPagos;
+    private boolean isLiquidado;
 
 
     public EventoDTO(){}
     public EventoDTO(Integer idEvento, Integer idCliente, LocalDateTime horarioInicio, LocalDateTime horarioDecoracion, LocalDateTime horarioFin, Boolean decorar,
         BigDecimal costo, Boolean esEspecial, Integer idUsuarioIngreso, LocalDateTime fechaUltimaModificacion, Short horasExtras,
-        LocalDateTime fechaIngreso,ClienteDTO cliente,BigDecimal costoHoraExtras, List<EventoNotaDTO> notas ,MovimientoNuevoDTO movimientoNuevoDTO) {
+        LocalDateTime fechaIngreso,ClienteDTO cliente,BigDecimal costoHoraExtras, List<EventoNotaDTO> notas,
+                     BigDecimal montoPagos) {
         this.idEvento = idEvento;
         this.idCliente = idCliente;
         this.horarioInicio = horarioInicio;
@@ -47,8 +51,8 @@ public class EventoDTO {
         this.fechaIngreso = fechaIngreso;
         this.costoHoraExtra = costoHoraExtras;
         this.notas = notas;
-        this.movimientoNuevoDTO = movimientoNuevoDTO;
         this.cliente = cliente;
+        this.montoPagos = montoPagos;
     }
 
     public EventoDTO(Evento evento){
@@ -75,9 +79,8 @@ public class EventoDTO {
                     return eventoNotaDTO;
                 })
                 .collect(Collectors.toList());
-
-//        this.notas = evento.getNota() != null ? evento.getNota().getNota() : null;
-
+        this.montoPagos = evento.getMontoPagos();
+        this.isLiquidado = evento.getCosto().equals(evento.getMontoPagos());
     }
 
 
@@ -193,13 +196,13 @@ public class EventoDTO {
         this.notas = notas;
     }
 
-    public MovimientoNuevoDTO getMovimientoNuevoDTO() {
-        return movimientoNuevoDTO;
-    }
-
-    public void setMovimientoNuevoDTO(MovimientoNuevoDTO movimientoNuevoDTO) {
-        this.movimientoNuevoDTO = movimientoNuevoDTO;
-    }
+//    public MovimientoNuevoDTO getMovimientoNuevoDTO() {
+//        return movimientoNuevoDTO;
+//    }
+//
+//    public void setMovimientoNuevoDTO(MovimientoNuevoDTO movimientoNuevoDTO) {
+//        this.movimientoNuevoDTO = movimientoNuevoDTO;
+//    }
 
     public LocalDateTime getHorarioFinal() {
         return horarioFinal;
@@ -225,6 +228,22 @@ public class EventoDTO {
         this.cliente = cliente;
     }
 
+    public BigDecimal getMontoPagos() {
+        return montoPagos;
+    }
+
+    public void setMontoPagos(BigDecimal montoPagos) {
+        this.montoPagos = montoPagos;
+    }
+
+    public boolean isLiquidado() {
+        return isLiquidado;
+    }
+
+    public void setLiquidado(boolean liquidado) {
+        isLiquidado = liquidado;
+    }
+
     @Override
     public String toString() {
         return "EventoDTO{" +
@@ -244,7 +263,6 @@ public class EventoDTO {
                 ", fechaIngreso=" + fechaIngreso +
                 ", costoHoraExtra=" + costoHoraExtra +
                 ", notas=" + notas +
-                ", movimientoNuevoDTO=" + movimientoNuevoDTO +
                 ", cliente=" + cliente +
                 '}';
     }

@@ -34,6 +34,16 @@
   }
 }
 
+#nuevoPago-container{
+  display: grid;
+  grid-template-columns: auto 40%;
+  gap: 15px;
+  align-content: center;
+  label {
+    height: fit-content;
+  }
+}
+
 #anticipo-container{
   display: grid;
   grid-template-columns: auto 15%;
@@ -41,6 +51,12 @@
   align-content: center;
   label {
     height: fit-content;
+    justify-self: right;
+  }
+
+  #nuevoPago{
+    width: 50%;
+    justify-self: right;
   }
 
   #btn-agregar-pago {
@@ -48,9 +64,10 @@
     border-color: rgb(255, 157, 91);
     border-radius: 8px;
     color: white;
-    font-size: 16px;
+    font-size: 14px;
     cursor: pointer;
-    
+    width: fit-content;
+    font-family: 'Trebuchet MS', sans-serif;
   }
 }
 
@@ -400,4 +417,122 @@ justify-self: right;
   color: white;
   font-size: 16px;
   cursor: pointer;
+}
+
+#sumatoriaAnticipoAbono-container {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  display: grid;
+  grid-template-columns: auto 40%;
+  gap: 15px;
+  align-content: center;
+  label {
+    height: fit-content;
+    justify-items: right;
+  }
+}
+
+#sumatoriaAnticipoAbono {
+  background-color: #d4edda;
+  font-weight: 600;
+  
+}
+
+#nuevoPagoEventoContainer {
+  display: grid;
+  grid-template-columns: auto 40%;
+  gap: 15px;
+  align-content: center;
+  label {
+    height: fit-content;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.finanzas-container {
+  max-width: 400px;
+  margin: 2rem auto;
+  padding: 1rem;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.campo-financiero {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.2rem;
+}
+
+.campo-financiero label {
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  color: #333;
+}
+
+.input-readonly {
+  padding: 0.6rem 0.8rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #eaeaea;
+  color: #333;
+}
+
+.pago {
+  background-color: #e0f7e9;
+  border-color: #a5d6a7;
+}
+
+.saldo {
+  background-color: #fff3cd;
+  border-color: #ffeeba;
+}
+
+.pago-nuevo {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+#btn-agregar-pago {
+  padding: 0.6rem 1rem;
+  background-color: #ff9800;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+#btn-agregar-pago:hover {
+  background-color: #fb8c00;
+}
+
+#nuevo-pago-container{
+  display: grid;
+  grid-template-columns: auto 40%;
+  gap: 15px;
+  align-content: center;
+  label {
+    height: fit-content;
+  }
+
 }
