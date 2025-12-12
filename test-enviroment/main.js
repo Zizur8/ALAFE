@@ -138,3 +138,41 @@ function toggleDropdown() {
   dropdown.style.visibility = dropdown.classList.contains("show") ? "visible" : "hidden";
 }
 
+  document.getElementById("formEvento").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const form = e.target;
+    const formData = new FormData(form);
+
+    fetch("https://httpbin.org/post", {
+      method: "POST",
+      body: formData
+    })
+    .then(res => res.ok ? res.json() : Promise.reject("Error en el envío"))
+    .then(data => console.log("Evento creado:", data))
+    .catch(err => console.error("Error:", err));
+  });
+
+
+  $(document).ready(function () {
+    $("#btnEnviarJQuery").click(function () {
+      const form = document.getElementById("formEvento");
+      const formData = new FormData(form);
+
+      $.ajax({
+        url: "https://httpbin.org/post", 
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false, 
+        success: function (response) {
+          console.log("Respuesta recibida:", response);
+          alert("Formulario enviado con jQuery (simulado)");
+        },
+        error: function (xhr, status, error) {
+          console.error("Error:", error);
+          alert("Error al enviar el formulario");
+        }
+      });
+    });
+  });
