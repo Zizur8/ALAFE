@@ -1,1 +1,1 @@
-web java -Dserver.port=$PORT -jar targetalafe-0.0.1-SNAPSHOT.jar
+web: java -Dserver.port=$PORT -jar target/alafe-0.0.1-SNAPSHOT.jar
