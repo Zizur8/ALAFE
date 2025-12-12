@@ -13,4 +13,10 @@ public class HomeController {
     public String HomePage() {
         return "home/index";
     }
+
+    @GetMapping("/")
+    public String home() {
+        return "¡Aplicación funcionando!";
+    }
+
 }
