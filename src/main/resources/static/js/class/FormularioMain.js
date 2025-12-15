@@ -401,10 +401,18 @@ renderizarNuevoPagoContainer() {
   }
 
   obtenerClienteParaCrear() {
+
+    console.log(this.inputs.apellidoPaternoCliente.value);
+    console.log(this.inputs.apellidoMaternoCliente.value);
+    if (this.inputs.telefonoCliente.value === "" || this.inputs.nombreCliente.value === "") {
+      return null;
+    }
+
     let cliente = new Cliente({
       idPropietario: 1,
       telefono: this.inputs.telefonoCliente.value,
       nombre: this.inputs.nombreCliente.value,
+      correo: this.inputs.correoCliente.value,
       apellidoPaterno: this.inputs.apellidoPaternoCliente.value,
       apellidoMaterno: this.inputs.apellidoMaternoCliente.value,
       idColonia: this.inputs.coloniaCliente.selectedIndex,

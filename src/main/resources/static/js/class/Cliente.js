@@ -7,6 +7,7 @@ export class Cliente {
         idPropietario = null,
         telefono = null,
         nombre = null,
+        correo = null,
         apellidoPaterno = null,
         apellidoMaterno = null,
         idColonia = null,
@@ -18,8 +19,9 @@ export class Cliente {
         this.idCliente = idCliente;
         this.idPropietario = idPropietario;
         this.telefono = telefono;
+        this.correo = correo;
         this.nombre = nombre;
-        this.apellidoPaterno = apellidoMaterno;
+        this.apellidoPaterno = apellidoPaterno;
         this.apellidoMaterno = apellidoMaterno;
         this.idColonia = idColonia;
         this.numeroExterior = numeroExterior;

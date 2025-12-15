@@ -1,7 +1,6 @@
 package com.vs.alafe.model.entities;
 
 import jakarta.persistence.*;
-
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -17,11 +16,11 @@ public class Propietario implements Serializable {
     private String telefono;
     @Column(name = "nombre")
     private String nombre;
-    @Column(name = "apellidoPaterno")
+    @Column(name = "apellido_paterno")
     private String apellidoPaterno;
-    @Column(name = "apellidoMaterno")
+    @Column(name = "apellido_materno")
     private String apellidoMaterno;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_colonia")
     private Colonia colonia;
     @Column(name = "numero_exterior")
@@ -29,10 +28,11 @@ public class Propietario implements Serializable {
     @Column(name = "calle")
     private String calle;
     @Column(name = "fecha_alta")
-    private LocalDateTime fechaAlta;
-    @Column(name = "correo")
+    private java.sql.Timestamp fechaAlta;
+    @Column(name = "correo", columnDefinition = "nvarchar")
     private String correo;
 
+    public Propietario(){}
 
     public Integer getIdPropietario() {
         return idPropietario;
@@ -98,11 +98,11 @@ public class Propietario implements Serializable {
         this.calle = calle;
     }
 
-    public LocalDateTime getFechaAlta() {
+    public java.sql.Timestamp getFechaAlta() {
         return fechaAlta;
     }
 
-    public void setFechaAlta(LocalDateTime fechaAlta) {
+    public void setFechaAlta(java.sql.Timestamp fechaAlta) {
         this.fechaAlta = fechaAlta;
     }
 
@@ -112,5 +112,20 @@ public class Propietario implements Serializable {
 
     public void setCorreo(String correo) {
         this.correo = correo;
+    }
+
+    @Override
+    public String toString() {
+        return "Propietario{" +
+                "idPropietario=" + idPropietario +
+                ", telefono='" + telefono + '\'' +
+                ", nombre='" + nombre + '\'' +
+                ", apellidoPaterno='" + apellidoPaterno + '\'' +
+                ", apellidoMaterno='" + apellidoMaterno + '\'' +
+                ", numeroExterior='" + numeroExterior + '\'' +
+                ", calle='" + calle + '\'' +
+                ", fechaAlta=" + fechaAlta +
+                ", correo='" + correo + '\'' +
+                '}';
     }
 }

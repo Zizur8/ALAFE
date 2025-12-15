@@ -19,7 +19,7 @@ public class Cliente implements Serializable{
     @Column(name = "id_cliente",nullable = false)
     private Integer idCliente;
     @JoinColumn(name = "id_propietario",nullable = false)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private Propietario propietario;
     @Column(name = "telefono")
     private String telefono;

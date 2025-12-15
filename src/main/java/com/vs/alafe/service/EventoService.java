@@ -48,15 +48,9 @@ public class EventoService {
 
         Evento evento = toEntity(eventoDTO);
 
-
         System.out.println("Mi evento  depsues del cotnroller antes del service: " + evento.toString());
         Usuario usuarioSession = usuarioService.findById(1)
                 .orElseThrow(() -> new RuntimeException("usuario session no encontrado"));
-
-        if (evento.getCliente() != null) {
-            Cliente cliente = clienteService.findById(evento.getCliente().getIdCliente())
-                    .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
-        }
 
         Usuario ingreso = usuarioService.findById(evento.getUsuarioIngreso().getIdUsuario())
                 .orElseThrow(() -> new RuntimeException("Usuario ingreso no encontrado"));
@@ -146,7 +140,6 @@ public class EventoService {
         Evento eventoExistente = eventoRepository.findById(evento.getIdEvento())
                 .orElseThrow(() -> new RuntimeException("Evento no existente para actualizar."));
 
-        //evento.setCliente(eventoExistente.getCliente());
         evento.setFechaAlta(eventoExistente.getFechaAlta());
         evento.setEliminado(eventoExistente.getEliminado());
         evento.setFechaUltimaModificacion(LocalDateTime.now());
@@ -164,11 +157,16 @@ public class EventoService {
         Usuario usuarioSession = usuarioService.findById(1)
                 .orElseThrow(() -> new RuntimeException("usuario session no encontrado"));
 
-        if (eventoDTO.getCliente() != null) {
+        if (eventoDTO.getCliente() != null && eventoDTO.getCliente().getIdCliente() == null) {
+            evento.setCliente(clienteService.toEntity(eventoDTO.getCliente()));
+        }
+        else {
             Cliente cliente = clienteService.findById(eventoDTO.getCliente().getIdCliente())
                     .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
             evento.setCliente(cliente);
         }
+
+
 
         if (eventoDTO.getIdEvento() != null) {
             boolean eventoExistente = eventoRepository.existsById(eventoDTO.getIdEvento());

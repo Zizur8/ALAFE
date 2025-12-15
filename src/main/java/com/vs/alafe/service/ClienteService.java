@@ -2,13 +2,16 @@ package com.vs.alafe.service;
 
 import com.vs.alafe.model.dto.ClienteDTO;
 import com.vs.alafe.model.entities.Cliente;
+import com.vs.alafe.model.entities.Colonia;
 import com.vs.alafe.model.entities.Propietario;
 import com.vs.alafe.repository.ClienteRepository;
 import com.vs.alafe.repository.PropietarioRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,7 +21,9 @@ public class ClienteService {
     @Autowired
     private ClienteRepository clienteRepository;
     @Autowired
-    private PropietarioRepository propietarioRepository;
+    private PropietarioService propietarioService;
+    @Autowired
+    private ColoniaService coloniaService;
 
     @Transactional
     public Cliente save(Cliente object) {
@@ -54,21 +59,33 @@ public class ClienteService {
 
     public Cliente toEntity(ClienteDTO clienteDTO){
 
-//        Optional<Propietario> propietario = propietarioRepository.findById(1);
-//        Cliente cliente = new Cliente();
-//        cliente.setPropietario(propietario.get());
-//        cliente.setTelefono(clienteDTO.getTelefono());
-//        cliente.setNombre(clienteDTO.getNombre();
-//        cliente.setApellidoPaterno(clienteDTO.getApellidoPaterno());
-//        cliente.setApellidoMaterno(clienteDTO.getApellidoMaterno());
-//        cliente.setColonia();
-//        cliente.setNumeroExterior(clienteDTO.getNumeroExterior());
-//        cliente.getCalle(clienteDTO.getCalle());
-//        if (clienteDTO.)
-//        cliente.setFechaAlta();
+        boolean clienteExiste = false;
+        Integer idCliente = clienteDTO.getIdCliente();
+        Propietario propietario = propietarioService.findById(1)
+                .orElseThrow(() -> new EntityNotFoundException("Propietario no encontrado."));
+        System.out.println(propietario.toString());
+        Colonia colonia = coloniaService.findById(clienteDTO.getIdColonia())
+                .orElseThrow(() -> new EntityNotFoundException("Colonia seleccionada no existe."));
+        if (idCliente != null) {
+            clienteExiste = clienteRepository.existsByIdCliente(clienteDTO.getIdCliente());
+            idCliente = clienteDTO.getIdCliente();
+        }
 
-        Cliente cliente = clienteRepository.findById(clienteDTO.getIdCliente())
-                .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+        Cliente cliente = new Cliente();
+        cliente.setIdCliente(idCliente);
+        cliente.setPropietario(propietario);
+        cliente.setTelefono(clienteDTO.getTelefono());
+        cliente.setCorreo(clienteDTO.getCorreo());
+        cliente.setNombre(clienteDTO.getNombre());
+        cliente.setApellidoPaterno(clienteDTO.getApellidoPaterno());
+        cliente.setApellidoMaterno(clienteDTO.getApellidoMaterno());
+        cliente.setColonia(colonia);
+        cliente.setNumeroExterior(clienteDTO.getNumeroExterior());
+        cliente.setCalle(clienteDTO.getCalle());
+
+        if (!clienteExiste) {
+            cliente.setFechaAlta(LocalDateTime.now());
+        }
 
         return cliente;
 
