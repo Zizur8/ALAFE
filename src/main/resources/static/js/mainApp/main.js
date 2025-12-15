@@ -4,6 +4,7 @@ import { Nota } from "../class/Nota.js";
 import { FormularioMain } from "../class/FormularioMain.js";
 import { crearNotaComponent } from "../components/notas-component.js";
 import { modalMovimientoFinanciero } from "../components/modal-movimiento-financiero.js";
+import { modalCliente } from "../components/modal-cliente-component.js";
 
 window.AppConfig = {
   usuarioSession: {
@@ -249,9 +250,11 @@ function crearEvento() {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(formulario.evento),
   })
-    .then((response) => {
+    .then( async(response) => {
       if (!response.ok) {
-        throw new Error("Error al crear el evento");
+        const errorData = await response.json().catch(() => null);
+        const message = errorData?.message || "Error al agendar el evento"
+        throw new Error(message);
       }
       return response.json(); // ✅ leer JSON una sola vez
     })
@@ -265,19 +268,23 @@ function crearEvento() {
     })
     .catch((error) => {
       console.error("Error en la petición:", error);
-      alert("No se pudo crear el evento");
+      alert("Error al agendar el evento: ", error.message);
     });
 }
+
 function editarEvento() {
-  console.log("Evento en formulario editar:" + formulario.evento);
+  console.log("Evento en formulario editar:", formulario.evento);
+
   fetch(`/alafe/v1/evento/${formulario.evento.idEvento}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(formulario.evento),
   })
-    .then((response) => {
+    .then(async (response) => {
       if (!response.ok) {
-        throw new Error("Error al editar el evento");
+        const errorData = await response.json().catch(() => null);
+        const message = errorData?.message || "Error al editar el evento";
+        throw new Error(message);
       }
       return response.json();
     })
@@ -287,9 +294,10 @@ function editarEvento() {
     })
     .catch((error) => {
       console.error("Error en la petición:", error);
-      alert("No se pudo editar el evento");
+      alert("No se pudo editar el evento: " + error.message);
     });
 }
+
 
 document
   .getElementById("cantidadHorasExtras")
@@ -416,6 +424,14 @@ document.getElementById("btn-agregar-pago").addEventListener("click", () => {
   const titulo = "Nuevo " + tituloMovimiento;
   abrirModalMovimientoFinanciero(titulo);
 });
+document.getElementById("btn-cliente-evento").addEventListener("click", () => {
+
+  const titulo = "Nuevo " + "Cliente";
+  abrirModalCliente(titulo);
+});
+
+
+
 
 
 function abrirModalMovimientoFinanciero(titulo) {
@@ -432,6 +448,13 @@ function abrirModalMovimientoFinanciero(titulo) {
     },
   });
 }
+
+function abrirModalCliente(titulo){
+  modalCliente({
+    labelTitulo:titulo
+  });
+}
+
 document.getElementById("delete-evento").addEventListener("click", (e) => {
   console.log("Botón clicado:", e.currentTarget.id);
   formulario.estadoFormulario = "delete";

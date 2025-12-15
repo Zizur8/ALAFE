@@ -46,7 +46,7 @@ public class Evento implements Serializable {
     private Short horasExtras;
     @Column(name = "horario_decoracion")
     private LocalDateTime horarioDecoracion;
-    @OneToMany(mappedBy = "evento", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "evento", fetch = FetchType.LAZY)
     private List<EventoNota> notas = new ArrayList<>();
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_agenda", nullable = false)

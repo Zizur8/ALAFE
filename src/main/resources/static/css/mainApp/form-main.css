@@ -449,6 +449,14 @@ justify-self: right;
 }
 
 
+#btn-cliente-evento{
+    background: #247ebf;
+  border-radius: 4px;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  width: 100%;
+}
 
 
 

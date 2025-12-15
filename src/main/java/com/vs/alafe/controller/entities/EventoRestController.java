@@ -87,8 +87,8 @@ public class EventoRestController {
     @PostMapping("evento")
     public ResponseEntity<EventoDTO> create(@RequestBody EventoDTO eventoDTO) {
 
-        Evento dtoToEvento = eventoService.toEntity(eventoDTO);
-        Evento guardado = eventoService.save(dtoToEvento);
+        //Evento dtoToEvento = eventoService.toEntity(eventoDTO);
+        Evento guardado = eventoService.save(eventoDTO);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -97,9 +97,14 @@ public class EventoRestController {
 
     @PutMapping("evento/{id}")
     public ResponseEntity<EventoDTO> update(@PathVariable Integer id, @RequestBody EventoDTO eventoDTO) {
+        if (eventoDTO == null) {
+            System.out.println("ES nullll en dto en put");
+        }
 
-        Evento dtoToEvento = eventoService.toEntity(eventoDTO);
-        Evento eventoGuardado = eventoService.update(dtoToEvento);
+        Evento evento = eventoService.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("El Evento con el id:" + id.toString() + " no existe."
+        ));
+        Evento eventoGuardado = eventoService.update(eventoDTO);
 //
 //        MovimientoNuevoDTO MovimientoNuevoDTO = eventoDTO.getMovimientoNuevoDTO();
 //        if (MovimientoNuevoDTO != null) {
@@ -113,7 +118,9 @@ public class EventoRestController {
 //
 //        }
 
-        return ResponseEntity.ok(new EventoDTO(eventoGuardado));
+        return ResponseEntity
+                .status(HttpStatus.ACCEPTED)
+                .body(new EventoDTO(eventoGuardado));
     }
 
 
@@ -125,7 +132,8 @@ public class EventoRestController {
 
     @DeleteMapping("evento/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
-        Evento evento = eventoService.findById(id).orElseThrow(() -> new IllegalArgumentException("Evento inexistente pard eliminar"));
+        Evento evento = eventoService.findById(id).orElseThrow(() -> new IllegalArgumentException("Evento inexistente para eliminar"));
+        evento.getNotas().forEach(eventoNotaService::delete);
         eventoService.eliminarEvento(evento);
         return ResponseEntity.noContent().build();
     }

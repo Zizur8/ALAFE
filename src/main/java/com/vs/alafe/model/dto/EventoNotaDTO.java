@@ -23,6 +23,13 @@ public class EventoNotaDTO {
         this.fechaIngreso = fechaIngreso;
     }
 
+    public EventoNotaDTO(Integer idEventoNota, Integer idEvento, String nota, Integer idUsuarioIngreso) {
+        this.idEventoNota = idEventoNota;
+        this.idEvento = idEvento;
+        this.nota = nota;
+        this.idUsuarioIngreso = idUsuarioIngreso;
+    }
+
     public EventoNotaDTO(EventoNota eventoNota) {
         this.idEventoNota = eventoNota.getIdEventoNota();
         this.idEvento = eventoNota.getEvento().getIdEvento();

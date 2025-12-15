@@ -17,6 +17,7 @@
     <script th:src="@{/js/components/calendar-component.js}"></script>
     <script type="module" th:src="@{/js/components/notas-component.js}"></script>
     <script type="module" th:src="@{/js/components/modal-movimiento-financiero.js}"></script>
+    <script type="module" th:src="@{/js/components/modal-cliente-component.js}"></script>
 
 
 </head>
@@ -87,6 +88,7 @@
     </div>
         <div class="bg-translucent"></div> -->
 
+
     <main>
 
         <custom-calendar></custom-calendar>
@@ -118,8 +120,8 @@
                 <input type="time" id="horarioFin" name="horarioFin" value="23:00">
 
                 <div class="inputs-data-evento">
-                    <label for="ocupaDosDias">Ocupa Dos Dias</label>
-                    <input class="right-section-input" type="checkbox" id="ocupaDosDias" name="ocupaDosDias">
+                    <label for="ocupaDosDias" class="ocultar-default">Ocupa Dos Dias</label>
+                    <input class="right-section-input ocultar-default" type="checkbox" id="ocupaDosDias" name="ocupaDosDias">
                     <label for="decorar">Decorar</label>
                     <input class="right-section-input" type="checkbox" id="decorar" name="decorar" checked>
                     <label id="lblHorarioDecoracion" for="horarioDecoracion" class="">Horario Decoración</label>
@@ -157,48 +159,54 @@
 
                     </div>
                 </div>
+                <div class="">
+                    <div id="cliente-form-header" class="cliente-header-section">
+                        <h3 class="title-section-date-info">Cliente</h3>
+                        <!-- <button id="btnGuardarCliente" class="btn-guardar-cliente">💾</button> -->
+                    </div>
 
-                <div id="cliente-form-header" class="cliente-header-section">
-                    <h3 class="title-section-date-info">Cliente</h3>
-                    <!-- <button id="btnGuardarCliente" class="btn-guardar-cliente">💾</button> -->
+                    <div>
+                        <label for="telefonoCliente">Teléfono</label>
+                        <input type="text" id="telefonoCliente" name="telefonoCliente" pattern="[0-9]{10}"
+                            autocomplete="8673265329" title="Debe contener 10 dígitos numéricos.">
+                        <ul id="sugerenciasClientes" class="sugerencias-lista"></ul>
+                    </div>
+
+                    <label for="correoCliente">Correo</label>
+                    <input type="email" id="correoCliente" name="correo">
+                    <label for="direccionCliente">Dirección</label>
+                    <input type="text" id="direccionCliente" name="direccionCliente">
+
+                    <div id="container-direccion-cliente" class="">
+                        <div>
+                            <label for="coloniaCliente">Colonia</label>
+                            <select name="colonia" id="coloniaCliente">
+                                <option value="">--</option>
+                                <th:block th:each="colonia : ${colonias}">
+                                    <option th:value="${colonia.idColonia}" th:text="${colonia.nombre}"></option>
+                                </th:block>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="numeroExterior">Num. Exterior</label>
+
+                            <input type="text" id="numeroExterior" name="numeroExterior" placeholder="#">
+                        </div>
+
+                    </div>
+
+                    <label for="nombreCliente">Nombre</label>
+                    <input type="text" id="nombreCliente" name="nombreCliente">
+                    <label for="apellidoPaternoCliente">Apellido Paterno</label>
+                    <input type="text" id="apellidoPaternoCliente" name="apellidoPaternoCliente">
+                    <label for="apellidoMaternoCliente">Apellido Materno</label>
+                    <input type="text" id="apellidoMaternoCliente" name="apellidoMaternoCliente">
                 </div>
 
                 <div>
-                    <label for="telefonoCliente">Teléfono</label>
-                    <input type="text" id="telefonoCliente" name="telefonoCliente" pattern="[0-9]{10}"
-                        autocomplete="8673265329" title="Debe contener 10 dígitos numéricos.">
-                    <ul id="sugerenciasClientes" class="sugerencias-lista"></ul>
+                    <button id="btn-cliente-evento" class="ocultar-default">Agregar Cliente</button>
                 </div>
 
-                <label for="correoCliente">Correo</label>
-                <input type="email" id="correoCliente" name="correo">
-                <label for="direccionCliente">Dirección</label>
-                <input type="text" id="direccionCliente" name="direccionCliente">
-
-                <div id="container-direccion-cliente" class="">
-                    <div>
-                        <label for="coloniaCliente">Colonia</label>
-                        <select name="colonia" id="coloniaCliente">
-                            <option value="">--</option>
-                            <th:block th:each="colonia : ${colonias}">
-                                <option th:value="${colonia.idColonia}" th:text="${colonia.nombre}"></option>
-                            </th:block>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="numeroExterior">Num. Exterior</label>
-
-                        <input type="text" id="numeroExterior" name="numeroExterior" placeholder="#">
-                    </div>
-
-                </div>
-
-                <label for="nombreCliente">Nombre</label>
-                <input type="text" id="nombreCliente" name="nombreCliente">
-                <label for="apellidoPaternoCliente">Apellido Paterno</label>
-                <input type="text" id="apellidoPaternoCliente" name="apellidoPaternoCliente">
-                <label for="apellidoMaternoCliente">Apellido Materno</label>
-                <input type="text" id="apellidoMaternoCliente" name="apellidoMaternoCliente">
 
 
 

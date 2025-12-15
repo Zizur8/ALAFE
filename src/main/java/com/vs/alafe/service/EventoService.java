@@ -1,13 +1,17 @@
 package com.vs.alafe.service;
 
 import com.vs.alafe.model.dto.EventoDTO;
+import com.vs.alafe.model.dto.EventoNotaDTO;
 import com.vs.alafe.model.entities.*;
+import com.vs.alafe.repository.EventoNotaRepository;
 import com.vs.alafe.repository.EventoRepository;
 import com.vs.alafe.repository.MovimientoRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.util.StringUtils;
 
 import javax.swing.text.html.Option;
 import java.math.BigDecimal;
@@ -26,6 +30,9 @@ public class EventoService {
     private final EventoNotaService eventoNotaService;
     private final AgendaService agendaService;
 
+    @Autowired
+    private EventoNotaRepository eventoNotaRepository;
+
     public EventoService(EventoRepository eventoRepository, ClienteService clienteService, UsuarioService usuarioService,
                          EventoNotaService eventoNotaService, AgendaService agendaService,MovimientoRepository movimientoRepository) {
         this.eventoRepository = eventoRepository;
@@ -37,7 +44,10 @@ public class EventoService {
     }
 
     @Transactional
-    public Evento save(Evento evento) {
+    public Evento save(EventoDTO eventoDTO) {
+
+        Evento evento = toEntity(eventoDTO);
+
 
         System.out.println("Mi evento  depsues del cotnroller antes del service: " + evento.toString());
         Usuario usuarioSession = usuarioService.findById(1)
@@ -69,36 +79,82 @@ public class EventoService {
         evento.setFechaAlta(LocalDateTime.now());
         evento.setFechaUltimaModificacion(LocalDateTime.now());
         evento.setEliminado(false);
-        if (evento.getNotas() != null) {
-            evento.getNotas().forEach(nota -> {
-                nota.setEvento(evento);
-                nota.setUsuario(usuarioSession);
-                System.out.println("Nota:" + nota);
-                //EventoNota eventoNota = eventoNotaService.save(nota);
-            });
+
+        System.out.println(evento.getNotas());
+
+        Evento eventoCreado = eventoRepository.save(evento);
+        guardarEventoNotas(eventoDTO.getNotas(), eventoCreado);
+
+        //        if (evento.getNotas() != null) {
+//            evento.getNotas().forEach(nota -> {
+//                nota.setEvento(evento);
+//                nota.setUsuario(usuarioSession);
+//                System.out.println("Nota:" + nota);
+//                //EventoNota eventoNota = eventoNotaService.save(nota);
+//            });
+//        }
+        return eventoCreado;
+    }
+
+    @Transactional
+    private void guardarEventoNotas(List<EventoNotaDTO> eventoNotasDTO, Evento evento) {
+        List<EventoNota> notas = eventoNotasDTO.stream()
+                .map(dto -> toEventoNota(dto,evento))
+                .toList();
+        eventoNotaRepository.saveAll(notas);
+    }
+
+    private EventoNota toEventoNota(EventoNotaDTO eventoNotaDTO, Evento evento) {
+
+        EventoNota eventoNota = new EventoNota();
+        boolean notaExiste = false;
+        String contenidoNota = StringUtils.trim(eventoNotaDTO.getNota());
+
+        if (contenidoNota == null || contenidoNota.isEmpty()) {
+            throw new IllegalArgumentException("Una nota no puede guardarse con el contenido vacio.");
+        }
+        if (eventoNotaDTO.getIdEventoNota() != null) {
+            eventoNota = eventoNotaService.findById(eventoNotaDTO.getIdEventoNota())
+                    .orElseThrow(() -> new EntityNotFoundException("ID evento nota no se encuentra registrada."));
         }
 
+        notaExiste = eventoNota.getIdEventoNota() != null;
+        if (notaExiste) {
+            eventoNota.setNota(eventoNotaDTO.getNota());
+            return eventoNota;
+        }
 
-        return eventoRepository.save(evento);
+        if (eventoNotaDTO.getIdUsuarioIngreso() == null) {
+            throw new EntityNotFoundException("El evento nota debe contar con usuario ingreso, contenido: " + eventoNotaDTO.getNota());
+        }
+
+        eventoNota.setNota(eventoNotaDTO.getNota());
+        eventoNota.setFechaIngreso(eventoNotaDTO.getFechaIngreso() != null ? eventoNotaDTO.getFechaIngreso() : LocalDateTime.now());
+        eventoNota.setEvento(evento);
+        eventoNota.setUsuario(usuarioService.findById(eventoNotaDTO.getIdUsuarioIngreso()).get());
+        return eventoNota;
+
     }
 
 
-
     @Transactional
-    public Evento update(Evento evento) {
+    public Evento update(EventoDTO eventoDTO) {
 
+        Evento evento = toEntity(eventoDTO);
         Usuario usuarioSession = usuarioService.findById(1)
                 .orElseThrow(() -> new RuntimeException("usuario session no encontrado"));
         Evento eventoExistente = eventoRepository.findById(evento.getIdEvento())
                 .orElseThrow(() -> new RuntimeException("Evento no existente para actualizar."));
 
-        evento.setCliente(eventoExistente.getCliente());
+        //evento.setCliente(eventoExistente.getCliente());
         evento.setFechaAlta(eventoExistente.getFechaAlta());
         evento.setEliminado(eventoExistente.getEliminado());
         evento.setFechaUltimaModificacion(LocalDateTime.now());
         evento.setUsuarioModificacion(usuarioSession);
 
-        return eventoRepository.save(evento);
+        Evento eventoGuardado = eventoRepository.save(evento);
+        guardarEventoNotas(eventoDTO.getNotas(), eventoGuardado);
+        return eventoGuardado;
     }
 
     public Evento toEntity(EventoDTO eventoDTO) {
@@ -108,8 +164,8 @@ public class EventoService {
         Usuario usuarioSession = usuarioService.findById(1)
                 .orElseThrow(() -> new RuntimeException("usuario session no encontrado"));
 
-        if (eventoDTO.getIdCliente() != null) {
-            Cliente cliente = clienteService.findById(eventoDTO.getIdCliente())
+        if (eventoDTO.getCliente() != null) {
+            Cliente cliente = clienteService.findById(eventoDTO.getCliente().getIdCliente())
                     .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
             evento.setCliente(cliente);
         }
@@ -125,7 +181,6 @@ public class EventoService {
         Agenda agenda = agendaService.findById(1).orElseThrow(() ->  new RuntimeException("Agenda referencia no encontrada"));
 
         evento.setAgenda(agenda);
-        evento.setNotas(eventoNotaService.toEventoNotasListado(eventoDTO.getNotas()));
         evento.setHorarioInicio(eventoDTO.getHorarioInicio());
         evento.setHorarioFinal(eventoDTO.getHorarioFinal());
         evento.setDecoracion(eventoDTO.getDecoracion());

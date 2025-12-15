@@ -22,27 +22,21 @@ public class EventoNotaRestController {
     private EventoService eventoService;
 
     @PostMapping("eventoNota")
-    public ResponseEntity<EventoNotaDTO> create(@RequestBody EventoNota eventoNota) {
+    public ResponseEntity<EventoNotaDTO> create(@RequestBody EventoNotaDTO eventoNotaDTO) {
 
-        Evento evento = eventoService.findById(eventoNota.getEvento().getIdEvento())
+        Evento evento = eventoService.findById(eventoNotaDTO.getIdEvento())
                 .orElseThrow(() -> new RuntimeException("Evento no encontrado"));
-        eventoNota.setEvento(evento);
 
-        EventoNota guardado = eventoNotaService.save(eventoNota);
+        EventoNota guardado = eventoNotaService.save(eventoNotaDTO,evento);
         return ResponseEntity.ok(new EventoNotaDTO(guardado));
 
     }
 
     @PutMapping("eventoNota/{id}")
-    public ResponseEntity<EventoNotaDTO> update(@PathVariable Integer id, @RequestBody EventoNota eventoNota){
-        Optional<Evento> existenteEvento = eventoService.findById(eventoNota.getEvento().getIdEvento());
-        if (existenteEvento.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        eventoNota.setEvento(eventoNota.getEvento());
-        eventoNota.setIdEventoNota(id);
-        EventoNota guardado = eventoNotaService.save(eventoNota);
+    public ResponseEntity<EventoNotaDTO> update(@PathVariable Integer id, @RequestBody EventoNotaDTO eventoNotaDTO){
+        Evento existenteEvento = eventoService.findById(eventoNotaDTO.getIdEvento())
+                .orElseThrow(() -> new IllegalArgumentException("La nota no cuenta con un evento inexistente."));
+        EventoNota guardado = eventoNotaService.save(eventoNotaDTO,existenteEvento);
         return ResponseEntity.ok(new EventoNotaDTO(guardado));
 
     }
