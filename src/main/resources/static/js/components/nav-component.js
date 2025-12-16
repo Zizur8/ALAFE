@@ -10,7 +10,7 @@ class CustomNav extends HTMLElement {
                 </div>
                 <div id="last-update">
                     <h3>ALAFE</h3>
-                    <p id="info-ultimo-registro">Hola Estrella ⭐</p>
+                    <p id="info-ultimo-registro">Admi</p>
                 </div>
             </div>
         </nav>
